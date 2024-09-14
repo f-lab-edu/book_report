@@ -1,30 +1,28 @@
-package com.towitty.bookreport.ui.home
+package com.towitty.bookreport.ui.search
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
-import com.towitty.bookreport.databinding.FragmentHomeBinding
+import com.towitty.bookreport.databinding.FragmentSearchBinding
 
-class HomeFragment : Fragment() {
+class SearchFragment : Fragment() {
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentSearchBinding? = null
     private val binding get() = requireNotNull(_binding)
-    private val homeViewModel: HomeViewModel by viewModels()
+    private val searchViewModel:SearchViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentSearchBinding.inflate(inflater, container, false)
 
-        homeViewModel.text.observe(viewLifecycleOwner) {
-            binding.tvHome.text = it
+        searchViewModel.text.observe(viewLifecycleOwner) {
+            binding.tvSearch.text = it
         }
 
         return binding.root
