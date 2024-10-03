@@ -2,6 +2,7 @@ package com.towitty.bookreport.ui
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -28,11 +29,13 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -46,6 +49,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.towitty.bookreport.R
+import com.towitty.bookreport.ui.bookreport.BookReportScreen
 import com.towitty.bookreport.ui.calendar.CalendarScreen
 import com.towitty.bookreport.ui.home.HomeScreen
 import com.towitty.bookreport.ui.search.SearchScreen
@@ -83,8 +87,10 @@ fun BookReportApp() {
 
         if (showWritingModal) {
             BookReportWritingModal(
+                navController = navController,
                 onDismissRequest = { showWritingModal = false },
                 modifier = Modifier.wrapContentHeight()
+
             )
         }
     }
@@ -112,6 +118,9 @@ private fun BookReportNavHost(
         }
         composable(route = BottomNavItem.SETTINGS.name) {
             SettingsScreen()
+        }
+        composable(route = Routes.DIRECTLY_BOOK_REPORT) {
+            BookReportScreen(onCancel = { navController.navigateUp() }, onSave = {/*TODO*/ })
         }
 
     }
@@ -150,37 +159,61 @@ fun BookReportBottomNavigation(navController: NavHostController, modifier: Modif
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookReportWritingModal(onDismissRequest: () -> Unit, modifier: Modifier = Modifier) {
+fun BookReportWritingModal(
+    navController: NavHostController,
+    onDismissRequest: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     ModalBottomSheet(
         onDismissRequest = { onDismissRequest() },
         shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
         modifier = modifier
     ) {
-        BookReportModalSheetItem(icon = Icons.Default.Keyboard, label = stringResource(R.string.fab_modal_keyboard))
-        BookReportModalSheetItem(icon = Icons.Default.Search, label = stringResource(R.string.fab_modal_book_search))
-        BookReportModalSheetItem(
-            icon = ImageVector.vectorResource(id = R.drawable.ic_barcode_scanner), label = stringResource(
-                R.string.fab_modal_barcode_scanner
+        Column(
+            horizontalAlignment = Alignment.Start,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+        ) {
+            BookReportModalSheetItem(
+                icon = Icons.Default.Keyboard,
+                label = stringResource(R.string.fab_modal_keyboard),
+                onClicked = {
+                    onDismissRequest()
+                    navController.navigate(Routes.DIRECTLY_BOOK_REPORT)
+                },
             )
-        )
+            BookReportModalSheetItem(
+                icon = Icons.Default.Search,
+                label = stringResource(R.string.fab_modal_book_search),
+                onClicked = {/*TODO*/ }
+            )
+            BookReportModalSheetItem(
+                icon = ImageVector.vectorResource(id = R.drawable.ic_barcode_scanner),
+                label = stringResource(R.string.fab_modal_barcode_scanner),
+                onClicked = {/*TODO*/ }
+            )
+        }
+
     }
 }
 
 @Composable
-fun BookReportModalSheetItem(icon: ImageVector, label: String) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp),
-        horizontalArrangement = Arrangement.Start
-    ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = label,
-            modifier = Modifier.size(24.dp)
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Text(text = label, style = MaterialTheme.typography.bodyMedium)
+fun BookReportModalSheetItem(icon: ImageVector, label: String, onClicked: () -> Unit) {
+    TextButton(onClick = onClicked, modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Start,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Icon(
+                imageVector = icon,
+                contentDescription = label,
+                modifier = Modifier.size(24.dp)
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Text(text = label, style = MaterialTheme.typography.bodyMedium)
+        }
     }
 }
 
@@ -194,7 +227,11 @@ enum class BottomNavItem(@StringRes val label: Int, val icon: ImageVector) {
 @Preview(showBackground = true)
 @Composable
 fun BookReportWritingModalPreview() {
-    BookReportWritingModal(onDismissRequest = {}, modifier = Modifier.fillMaxSize())
+    BookReportWritingModal(
+        navController = rememberNavController(),
+        onDismissRequest = {},
+        modifier = Modifier.fillMaxSize()
+    )
 }
 
 @Preview(showBackground = true)

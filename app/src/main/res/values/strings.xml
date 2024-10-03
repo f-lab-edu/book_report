@@ -12,4 +12,6 @@
     <string name="fab_modal_keyboard">직접 입력</string>
     <string name="fab_modal_book_search">책 검색</string>
     <string name="fab_modal_barcode_scanner">바코드</string>
+    <string name="str_save">저장</string>
+    <string name="str_cancel">취소</string>
 </resources>
