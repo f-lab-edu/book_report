@@ -49,6 +49,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.towitty.bookreport.R
+import com.towitty.bookreport.ui.bookreport.BookInfoDetailScreen
 import com.towitty.bookreport.ui.bookreport.BookReportScreen
 import com.towitty.bookreport.ui.bookreport.BookSearchScreen
 import com.towitty.bookreport.ui.calendar.CalendarScreen
@@ -124,7 +125,10 @@ private fun BookReportNavHost(
             BookReportScreen(onCancel = { navController.navigateUp() }, onSave = {/*TODO*/ })
         }
         composable(route = Routes.BOOK_SEARCH_FOR_BOOK_REPORT) {
-            BookSearchScreen(onBack = { navController.navigateUp() })
+            BookSearchScreen(onClicked = {navController.navigate(Routes.BOOK_INFO_DETAIL)}, onBack = { navController.navigateUp() })
+        }
+        composable(route = Routes.BOOK_INFO_DETAIL) {
+            BookInfoDetailScreen(onBack = { navController.navigateUp() }, onSelection = { /*TODO*/ })
         }
 
     }

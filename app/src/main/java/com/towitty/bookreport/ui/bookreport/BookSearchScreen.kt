@@ -41,7 +41,7 @@ import com.towitty.bookreport.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookSearchScreen(onBack: () -> Unit, modifier: Modifier = Modifier) {
+fun BookSearchScreen(onClicked: () -> Unit, onBack: () -> Unit, modifier: Modifier = Modifier) {
     Scaffold(
         topBar = {
             TopAppBar(
@@ -62,12 +62,13 @@ fun BookSearchScreen(onBack: () -> Unit, modifier: Modifier = Modifier) {
     ) { innerPadding ->
         Column(
             modifier = Modifier
-                .padding(innerPadding).padding(start = 16.dp, end = 16.dp),
+                .padding(innerPadding)
+                .padding(start = 16.dp, end = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             BookSearchBar()
             SearchFilter()
-            Button(onClick = { /*TODO*/ }) {
+            Button(onClick = onClicked) {
                 Text(stringResource(R.string.btn_direct_book_registration))
             }
             BookList(Modifier.fillMaxHeight())
@@ -171,5 +172,5 @@ fun BookListItemPreview(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun BookSearchScreenPreview(modifier: Modifier = Modifier) {
-    BookSearchScreen({})
+    BookSearchScreen({}, {})
 }
