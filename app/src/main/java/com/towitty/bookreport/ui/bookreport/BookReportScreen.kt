@@ -151,7 +151,7 @@ fun BookReportBookInfo(
             colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
             modifier = Modifier.align(alignment = Alignment.BottomEnd)
         ) {
-            Text(text = "편집")
+            Text(text = stringResource(id = R.string.str_edit))
         }
     }
 }
@@ -169,7 +169,7 @@ fun BookReportContent(modifier: Modifier = Modifier) {
         OutlinedTextField(
             value = bookReportTitle,
             onValueChange = { bookReportTitle = it },
-            placeholder = { Text(text = "제목을 입력해 주세요.") },
+            placeholder = { Text(text = stringResource(R.string.placeholer_bookreport_title)) },
             singleLine = true,
             textStyle = TextStyle(fontWeight = FontWeight.Bold),
             modifier = Modifier.fillMaxWidth()
@@ -178,7 +178,7 @@ fun BookReportContent(modifier: Modifier = Modifier) {
         OutlinedTextField(
             value = bookReportContent,
             onValueChange = { bookReportContent = it },
-            placeholder = { Text(text = "내용을 입력해 주세요.") },
+            placeholder = { Text(text = stringResource(R.string.placeholer_bookreport_content)) },
             modifier = Modifier
                 .fillMaxSize()
                 .weight(0.8f)

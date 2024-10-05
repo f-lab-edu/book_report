@@ -50,6 +50,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.towitty.bookreport.R
 import com.towitty.bookreport.ui.bookreport.BookReportScreen
+import com.towitty.bookreport.ui.bookreport.BookSearchScreen
 import com.towitty.bookreport.ui.calendar.CalendarScreen
 import com.towitty.bookreport.ui.home.HomeScreen
 import com.towitty.bookreport.ui.search.SearchScreen
@@ -122,6 +123,9 @@ private fun BookReportNavHost(
         composable(route = Routes.DIRECTLY_BOOK_REPORT) {
             BookReportScreen(onCancel = { navController.navigateUp() }, onSave = {/*TODO*/ })
         }
+        composable(route = Routes.BOOK_SEARCH_FOR_BOOK_REPORT) {
+            BookSearchScreen(onBack = { navController.navigateUp() })
+        }
 
     }
 }
@@ -186,7 +190,10 @@ fun BookReportWritingModal(
             BookReportModalSheetItem(
                 icon = Icons.Default.Search,
                 label = stringResource(R.string.fab_modal_book_search),
-                onClicked = {/*TODO*/ }
+                onClicked = {
+                    onDismissRequest()
+                    navController.navigate(Routes.BOOK_SEARCH_FOR_BOOK_REPORT)
+                }
             )
             BookReportModalSheetItem(
                 icon = ImageVector.vectorResource(id = R.drawable.ic_barcode_scanner),
