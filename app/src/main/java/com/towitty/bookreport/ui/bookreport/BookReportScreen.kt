@@ -45,8 +45,9 @@ import com.towitty.bookreport.R
 fun BookReportScreen(onCancel: () -> Unit, onSave: () -> Unit, modifier: Modifier = Modifier) {
     Scaffold(
         topBar = {
-            BookReportTopAppbar(onCancel, onSave, Modifier.height(16.dp))
-        }
+            BookReportTopAppbar(onCancel, onSave)
+        },
+        modifier = modifier
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             BookReportBookInfo(
@@ -67,7 +68,7 @@ fun BookReportScreen(onCancel: () -> Unit, onSave: () -> Unit, modifier: Modifie
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
-private fun BookReportTopAppbar(onCancel: () -> Unit, onSave: () -> Unit, modifier: Modifier) {
+private fun BookReportTopAppbar(onCancel: () -> Unit, onSave: () -> Unit, modifier: Modifier = Modifier) {
     TopAppBar(
         title = {},
         navigationIcon = {
@@ -88,7 +89,7 @@ private fun BookReportTopAppbar(onCancel: () -> Unit, onSave: () -> Unit, modifi
                 Text(stringResource(R.string.str_save))
             }
         },
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     )
 }
 
@@ -100,60 +101,63 @@ fun BookReportBookInfo(
     content: String,
     modifier: Modifier = Modifier
 ) {
-    Text(
-        text = "책 정보",
-        style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 8.dp)
-    )
-    Box(modifier = Modifier.height(190.dp)) {
-        Row(modifier = Modifier.height(166.dp)) {
-            Image(
-                painter = bookCover,
-                contentDescription = "Book Cover",
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .size(166.dp)
-                    .padding(end = 8.dp)
-            )
-            Column(
-                verticalArrangement = Arrangement.SpaceEvenly,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(166.dp)
+    Column(modifier = modifier) {
+        Text(
+            text = "책 정보",
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 8.dp)
+        )
+        Box(modifier = Modifier.height(190.dp)) {
+            Row(modifier = Modifier.height(166.dp)) {
+                Image(
+                    painter = bookCover,
+                    contentDescription = "Book Cover",
+                    contentScale = ContentScale.Crop,
+                    modifier = Modifier
+                        .size(166.dp)
+                        .padding(end = 8.dp)
+                )
+                Column(
+                    verticalArrangement = Arrangement.SpaceEvenly,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(166.dp)
+                ) {
+                    Text(
+                        text = bookTitle,
+                        style = MaterialTheme.typography.bodyLarge,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                    Text(
+                        text = genre,
+                        style = MaterialTheme.typography.bodyLarge,
+                        textAlign = TextAlign.Left,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                    Text(
+                        text = content,
+                        style = MaterialTheme.typography.bodyMedium,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                    )
+                }
+            }
+            Button(
+                onClick = { /*TODO*/ },
+                shape = RoundedCornerShape(8.dp),
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
+                modifier = Modifier.align(alignment = Alignment.BottomEnd)
             ) {
-                Text(
-                    text = bookTitle,
-                    style = MaterialTheme.typography.bodyLarge,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-                Text(
-                    text = genre,
-                    style = MaterialTheme.typography.bodyLarge,
-                    textAlign = TextAlign.Left,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                )
-                Text(
-                    text = content,
-                    style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                )
+                Text(text = stringResource(id = R.string.str_edit))
             }
         }
-        Button(
-            onClick = { /*TODO*/ },
-            shape = RoundedCornerShape(8.dp),
-            colors = ButtonDefaults.buttonColors(containerColor = Color.Gray),
-            modifier = Modifier.align(alignment = Alignment.BottomEnd)
-        ) {
-            Text(text = stringResource(id = R.string.str_edit))
-        }
     }
+
 }
 
 @Composable
@@ -164,7 +168,7 @@ fun BookReportContent(modifier: Modifier = Modifier) {
     var bookReportContent by rememberSaveable {
         mutableStateOf("")
     }
-    Column {
+    Column(modifier = modifier) {
         Spacer(modifier = Modifier.size(8.dp))
         OutlinedTextField(
             value = bookReportTitle,
