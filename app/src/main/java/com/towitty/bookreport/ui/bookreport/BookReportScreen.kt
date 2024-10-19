@@ -42,11 +42,13 @@ import androidx.compose.ui.unit.dp
 import com.towitty.bookreport.R
 
 @Composable
-fun BookReportScreen(onCancel: () -> Unit, onSave: () -> Unit, modifier: Modifier = Modifier) {
+fun BookReportScreen(
+    onCancel: () -> Unit,
+    onSave: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Scaffold(
-        topBar = {
-            BookReportTopAppbar(onCancel, onSave)
-        },
+        topBar = { BookReportTopAppbar(onCancel, onSave) },
         modifier = modifier
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {

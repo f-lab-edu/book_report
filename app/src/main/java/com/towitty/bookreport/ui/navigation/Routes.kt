@@ -1,4 +1,4 @@
-package com.towitty.bookreport.ui
+package com.towitty.bookreport.ui.navigation
 
 object Routes {
     const val BOOK_INFO_DETAIL: String = "book_info_detail"

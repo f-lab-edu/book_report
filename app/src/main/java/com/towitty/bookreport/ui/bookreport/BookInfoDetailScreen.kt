@@ -40,12 +40,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.towitty.bookreport.R
+import com.towitty.bookreport.ui.BookReportViewModel
 
 @Composable
-fun BookInfoDetailScreen(onBack: () -> Unit, onSelection: () -> Unit, modifier: Modifier = Modifier) {
+fun BookInfoDetailScreen(
+    onNavigateUp: () -> Unit,
+    onSelection: () -> Unit,
+    isbn: String,
+    viewModel: BookReportViewModel = hiltViewModel(),
+    modifier: Modifier = Modifier
+) {
     Scaffold(
-        topBar = { BookInfoDetailTopAppbar(onBack, onSelection, Modifier.fillMaxWidth()) },
+        topBar = { BookInfoDetailTopAppbar(onNavigateUp, onSelection, Modifier.fillMaxWidth()) },
         modifier = modifier
     ) { innerPadding ->
         Column(
@@ -220,5 +228,5 @@ fun PreviewBookInfoImage() {
 @Preview(showBackground = true)
 @Composable
 fun BookInfoDetailScreenPreview(modifier: Modifier = Modifier) {
-    BookInfoDetailScreen(onBack = {}, onSelection = {})
+    //BookInfoDetailScreen(onBack = {}, onSelection = {})
 }
