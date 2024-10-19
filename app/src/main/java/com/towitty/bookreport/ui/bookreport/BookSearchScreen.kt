@@ -2,6 +2,7 @@ package com.towitty.bookreport.ui.bookreport
 
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,10 +28,12 @@ import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -45,6 +48,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -72,6 +76,7 @@ fun BookSearchScreen(
 ) {
     var searchText by remember { mutableStateOf("") }
     val bookList by viewModel.bookList.collectAsState()
+    var selectedFilter by remember { mutableStateOf("") }
 
     Scaffold(
         topBar = {
@@ -95,18 +100,29 @@ fun BookSearchScreen(
             modifier = Modifier
                 .padding(innerPadding)
                 .padding(start = 16.dp, end = 16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             BookSearchBar(
                 searchText,
                 { searchText = it },
-                onSearch = { viewModel.getBooks(searchText) }
+                onSearch = {
+                    viewModel.getBooks(searchText)
+                },
             )
-            SearchFilter()
+            SearchFilter(
+                selectedFilter,
+                { selectedFilter = if (selectedFilter == it) "" else it }
+            )
             Button(onClick = {}) {
                 Text(stringResource(R.string.btn_direct_book_registration))
             }
-            BookList(bookList, Modifier.fillMaxHeight(), onItemClicked = onItemClicked)
+            BookList(
+                bookList,
+                onItemClicked = onItemClicked,
+                selectedFilter = selectedFilter,
+                searchText = searchText,
+                Modifier.fillMaxHeight()
+            )
         }
     }
 }
@@ -128,7 +144,7 @@ fun BookSearchBar(
             Text(stringResource(id = R.string.placeholder_search))
         },
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
-        keyboardActions = KeyboardActions(onSearch = onSearch),
+        keyboardActions = KeyboardActions(onSearch = onSearch ),
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 56.dp)
@@ -136,30 +152,76 @@ fun BookSearchBar(
 }
 
 @Composable
-fun SearchFilter(modifier: Modifier = Modifier) { // 라디오 처럼 Click 시 선택 되는 필터, 버튼의 배경색을 바꿀 예정
-    Row(verticalAlignment = Alignment.CenterVertically, modifier = modifier.wrapContentHeight()) {
+fun SearchFilter(
+    selectedFilter: String,
+    onSelectedFilter: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        modifier = modifier.wrapContentHeight()
+    ) {
         Icon(imageVector = Icons.Default.FilterAlt, contentDescription = null)
-        TextButton(onClick = { /*TODO*/ }, modifier = Modifier.wrapContentSize()) {
+
+        TextButton(
+            onClick = { onSelectedFilter("title") },
+            colors = ButtonDefaults.textButtonColors(
+                containerColor = if (selectedFilter == "title") MaterialTheme.colorScheme.primary else Color.Transparent,
+                contentColor = if (selectedFilter == "title") MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+            ),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface),
+            modifier = Modifier.wrapContentSize()
+        ) {
             Text(stringResource(id = R.string.str_book_title))
         }
-        TextButton(onClick = { /*TODO*/ }, modifier = Modifier.wrapContentSize()) {
+        TextButton(
+            onClick = { onSelectedFilter("author") },
+            colors = ButtonDefaults.textButtonColors(
+                containerColor = if (selectedFilter == "author") MaterialTheme.colorScheme.primary else Color.Transparent,
+                contentColor = if (selectedFilter == "author") MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+            ),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface),
+            modifier = Modifier.wrapContentSize()
+        ) {
             Text(stringResource(id = R.string.str_author))
         }
-        TextButton(onClick = { /*TODO*/ }, modifier = Modifier.wrapContentSize()) {
-            Text(stringResource(id = R.string.str_genre))
-        }
-        TextButton(onClick = { /*TODO*/ }, modifier = Modifier.wrapContentSize()) {
+        TextButton(
+            onClick = { onSelectedFilter("publisher") },
+            colors = ButtonDefaults.textButtonColors(
+                containerColor = if (selectedFilter == "publisher") MaterialTheme.colorScheme.primary else Color.Transparent,
+                contentColor = if (selectedFilter == "publisher") MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurface
+            ),
+            border = BorderStroke(1.dp, MaterialTheme.colorScheme.onSurface),
+            modifier = Modifier.wrapContentSize()
+        ) {
             Text(stringResource(id = R.string.str_publisher))
         }
     }
 }
 
 @Composable
-fun BookList(bookList: List<BookItem>, modifier: Modifier = Modifier, onItemClicked: (String) -> Unit) {
+fun BookList(
+    bookList: List<BookItem>,
+    onItemClicked: (String) -> Unit,
+    selectedFilter: String,
+    searchText: String,
+    modifier: Modifier = Modifier
+) {
+
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
         items(items = bookList, key = { it.isbn }) { bookItem ->
-            BookListItem(bookItem) {
-                onItemClicked(bookItem.isbn)
+            when (selectedFilter) {
+                "title" -> if (bookItem.title.contains(searchText))
+                    BookListItem(bookItem) { onItemClicked(bookItem.isbn) }
+
+                "author" -> if (bookItem.author.contains(searchText))
+                    BookListItem(bookItem) { onItemClicked(bookItem.isbn) }
+
+                "publisher" -> if (bookItem.publisher.contains(searchText))
+                    BookListItem(bookItem) { onItemClicked(bookItem.isbn) }
+
+                "" -> BookListItem(bookItem) { onItemClicked(bookItem.isbn) }
             }
         }
     }
