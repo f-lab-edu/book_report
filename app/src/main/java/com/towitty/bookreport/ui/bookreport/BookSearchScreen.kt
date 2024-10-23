@@ -41,7 +41,6 @@ import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,26 +55,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.towitty.bookreport.R
 import com.towitty.bookreport.model.BookItem
-import com.towitty.bookreport.ui.BookReportViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookSearchScreen(
     onNavigateUp: () -> Unit,
+    searchBook: (String) -> Unit,
     onItemClicked: (String) -> Unit,
-    viewModel: BookReportViewModel = hiltViewModel(),
+    bookList: List<BookItem>,
     modifier: Modifier = Modifier,
     title: @Composable () -> Unit = {},
 ) {
     var searchText by remember { mutableStateOf("") }
-    val bookList by viewModel.bookList.collectAsState()
     var selectedFilter by remember { mutableStateOf("") }
 
     Scaffold(
@@ -105,9 +102,7 @@ fun BookSearchScreen(
             BookSearchBar(
                 searchText,
                 { searchText = it },
-                onSearch = {
-                    viewModel.getBooks(searchText)
-                },
+                onSearch = { searchBook(searchText) },
             )
             SearchFilter(
                 selectedFilter,
@@ -229,9 +224,7 @@ fun BookList(
 
 @Composable
 fun BookListItem(bookItem: BookItem, modifier: Modifier = Modifier, onClick: () -> Unit) {
-    val bitmap: MutableState<Bitmap?> = remember {
-        mutableStateOf(null)
-    }
+    val bitmap: MutableState<Bitmap?> = remember { mutableStateOf(null) }
 
     Glide.with(LocalContext.current).asBitmap().load(bookItem.image).into(object : CustomTarget<Bitmap>() {
         override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
@@ -281,23 +274,19 @@ fun BookListItem(bookItem: BookItem, modifier: Modifier = Modifier, onClick: () 
 @Preview(showBackground = true)
 @Composable
 fun BookSearchBarPreview(modifier: Modifier = Modifier) {
-//    BookSearchBar("", {}, {})
 }
 
 @Preview(showBackground = true)
 @Composable
 fun BookListPreview(modifier: Modifier = Modifier) {
-//    BookList(listOf())
 }
 
 @Preview(showBackground = true)
 @Composable
 fun BookListItemPreview(modifier: Modifier = Modifier) {
-//    BookListItem(BookItem("", "", "", "", "", "", "", "", ""))
 }
 
 @Preview(showBackground = true)
 @Composable
 fun BookSearchScreenPreview(modifier: Modifier = Modifier) {
-//    BookSearchScreen({}, {}, {}, {})
 }

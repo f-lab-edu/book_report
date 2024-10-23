@@ -17,11 +17,16 @@ class BookReportViewModel @Inject constructor(
     private val _bookList = MutableStateFlow<List<BookItem>>(emptyList())
     val bookList: StateFlow<List<BookItem>> = _bookList
 
-    fun getBooks(query: String) {
+    fun searchBooks(query: String) {
         viewModelScope.launch {
-            val books = bookRemoteRepository.getSearchBook(query)
+            val books = bookRemoteRepository.searchBooks(query)
             _bookList.value = books.bookList
         }
     }
 
+    fun getBookByIsbn(isbn: String): BookItem {
+        return _bookList.value.find { it.isbn == isbn } ?: BookItem(
+            "", "", "", "", "", "", "", "", ""
+        )
+    }
 }

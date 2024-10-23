@@ -1,5 +1,7 @@
 package com.towitty.bookreport.ui.bookreport
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -30,45 +32,72 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.towitty.bookreport.R
-import com.towitty.bookreport.ui.BookReportViewModel
+import com.towitty.bookreport.model.BookItem
 
 @Composable
 fun BookInfoDetailScreen(
     onNavigateUp: () -> Unit,
     onSelection: () -> Unit,
-    isbn: String,
-    viewModel: BookReportViewModel = hiltViewModel(),
+    bookItem: BookItem,
     modifier: Modifier = Modifier
 ) {
+    val bitmap: MutableState<Bitmap?> = remember { mutableStateOf(null) }
+
+    Glide.with(LocalContext.current).asBitmap().load(bookItem.image).into(object : CustomTarget<Bitmap>() {
+        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+            bitmap.value = resource
+        }
+
+        override fun onLoadCleared(placeholder: Drawable?) {
+            bitmap.value = null
+        }
+    })
+
     Scaffold(
         topBar = { BookInfoDetailTopAppbar(onNavigateUp, onSelection, Modifier.fillMaxWidth()) },
         modifier = modifier
     ) { innerPadding ->
         Column(
-            modifier = Modifier
+            modifier = Modifier 
                 .padding(innerPadding)
                 .padding(start = 16.dp, end = 16.dp)
                 .verticalScroll(rememberScrollState())
         ) {
-            BookInfoImage(
-                imagePainter = painterResource(id = R.drawable.ic_launcher_foreground),
+            bitmap.value?.asImageBitmap()?.let { bookItemImage ->
+                BookInfoImage(
+                    bookItemImage = bookItemImage,
+                    onCameraClick = {},
+                    onHeartClick = {},
+                    isFavorite = false
+                )
+            } ?: BookInfoImage(
+                bookItemImage = ImageBitmap.imageResource(id = android.R.drawable.ic_menu_gallery),
                 onCameraClick = {},
                 onHeartClick = {},
                 isFavorite = false
             )
+
             BookInfoDetail(
+                book = bookItem,
                 Modifier
                     .fillMaxSize()
                     .padding(top = 16.dp, bottom = 16.dp)
@@ -102,7 +131,7 @@ fun BookInfoDetailTopAppbar(onBack: () -> Unit, onSelection: () -> Unit, modifie
 
 @Composable
 fun BookInfoImage(
-    imagePainter: Painter,
+    bookItemImage: ImageBitmap,
     onCameraClick: () -> Unit,
     onHeartClick: () -> Unit,
     isFavorite: Boolean
@@ -113,7 +142,7 @@ fun BookInfoImage(
             .height(312.dp)
     ) {
         Image(
-            painter = imagePainter,
+            bitmap = bookItemImage,
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier
@@ -155,7 +184,7 @@ fun BookInfoImage(
 }
 
 @Composable
-fun BookInfoDetail(modifier: Modifier = Modifier) {
+fun BookInfoDetail(book: BookItem, modifier: Modifier = Modifier) {
     Card(modifier = modifier) {
         Column(
             verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier
@@ -163,42 +192,42 @@ fun BookInfoDetail(modifier: Modifier = Modifier) {
                 .fillMaxWidth()
         ) {
             Text(
-                text = stringResource(id = R.string.str_book_title),
+                text = book.title,
                 modifier = Modifier
                     .fillMaxWidth()
                     .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
                     .padding(8.dp)
             )
             Text(
-                text = stringResource(id = R.string.str_author),
+                text = book.author,
                 modifier = Modifier
                     .fillMaxWidth()
                     .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
                     .padding(8.dp)
             )
             Text(
-                text = stringResource(id = R.string.str_genre),
+                text = book.price,
                 modifier = Modifier
                     .fillMaxWidth()
                     .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
                     .padding(8.dp)
             )
             Text(
-                text = stringResource(id = R.string.str_publisher),
+                text = book.publisher,
                 modifier = Modifier
                     .fillMaxWidth()
                     .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
                     .padding(8.dp)
             )
             Text(
-                text = stringResource(id = R.string.str_isbn),
+                text = book.isbn,
                 modifier = Modifier
                     .fillMaxWidth()
                     .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
                     .padding(8.dp)
             )
             Text(
-                text = stringResource(id = R.string.str_introduction),
+                text = book.description,
                 modifier = Modifier
                     .fillMaxWidth()
                     .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))
@@ -211,14 +240,26 @@ fun BookInfoDetail(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun BookInfoDetailPreview(modifier: Modifier = Modifier) {
-    BookInfoDetail()
+    BookInfoDetail(
+        book = BookItem(
+            title = "title",
+            link = "link",
+            image = "image",
+            author = "author",
+            price = "price",
+            publisher = "publisher",
+            pubDate = "pubDate",
+            isbn = "isbn",
+            description = "description"
+        ), modifier = modifier
+    )
 }
 
 @Preview(showBackground = true)
 @Composable
 fun PreviewBookInfoImage() {
     BookInfoImage(
-        imagePainter = painterResource(id = android.R.drawable.ic_menu_gallery),
+        bookItemImage = ImageBitmap.imageResource(id = android.R.drawable.ic_menu_gallery),
         onCameraClick = {},
         onHeartClick = {},
         isFavorite = true
@@ -228,5 +269,4 @@ fun PreviewBookInfoImage() {
 @Preview(showBackground = true)
 @Composable
 fun BookInfoDetailScreenPreview(modifier: Modifier = Modifier) {
-    //BookInfoDetailScreen(onBack = {}, onSelection = {})
 }

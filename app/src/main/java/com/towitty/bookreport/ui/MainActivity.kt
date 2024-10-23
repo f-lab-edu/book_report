@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.towitty.bookreport.R
@@ -44,11 +45,14 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun BookReportApp() {
+fun BookReportApp(
+    viewModel: BookReportViewModel = hiltViewModel()
+) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
     var isShowFabModal by remember { mutableStateOf(false) }
+
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -68,6 +72,7 @@ fun BookReportApp() {
         }
     ) { innerPadding ->
         Navigation(
+            viewModel = viewModel,
             navController = navController,
             startDestination = BottomNavItem.HOME.name,
             modifier = Modifier.padding(innerPadding)

@@ -8,7 +8,7 @@ import javax.inject.Singleton
 class BookRemoteRepository @Inject constructor(
     private val bookRemoteDataSource: BookRemoteDataSource
 ) {
-    suspend fun getSearchBook(query: String): Book {
+    suspend fun searchBooks(query: String): Book {
         return bookRemoteDataSource.getBooks(query)
     }
 }
