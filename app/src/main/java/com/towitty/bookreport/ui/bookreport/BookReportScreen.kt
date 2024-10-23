@@ -1,5 +1,7 @@
 package com.towitty.bookreport.ui.bookreport
 
+import android.graphics.Bitmap
+import android.graphics.drawable.Drawable
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -30,8 +32,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -39,26 +42,44 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.towitty.bookreport.R
+import com.towitty.bookreport.model.BookItem
 
 @Composable
 fun BookReportScreen(
     onCancel: () -> Unit,
     onSave: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    bookItem: BookItem
 ) {
     Scaffold(
         topBar = { BookReportTopAppbar(onCancel, onSave) },
         modifier = modifier
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            BookReportBookInfo(
-                bookCover = painterResource(id = R.drawable.ic_launcher_foreground),
-                bookTitle = "제목",
-                genre = "장르",
-                content = "소개",
-                modifier = Modifier.fillMaxWidth()
-            )
+
+            if (bookItem.isbn.isNotBlank()) {
+                BookReportBookInfo(
+                    bookCover = bookItem.image,
+                    bookTitle = bookItem.title,
+                    author = bookItem.author,
+                    content = bookItem.description,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+            } else {
+                BookReportBookInfo(
+                    bookCover = "",
+                    bookTitle = "제목",
+                    author = "저자",
+                    content = "소개",
+                    modifier = Modifier.fillMaxWidth()
+                )
+            }
+
             Spacer(modifier = Modifier.size(4.dp))
             BookReportContent(
                 Modifier.fillMaxWidth()
@@ -98,12 +119,26 @@ private fun BookReportTopAppbar(onCancel: () -> Unit, onSave: () -> Unit, modifi
 
 @Composable
 fun BookReportBookInfo(
-    bookCover: Painter,
+    bookCover: String,
     bookTitle: String,
-    genre: String,
+    author: String,
     content: String,
     modifier: Modifier = Modifier
 ) {
+    var bitmap by rememberSaveable {
+        mutableStateOf<Bitmap?>(null)
+    }
+
+    Glide.with(LocalContext.current).asBitmap().load(bookCover).into(object : CustomTarget<Bitmap>() {
+        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+            bitmap = resource
+        }
+
+        override fun onLoadCleared(placeholder: Drawable?) {
+            bitmap = null
+        }
+    })
+
     Column(modifier = modifier) {
         Text(
             text = "책 정보",
@@ -114,8 +149,17 @@ fun BookReportBookInfo(
         )
         Box(modifier = Modifier.height(190.dp)) {
             Row(modifier = Modifier.height(166.dp)) {
-                Image(
-                    painter = bookCover,
+                bitmap?.asImageBitmap()?.let { fetchedBitmap ->
+                    Image(
+                        bitmap = fetchedBitmap,
+                        contentDescription = "Book Cover",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .size(166.dp)
+                            .padding(end = 8.dp)
+                    )
+                } ?: Image(
+                    painter = painterResource(id = android.R.drawable.ic_menu_gallery),
                     contentDescription = "Book Cover",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -135,7 +179,7 @@ fun BookReportBookInfo(
                             .fillMaxWidth()
                     )
                     Text(
-                        text = genre,
+                        text = author,
                         style = MaterialTheme.typography.bodyLarge,
                         textAlign = TextAlign.Left,
                         modifier = Modifier
@@ -205,9 +249,9 @@ fun BookReportContentPreview(modifier: Modifier = Modifier) {
 @Composable
 fun BookReportBookInfoPreview(modifier: Modifier = Modifier) {
     BookReportBookInfo(
-        bookCover = painterResource(id = R.drawable.ic_launcher_foreground),
+        bookCover = "",
         bookTitle = "첵 제목",
-        genre = "장르",
+        author = "장르",
         content = "책 소개"
     )
 }
@@ -215,5 +259,4 @@ fun BookReportBookInfoPreview(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun BookReportScreenPreview(modifier: Modifier = Modifier) {
-    BookReportScreen(onCancel = {}, onSave = {}, modifier.fillMaxSize())
 }

@@ -9,6 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.towitty.bookreport.model.BookItem
+import com.towitty.bookreport.model.emptyBookItem
 import com.towitty.bookreport.ui.BookReportViewModel
 import com.towitty.bookreport.ui.bookreport.BookInfoDetailScreen
 import com.towitty.bookreport.ui.bookreport.BookReportScreen
@@ -26,6 +27,7 @@ fun Navigation(
     modifier: Modifier = Modifier,
 ) {
     val bookList: List<BookItem> by viewModel.bookList.collectAsState()
+    val selectedBook: BookItem by viewModel.selectedBook.collectAsState()
 
     NavHost(
         navController = navController,
@@ -45,9 +47,11 @@ fun Navigation(
             SettingsScreen()
         }
         composable(route = Routes.DIRECTLY_BOOK_REPORT) {
+            val previousRoute = navController.previousBackStackEntry?.destination?.route
             BookReportScreen(
                 onCancel = { navController.navigateUp() },
-                onSave = {/*TODO*/ }
+                onSave = {/*TODO*/ },
+                bookItem = if (previousRoute == Routes.BOOK_INFO_DETAIL) selectedBook else emptyBookItem
             )
         }
         composable(route = Routes.BOOK_SEARCH_FOR_BOOK_REPORT) {
@@ -55,17 +59,19 @@ fun Navigation(
                 onNavigateUp = { navController.navigateUp() },
                 searchBook = { viewModel.searchBooks(it) },
                 bookList = bookList,
-                onItemClicked = { navController.navigate(Routes.BOOK_INFO_DETAIL + "/$it") },
+                onItemClicked = { isbn ->
+                    viewModel.findBookByIsbn(isbn)
+                    navController.navigate(Routes.BOOK_INFO_DETAIL)
+                },
                 title = {/*미사용*/ }
             )
         }
 
-        composable(route = Routes.BOOK_INFO_DETAIL + "/{isbn}") {
-            val isbn = it.arguments?.getString("isbn") ?: ""
+        composable(route = Routes.BOOK_INFO_DETAIL) {
             BookInfoDetailScreen(
                 onNavigateUp = { navController.navigateUp() },
-                onSelection = { /*TODO*/ },
-                bookItem = viewModel.getBookByIsbn(isbn),
+                onSelection = { navController.navigate(Routes.DIRECTLY_BOOK_REPORT) },
+                bookItem = selectedBook
             )
         }
     }

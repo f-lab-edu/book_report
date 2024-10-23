@@ -32,3 +32,15 @@ data class BookItem(
     @SerializedName("description")
     val description: String,
 )
+
+val emptyBookItem = BookItem(
+    title = "",
+    link = "",
+    image = "",
+    author = "",
+    price = "",
+    publisher = "",
+    pubDate = "",
+    isbn = "",
+    description = "",
+)
