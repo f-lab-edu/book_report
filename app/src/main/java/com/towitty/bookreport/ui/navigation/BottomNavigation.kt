@@ -5,7 +5,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Search
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -24,7 +23,6 @@ enum class BottomNavItem(@StringRes val label: Int, val icon: ImageVector) {
     HOME(R.string.label_home, Icons.Default.Home),
     CALENDAR(R.string.label_calender, Icons.Default.CalendarMonth),
     SEARCH(R.string.label_search, Icons.Default.Search),
-    SETTINGS(R.string.label_settings, Icons.Default.Settings)
 }
 
 @Composable

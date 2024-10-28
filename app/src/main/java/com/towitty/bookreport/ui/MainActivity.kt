@@ -32,7 +32,6 @@ import com.towitty.bookreport.ui.navigation.BottomNavItem
 import com.towitty.bookreport.ui.navigation.Navigation
 import com.towitty.bookreport.ui.theme.BookReportTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.StateFlow
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -76,7 +75,7 @@ fun BookReportApp(
                 ) {
                     Icon(
                         imageVector = Icons.Default.Book,
-                        contentDescription = stringResource(R.string.home_fab_description)
+                        contentDescription = stringResource(R.string.description_home_fab)
                     )
                 }
             }

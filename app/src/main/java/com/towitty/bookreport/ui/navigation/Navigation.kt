@@ -37,16 +37,18 @@ fun Navigation(
         modifier = modifier.fillMaxSize()
     ) {
         composable(route = BottomNavItem.HOME.name) {
-            HomeScreen()
+            val context = LocalContext.current
+            HomeScreen(
+                moveSettings = {
+                    context.startActivity(Intent(context, SettingsActivity::class.java))
+                }
+            )
         }
         composable(route = BottomNavItem.CALENDAR.name) {
             CalendarScreen()
         }
         composable(route = BottomNavItem.SEARCH.name) {
             SearchScreen()
-        }
-        composable(route = BottomNavItem.SETTINGS.name) {
-
         }
         composable(route = "${Routes.DIRECTLY_BOOK_REPORT}/{isbn}") {
             val previousRoute = navController.previousBackStackEntry?.destination?.route
