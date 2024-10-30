@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -37,9 +36,8 @@ fun Navigation(
         modifier = modifier.fillMaxSize()
     ) {
         composable(route = BottomNavItem.HOME.name) {
-            val context = LocalContext.current
             HomeScreen(
-                moveSettings = {
+                moveSettings = { context ->
                     context.startActivity(Intent(context, SettingsActivity::class.java))
                 }
             )

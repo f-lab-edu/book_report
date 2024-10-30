@@ -11,18 +11,22 @@
         android:id="@+id/iv_profile"
         android:layout_width="128dp"
         android:layout_height="128dp"
+        android:layout_marginTop="32dp"
+        android:background="@drawable/circle_border"
         android:contentDescription="@string/description_settings_profile_image"
         android:scaleType="centerCrop"
-        android:src="@drawable/ic_launcher_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay_MaterialComponents_Circle" />
+
 
     <TextView
         android:id="@+id/tv_profile_name"
         style="@style/TextAppearance.MaterialComponents.Headline6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:padding="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -38,13 +42,13 @@
         app:layout_constraintStart_toEndOf="@id/tv_profile_name"
         app:layout_constraintTop_toTopOf="@id/tv_profile_name" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_settings_list"
+    <ListView
+        android:id="@+id/lv_settings"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:layout_marginTop="32dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_profile_name"
-        tools:listitem="item_settings" />
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_name" />
 </androidx.constraintlayout.widget.ConstraintLayout>

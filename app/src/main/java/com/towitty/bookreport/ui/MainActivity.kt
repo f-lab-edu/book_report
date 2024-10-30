@@ -36,7 +36,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    private val viewModel:BookReportViewModel by viewModels()
+    private val viewModel: BookReportViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -58,7 +58,7 @@ fun BookReportApp(
     bookListState: State<List<BookItem>>,
     searchBooks: (String) -> Unit,
     findBookByIsbn: (String) -> BookItem,
-    ) {
+) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
