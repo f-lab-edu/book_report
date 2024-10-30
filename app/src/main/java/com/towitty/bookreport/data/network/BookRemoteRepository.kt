@@ -1,6 +1,5 @@
 package com.towitty.bookreport.data.network
 
-import com.towitty.bookreport.model.Book
 import com.towitty.bookreport.model.BookItem
 import com.towitty.bookreport.model.emptyBookItem
 import javax.inject.Inject
@@ -10,11 +9,12 @@ import javax.inject.Singleton
 class BookRemoteRepository @Inject constructor(
     private val bookRemoteDataSource: BookRemoteDataSource
 ) {
-    suspend fun searchBooks(query: String): Book {
-        return bookRemoteDataSource.getBooks(query)
+    private var bookList: List<BookItem> = emptyList()
+
+    suspend fun searchBooks(query: String): List<BookItem> {
+        bookList = bookRemoteDataSource.getBook(query).bookList
+        return bookList
     }
 
-    fun findBookByIsbn(isbn: String, bookList:List<BookItem>): BookItem {
-        return bookList.find { it.isbn == isbn } ?: emptyBookItem
-    }
+    fun findBookByIsbn(isbn: String): BookItem = bookList.find { it.isbn == isbn } ?: emptyBookItem
 }

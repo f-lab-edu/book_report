@@ -19,12 +19,11 @@ class BookReportViewModel @Inject constructor(
 
     fun searchBooks(query: String) {
         viewModelScope.launch {
-            val books = bookRemoteRepository.searchBooks(query)
-            _bookList.value = books.bookList
+            _bookList.value = bookRemoteRepository.searchBooks(query)
         }
     }
 
     fun findBookByIsbn(isbn: String): BookItem {
-        return bookRemoteRepository.findBookByIsbn(isbn, _bookList.value)
+        return bookRemoteRepository.findBookByIsbn(isbn)
     }
 }

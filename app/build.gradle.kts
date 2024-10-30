@@ -58,13 +58,16 @@ android {
 
 dependencies {
     // Hilt
-    implementation (libs.hilt.android)
+    implementation(libs.hilt.android)
     kapt(libs.hilt.android.compiler)
-    implementation (libs.androidx.hilt.navigation.compose)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Glide
-    implementation (libs.glide)
-    annotationProcessor (libs.glide.compiler)
+    implementation(libs.glide)
+    annotationProcessor(libs.glide.compiler)
+
+    // DataStore
+    implementation(libs.androidx.datastore.preferences)
 
     // Retrofit
     implementation(libs.retrofit)
@@ -96,6 +99,7 @@ dependencies {
     implementation(libs.androidx.material.icons.extended)
     implementation(libs.androidx.navigation.compose)
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
