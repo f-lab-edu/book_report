@@ -17,12 +17,16 @@ class TagManagementFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentTagManagementBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         setNavigation()
         binding.btnAddTag.setOnClickListener {
             // TODO: Add tag CustomBottomSheetDialogFragment 표시
         }
-        return binding.root
     }
 
     private fun setNavigation() {

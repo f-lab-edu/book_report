@@ -21,9 +21,13 @@ class SettingsFragment : Fragment() {
     ): View {
         super.onCreateView(inflater, container, savedInstanceState)
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
-        setNavigationList()
-
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setNavigationList()
     }
 
     override fun onDestroyView() {
