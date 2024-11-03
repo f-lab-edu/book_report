@@ -2,14 +2,22 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/settingsFragment"
-    android:id="@+id/settings_navigation">
+    android:id="@+id/settings_navigation"
+    app:startDestination="@id/settingsFragment">
 
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.towitty.bookreport.ui.settings.SettingsFragment"
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_settings">
+        <action
+            android:id="@+id/action_settingsFragment_to_tagManagementFragment"
+            app:destination="@id/tagManagementFragment" />
     </fragment>
 
+    <fragment
+        android:id="@+id/tagManagementFragment"
+        android:name="com.towitty.bookreport.ui.settings.tag.TagManagementFragment"
+        android:label="TagManagementFragment"
+        tools:layout="@layout/fragment_tag_management" />
 </navigation>

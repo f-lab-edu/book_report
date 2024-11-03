@@ -38,4 +38,7 @@
     <string name="theme">테마</string>
     <string name="user_feedback_and_improvement">사용자 피드백 및 개선 보고</string>
     <string name="reset_settings">설정 초기화</string>
+    <string name="description_add_tag">태그 추가 버튼</string>
+    <string name="add_tag">태그 추가</string>
+    <string name="str_custom">사용자 지정</string>
 </resources>
