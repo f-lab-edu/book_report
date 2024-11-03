@@ -24,14 +24,19 @@ class TagManagementFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setNavigation()
-        binding.btnAddTag.setOnClickListener {
-            // TODO: Add tag CustomBottomSheetDialogFragment 표시
-        }
+        showAddTagBottomSheet()
     }
 
     private fun setNavigation() {
         binding.tbTagManagement.setNavigationOnClickListener {
             findNavController().navigateUp()
+        }
+    }
+
+    private fun showAddTagBottomSheet() {
+        binding.btnAddTag.setOnClickListener {
+            val addTagBottomSheetFragment = AddTagBottomSheetFragment()
+            addTagBottomSheetFragment.show(parentFragmentManager, addTagBottomSheetFragment.tag)
         }
     }
 }

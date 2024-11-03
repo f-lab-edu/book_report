@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="ShapeAppearanceOverlay_MaterialComponents_Circle">
-        <item name="cornerFamily">rounded</item>
+    <style name="Circle">
         <item name="cornerSize">50%</item>
     </style>
 </resources>

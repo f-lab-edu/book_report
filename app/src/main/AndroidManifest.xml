@@ -27,7 +27,7 @@
 
         <activity
             android:name=".ui.SettingsActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:theme="@style/Theme.Material3.DayNight.NoActionBar"
             android:exported="false" />
     </application>
 

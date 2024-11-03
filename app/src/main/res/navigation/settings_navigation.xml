@@ -20,4 +20,5 @@
         android:name="com.towitty.bookreport.ui.settings.tag.TagManagementFragment"
         android:label="TagManagementFragment"
         tools:layout="@layout/fragment_tag_management" />
+
 </navigation>
