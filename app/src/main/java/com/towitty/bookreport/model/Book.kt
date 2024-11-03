@@ -33,6 +33,14 @@ data class BookItem(
     val description: String,
 )
 
+val emptyBook = Book(
+    lastBuildDate = "",
+    total = 0,
+    start = 0,
+    display = 0,
+    bookList = emptyList()
+)
+
 val emptyBookItem = BookItem(
     title = "",
     link = "",
