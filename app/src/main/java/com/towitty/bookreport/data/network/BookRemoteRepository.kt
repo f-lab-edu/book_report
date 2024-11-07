@@ -7,7 +7,7 @@ import javax.inject.Singleton
 
 @Singleton
 class BookRemoteRepository @Inject constructor(
-    private val bookRemoteDataSource: BookRemoteDataSource
+    private val bookRemoteDataSource: IBookDataSource
 ) {
     private var bookList: List<BookItem> = emptyList()
 

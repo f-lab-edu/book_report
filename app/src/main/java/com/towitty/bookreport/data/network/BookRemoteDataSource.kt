@@ -13,8 +13,8 @@ import javax.inject.Singleton
 class BookRemoteDataSource @Inject constructor(
     private val bookApi: ApiService,
     private val ioDispatcher: CoroutineDispatcher
-) {
-    suspend fun getBook(query: String): Book {
+) : IBookDataSource {
+    override suspend fun getBook(query: String): Book {
         return withContext(ioDispatcher) {
             try {
                 val response = bookApi.getSearchBook(query)
