@@ -66,7 +66,12 @@ fun BookReportApp(
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
-        bottomBar = { AppBottomNavigation(navController = navController) },
+        bottomBar = {
+            AppBottomNavigation(
+                navController = navController,
+                navBackStackEntry = navBackStackEntry
+            )
+        },
         floatingActionButton = {
             if (currentRoute == BottomNavItem.HOME.name) {
                 FloatingActionButton(
