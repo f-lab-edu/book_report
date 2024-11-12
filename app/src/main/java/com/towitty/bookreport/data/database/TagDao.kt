@@ -1,11 +1,11 @@
-package com.towitty.bookreport.data.local
+package com.towitty.bookreport.data.database
 
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.towitty.bookreport.model.TagEntity
+import com.towitty.bookreport.data.database.model.TagEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao

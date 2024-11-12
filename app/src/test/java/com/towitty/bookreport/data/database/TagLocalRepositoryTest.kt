@@ -1,6 +1,6 @@
-import com.towitty.bookreport.data.local.FakeTagDao
-import com.towitty.bookreport.model.TagEntity
-import com.towitty.bookreport.model.emptyTagEntity
+import com.towitty.bookreport.data.database.FakeTagDao
+import com.towitty.bookreport.data.database.model.TagEntity
+import com.towitty.bookreport.data.database.model.emptyTagEntity
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals

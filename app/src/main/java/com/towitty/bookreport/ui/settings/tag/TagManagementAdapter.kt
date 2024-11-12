@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
+import com.towitty.bookreport.data.database.model.TagEntity
 import com.towitty.bookreport.databinding.ItemTagBinding
-import com.towitty.bookreport.model.TagEntity
 
 class TagManagementAdapter(
     private val onDeleteClick: (TagEntity) -> Unit

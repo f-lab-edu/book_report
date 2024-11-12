@@ -2,9 +2,9 @@ package com.towitty.bookreport.ui.settings.tag
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.towitty.bookreport.data.local.TagRepository
-import com.towitty.bookreport.model.TagEntity
-import com.towitty.bookreport.model.emptyTagEntity
+import com.towitty.bookreport.data.database.model.TagEntity
+import com.towitty.bookreport.data.database.model.emptyTagEntity
+import com.towitty.bookreport.data.repository.ITagRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TagManagementViewModel @Inject constructor(
-    private val tagLocalRepository: TagRepository
+    private val tagLocalRepository: ITagRepository
 ) : ViewModel() {
 
     private val _tagList = MutableStateFlow<List<TagEntity>>(emptyList())

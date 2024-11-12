@@ -1,7 +1,7 @@
 package com.towitty.bookreport.data.network
 
-import com.towitty.bookreport.model.Book
-import com.towitty.bookreport.model.emptyBook
+import com.towitty.bookreport.data.network.model.Book
+import com.towitty.bookreport.data.network.model.emptyBook
 
 class FakeBookRemoteDataSource : IBookDataSource {
 

@@ -1,12 +1,13 @@
-package com.towitty.bookreport.data.local
+package com.towitty.bookreport.data.database
 
-import com.towitty.bookreport.model.TagEntity
+import com.towitty.bookreport.data.database.model.TagEntity
+import com.towitty.bookreport.data.repository.ITagRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class FakeTagLocalRepository(
     private val tagDatabase: MutableList<TagEntity>
-) : TagRepository {
+) : ITagRepository {
 
     override suspend fun insertTag(tagEntity: TagEntity) {
         tagDatabase.add(tagEntity)

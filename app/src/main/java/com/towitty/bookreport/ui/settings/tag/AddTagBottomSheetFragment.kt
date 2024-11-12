@@ -7,9 +7,9 @@ import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.towitty.bookreport.data.database.model.TagEntity
 import com.towitty.bookreport.databinding.FragmentAddTagBottomSheetBinding
 import com.towitty.bookreport.model.ColorItem
-import com.towitty.bookreport.model.TagEntity
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

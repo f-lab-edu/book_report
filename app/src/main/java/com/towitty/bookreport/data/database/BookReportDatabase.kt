@@ -1,8 +1,8 @@
-package com.towitty.bookreport.data.local
+package com.towitty.bookreport.data.database
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
-import com.towitty.bookreport.model.TagEntity
+import com.towitty.bookreport.data.database.model.TagEntity
 
 
 @Database(entities = [TagEntity::class], version = 1, exportSchema = false)

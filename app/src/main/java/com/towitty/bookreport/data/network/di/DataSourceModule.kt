@@ -1,4 +1,4 @@
-package com.towitty.bookreport.di
+package com.towitty.bookreport.data.network.di
 
 import com.towitty.bookreport.data.network.BookRemoteDataSource
 import com.towitty.bookreport.data.network.IBookDataSource
@@ -12,8 +12,5 @@ import dagger.hilt.components.SingletonComponent
 abstract class DataSourceModule {
 
     @Binds
-    abstract fun bindBookRemoteDataSource(
-        bookRemoteDataSource: BookRemoteDataSource
-    ): IBookDataSource
-
+    abstract fun bindsBookDataSource(bookRemoteDataSource: BookRemoteDataSource): IBookDataSource
 }

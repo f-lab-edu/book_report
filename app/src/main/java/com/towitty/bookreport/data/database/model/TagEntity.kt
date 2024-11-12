@@ -1,4 +1,4 @@
-package com.towitty.bookreport.model
+package com.towitty.bookreport.data.database.model
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey

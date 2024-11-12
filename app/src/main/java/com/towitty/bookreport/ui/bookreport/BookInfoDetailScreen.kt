@@ -51,7 +51,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.towitty.bookreport.R
-import com.towitty.bookreport.model.BookItem
+import com.towitty.bookreport.data.network.model.BookItem
 
 @Composable
 fun BookInfoDetailScreen(
@@ -77,7 +77,7 @@ fun BookInfoDetailScreen(
         modifier = modifier
     ) { innerPadding ->
         Column(
-            modifier = Modifier 
+            modifier = Modifier
                 .padding(innerPadding)
                 .padding(start = 16.dp, end = 16.dp)
                 .verticalScroll(rememberScrollState())

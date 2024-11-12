@@ -1,6 +1,7 @@
 package com.towitty.bookreport.data.network
 
-import com.towitty.bookreport.model.BookItem
+import com.towitty.bookreport.data.network.model.BookItem
+import com.towitty.bookreport.data.repository.BookRemoteRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before

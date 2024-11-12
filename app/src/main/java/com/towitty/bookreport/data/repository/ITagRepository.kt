@@ -1,9 +1,9 @@
-package com.towitty.bookreport.data.local
+package com.towitty.bookreport.data.repository
 
-import com.towitty.bookreport.model.TagEntity
+import com.towitty.bookreport.data.database.model.TagEntity
 import kotlinx.coroutines.flow.Flow
 
-interface TagRepository {
+interface ITagRepository {
     suspend fun insertTag(tagEntity: TagEntity)
     suspend fun updateTag(tagEntity: TagEntity)
     suspend fun deleteTag(tagEntity: TagEntity)

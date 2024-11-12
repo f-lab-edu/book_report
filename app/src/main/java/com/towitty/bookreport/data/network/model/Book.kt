@@ -1,4 +1,4 @@
-package com.towitty.bookreport.model
+package com.towitty.bookreport.data.network.model
 
 import com.google.gson.annotations.SerializedName
 

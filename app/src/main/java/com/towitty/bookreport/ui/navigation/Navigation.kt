@@ -9,8 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.towitty.bookreport.model.BookItem
-import com.towitty.bookreport.model.emptyBookItem
+import com.towitty.bookreport.data.database.model.TagEntity
+import com.towitty.bookreport.data.network.model.BookItem
+import com.towitty.bookreport.data.network.model.emptyBookItem
 import com.towitty.bookreport.ui.SettingsActivity
 import com.towitty.bookreport.ui.bookreport.BookInfoDetailScreen
 import com.towitty.bookreport.ui.bookreport.BookReportScreen

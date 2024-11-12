@@ -25,7 +25,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.towitty.bookreport.R
-import com.towitty.bookreport.model.BookItem
+import com.towitty.bookreport.data.database.model.TagEntity
+import com.towitty.bookreport.data.network.model.BookItem
 import com.towitty.bookreport.ui.components.FabModal
 import com.towitty.bookreport.ui.navigation.AppBottomNavigation
 import com.towitty.bookreport.ui.navigation.BottomNavItem
@@ -45,8 +46,13 @@ class MainActivity : ComponentActivity() {
             BookReportTheme {
                 BookReportApp(
                     bookListState = viewModel.bookList.collectAsState(),
+                    addedTagListState = viewModel.addedTagList.collectAsState(),
+                    tagListState = viewModel.tagList.collectAsState(),
                     searchBooks = viewModel::searchBooks,
-                    findBookByIsbn = viewModel::findBookByIsbn
+                    onSaveBookReport = { /*TODO*/ },
+                    onRemoveTag = viewModel::removeAddedTag,
+                    onAddSelectTag = viewModel::addSelectedTag,
+                    findBookByIsbn = viewModel::findBookByIsbn,
                 )
             }
         }
@@ -56,8 +62,13 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun BookReportApp(
     bookListState: State<List<BookItem>>,
+    addedTagListState: State<List<TagEntity>>,
+    tagListState: State<List<TagEntity>>,
     searchBooks: (String) -> Unit,
+    onSaveBookReport: () -> Unit,
+    onRemoveTag: (Int) -> Unit,
     findBookByIsbn: (String) -> BookItem,
+    onAddSelectTag: (Int) -> Unit,
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -88,11 +99,16 @@ fun BookReportApp(
     ) { innerPadding ->
         Navigation(
             bookListState = bookListState,
-            searchBooks = searchBooks,
+            addedTagListState = addedTagListState,
+            tagListState = tagListState,
             findBookByIsbn = findBookByIsbn,
+            searchBooks = searchBooks,
+            onSaveBookReport = onSaveBookReport,
+            onRemoveTag = onRemoveTag,
+            onAddSelectTag = onAddSelectTag,
             navController = navController,
             startDestination = BottomNavItem.HOME.name,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
         )
         if (isShowFabModal) {
             FabModal(
