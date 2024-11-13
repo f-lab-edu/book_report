@@ -9,9 +9,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Keyboard
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -27,6 +24,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.towitty.bookreport.R
 import com.towitty.bookreport.presentation.navigation.Routes
+import com.towitty.bookreport.presentation.ui.common.BookReportIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,7 +45,7 @@ fun FabModal(
                 .padding(16.dp),
         ) {
             FabModalSheetItem(
-                icon = Icons.Default.Keyboard,
+                icon = BookReportIcons.Keyboard,
                 label = stringResource(R.string.fab_modal_keyboard),
                 onClicked = {
                     onDismissRequest()
@@ -55,7 +53,7 @@ fun FabModal(
                 },
             )
             FabModalSheetItem(
-                icon = Icons.Default.Search,
+                icon = BookReportIcons.Search,
                 label = stringResource(R.string.fab_modal_book_search),
                 onClicked = {
                     onDismissRequest()

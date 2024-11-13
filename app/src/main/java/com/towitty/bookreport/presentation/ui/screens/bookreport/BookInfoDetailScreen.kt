@@ -19,8 +19,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.PhotoCamera
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material.icons.twotone.Favorite
 import androidx.compose.material3.Card
@@ -52,6 +50,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.towitty.bookreport.R
 import com.towitty.bookreport.data.network.model.BookItem
+import com.towitty.bookreport.presentation.ui.common.BookReportIcons
 
 @Composable
 fun BookInfoDetailScreen(
@@ -113,7 +112,7 @@ fun BookInfoDetailTopAppbar(onBack: () -> Unit, onSelection: () -> Unit, modifie
         title = {},
         navigationIcon = {
             IconButton(onClick = onBack) {
-                Icon(Icons.Default.ArrowBackIosNew, contentDescription = stringResource(R.string.description_go_back))
+                Icon(BookReportIcons.ArrowBackIosNew, contentDescription = stringResource(R.string.description_go_back))
             }
         },
         actions = {
@@ -174,7 +173,7 @@ fun BookInfoImage(
                 .clip(CircleShape)
         ) {
             Icon(
-                imageVector = Icons.Default.PhotoCamera,
+                imageVector = BookReportIcons.PhotoCamera,
                 contentDescription = stringResource(R.string.description_camera_btn),
                 tint = Color.White,
                 modifier = Modifier.size(34.dp)

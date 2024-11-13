@@ -1,10 +1,6 @@
 package com.towitty.bookreport.presentation.navigation
 
 import androidx.annotation.StringRes
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.CalendarMonth
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -17,11 +13,12 @@ import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import com.towitty.bookreport.R
+import com.towitty.bookreport.presentation.ui.common.BookReportIcons
 
 enum class BottomNavItem(@StringRes val label: Int, val icon: ImageVector) {
-    HOME(R.string.label_home, Icons.Default.Home),
-    CALENDAR(R.string.label_calender, Icons.Default.CalendarMonth),
-    SEARCH(R.string.label_search, Icons.Default.Search),
+    HOME(R.string.label_home, BookReportIcons.Home),
+    CALENDAR(R.string.label_calender, BookReportIcons.CalendarMonth),
+    SEARCH(R.string.label_search, BookReportIcons.Search),
 }
 
 @Composable

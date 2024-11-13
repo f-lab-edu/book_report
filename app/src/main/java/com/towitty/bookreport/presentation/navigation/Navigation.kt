@@ -23,8 +23,13 @@ import com.towitty.bookreport.presentation.ui.screens.search.SearchScreen
 @Composable
 fun Navigation(
     bookListState: State<List<BookItem>>,
+    addedTagListState: State<List<TagEntity>>,
+    tagListState: State<List<TagEntity>>,
     findBookByIsbn: (String) -> BookItem,
     searchBooks: (String) -> Unit,
+    onSaveBookReport: () -> Unit,
+    onRemoveTag: (Int) -> Unit,
+    onAddSelectTag: (Int) -> Unit,
     navController: NavHostController,
     startDestination: String,
     modifier: Modifier = Modifier,
@@ -54,7 +59,11 @@ fun Navigation(
             val isbn = it.arguments?.getString("isbn") ?: ""
             BookReportScreen(
                 onCancel = { navController.navigateUp() },
-                onSave = {/*TODO*/ },
+                addedTagListState = addedTagListState,
+                tagListState = tagListState,
+                onAddSelectTag = onAddSelectTag,
+                onRemoveTag = onRemoveTag,
+                onSaveBookReport = onSaveBookReport,
                 bookItem = if (previousRoute == "${Routes.BOOK_INFO_DETAIL}/{isbn}") findBookByIsbn(isbn) else emptyBookItem
             )
         }

@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Book
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -31,6 +29,7 @@ import com.towitty.bookreport.presentation.navigation.AppBottomNavigation
 import com.towitty.bookreport.presentation.navigation.BottomNavItem
 import com.towitty.bookreport.presentation.navigation.Navigation
 import com.towitty.bookreport.presentation.theme.BookReportTheme
+import com.towitty.bookreport.presentation.ui.common.BookReportIcons
 import com.towitty.bookreport.presentation.ui.components.FabModal
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -90,7 +89,7 @@ fun BookReportApp(
                     shape = CircleShape
                 ) {
                     Icon(
-                        imageVector = Icons.Default.Book,
+                        imageVector = BookReportIcons.Book,
                         contentDescription = stringResource(R.string.description_home_fab)
                     )
                 }

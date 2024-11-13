@@ -23,10 +23,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActionScope
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBackIosNew
-import androidx.compose.material.icons.filled.FilterAlt
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -60,6 +56,7 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.towitty.bookreport.R
 import com.towitty.bookreport.data.network.model.BookItem
+import com.towitty.bookreport.presentation.ui.common.BookReportIcons
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -82,7 +79,7 @@ fun BookSearchScreen(
                 navigationIcon = {
                     IconButton(onClick = onNavigateUp) {
                         Icon(
-                            imageVector = Icons.Default.ArrowBackIosNew, contentDescription = stringResource(
+                            imageVector = BookReportIcons.ArrowBackIosNew, contentDescription = stringResource(
                                 R.string.description_go_back
                             )
                         )
@@ -133,7 +130,7 @@ fun BookSearchBar(
         value = searchText,
         onValueChange = onValueChange,
         leadingIcon = {
-            Icon(imageVector = Icons.Default.Search, contentDescription = null)
+            Icon(imageVector = BookReportIcons.Search, contentDescription = null)
         },
         placeholder = {
             Text(stringResource(id = R.string.placeholder_search))
@@ -157,7 +154,7 @@ fun SearchFilter(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier.wrapContentHeight()
     ) {
-        Icon(imageVector = Icons.Default.FilterAlt, contentDescription = null)
+        Icon(imageVector = BookReportIcons.FilterAlt, contentDescription = null)
 
         TextButton(
             onClick = { onSelectedFilter("title") },

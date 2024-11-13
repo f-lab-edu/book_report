@@ -3,8 +3,6 @@ package com.towitty.bookreport.presentation.ui.screens.home
 import android.content.Context
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -17,6 +15,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.towitty.bookreport.R
+import com.towitty.bookreport.presentation.ui.common.BookReportIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -31,7 +30,7 @@ fun HomeScreen(
                 actions = {
                     IconButton(
                         onClick = { moveSettings(context) },
-                        content = { Icon(Icons.Default.Settings, contentDescription = null) }
+                        content = { Icon(BookReportIcons.Settings, contentDescription = null) }
                     )
                 }
             )
