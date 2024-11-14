@@ -1,7 +1,7 @@
 package com.towitty.bookreport.data.network
 
 import com.towitty.bookreport.BuildConfig
-import com.towitty.bookreport.model.Book
+import com.towitty.bookreport.data.network.model.Book
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
