@@ -50,7 +50,7 @@ class MainActivity : ComponentActivity() {
                     searchBooks = viewModel::searchBooks,
                     onSaveBookReport = { /*TODO*/ },
                     onRemoveTag = viewModel::removeAddedTag,
-                    onAddSelectTag = viewModel::addSelectedTag,
+                    onAddSelectedTag = viewModel::addSelectedTag,
                     findBookByIsbn = viewModel::findBookByIsbn,
                 )
             }
@@ -65,9 +65,9 @@ fun BookReportApp(
     tagListState: State<List<TagEntity>>,
     searchBooks: (String) -> Unit,
     onSaveBookReport: () -> Unit,
+    onAddSelectedTag: (Int) -> Unit,
     onRemoveTag: (Int) -> Unit,
     findBookByIsbn: (String) -> BookItem,
-    onAddSelectTag: (Int) -> Unit,
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -104,7 +104,7 @@ fun BookReportApp(
             searchBooks = searchBooks,
             onSaveBookReport = onSaveBookReport,
             onRemoveTag = onRemoveTag,
-            onAddSelectTag = onAddSelectTag,
+            onAddSelectedTag = onAddSelectedTag,
             navController = navController,
             startDestination = BottomNavItem.HOME.name,
             modifier = Modifier.padding(innerPadding),

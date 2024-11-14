@@ -51,7 +51,7 @@ class BookReportViewModel @Inject constructor(
     fun addSelectedTag(id: Int) {
         viewModelScope.launch {
             tagLocalRepository.getTag(id).collect { tag ->
-                if (_tagList.value.none { it.id == tag.id }) {
+                if (_addedTagList.value.none { it.id == tag.id }) {
                     _addedTagList.value += tag
                 }
             }
@@ -60,7 +60,7 @@ class BookReportViewModel @Inject constructor(
 
     fun removeAddedTag(id: Int) {
         viewModelScope.launch {
-            _addedTagList.value = _tagList.value.filter { it.id != id }
+            _addedTagList.value = _addedTagList.value.filter { it.id != id }
         }
     }
 }

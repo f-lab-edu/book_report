@@ -13,6 +13,7 @@ import com.towitty.bookreport.data.database.model.TagEntity
 import com.towitty.bookreport.data.network.model.BookItem
 import com.towitty.bookreport.data.network.model.emptyBookItem
 import com.towitty.bookreport.presentation.ui.SettingsActivity
+import com.towitty.bookreport.presentation.ui.screens.bookreport.AddTagScreen
 import com.towitty.bookreport.presentation.ui.screens.bookreport.BookInfoDetailScreen
 import com.towitty.bookreport.presentation.ui.screens.bookreport.BookReportScreen
 import com.towitty.bookreport.presentation.ui.screens.bookreport.BookSearchScreen
@@ -29,7 +30,7 @@ fun Navigation(
     searchBooks: (String) -> Unit,
     onSaveBookReport: () -> Unit,
     onRemoveTag: (Int) -> Unit,
-    onAddSelectTag: (Int) -> Unit,
+    onAddSelectedTag: (Int) -> Unit,
     navController: NavHostController,
     startDestination: String,
     modifier: Modifier = Modifier,
@@ -60,10 +61,10 @@ fun Navigation(
             BookReportScreen(
                 onCancel = { navController.navigateUp() },
                 addedTagListState = addedTagListState,
-                tagListState = tagListState,
-                onAddSelectTag = onAddSelectTag,
+                onAddSelectedTag = onAddSelectedTag,
                 onRemoveTag = onRemoveTag,
                 onSaveBookReport = onSaveBookReport,
+                onNavigateAddTag = { navController.navigate(Routes.ADD_TAG) },
                 bookItem = if (previousRoute == "${Routes.BOOK_INFO_DETAIL}/{isbn}") findBookByIsbn(isbn) else emptyBookItem
             )
         }
@@ -86,6 +87,15 @@ fun Navigation(
                 onSelection = { navController.navigate("${Routes.DIRECTLY_BOOK_REPORT}/$isbn") },
                 bookItem = findBookByIsbn(isbn)
             )
+        }
+
+        composable(route = Routes.ADD_TAG) {
+             AddTagScreen(
+                 onNavigateUp = { navController.navigateUp() },
+                 onAddSelectedTag = onAddSelectedTag,
+                 onRemoveTag = onRemoveTag,
+                 tagListState = tagListState
+             )
         }
     }
 }
