@@ -49,7 +49,7 @@ fun FabModal(
                 label = stringResource(R.string.fab_modal_keyboard),
                 onClicked = {
                     onDismissRequest()
-                    onClicked(Routes.DIRECTLY_BOOK_REPORT)
+                    onClicked("${Routes.DIRECTLY_BOOK_REPORT}/")
                 },
             )
             FabModalSheetItem(

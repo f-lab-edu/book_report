@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.settings.SettingsFragment">
+    tools:context=".presentation.ui.fragment.SettingsFragment">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/iv_profile"
