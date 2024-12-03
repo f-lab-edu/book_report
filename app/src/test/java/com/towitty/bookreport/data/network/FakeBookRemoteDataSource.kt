@@ -1,11 +1,11 @@
 package com.towitty.bookreport.data.network
 
-import com.towitty.bookreport.data.network.model.Book
-import com.towitty.bookreport.data.network.model.emptyBook
+import com.towitty.bookreport.data.network.model.NetworkSearchBook
+import com.towitty.bookreport.data.network.model.emptyNetworkSearchBook
 
 class FakeBookRemoteDataSource : IBookDataSource {
 
-    var book = Book(
+    var networkSearchBook = NetworkSearchBook(
         lastBuildDate = "",
         total = 0,
         start = 0,
@@ -13,10 +13,10 @@ class FakeBookRemoteDataSource : IBookDataSource {
         bookList = mutableListOf()
     )
 
-    override suspend fun getBook(query: String): Book {
-        return book.bookList.find { it.title.contains(query) }?.let {
-            book
-        } ?: emptyBook
+    override suspend fun getNetworkSearchBook(query: String): NetworkSearchBook {
+        return networkSearchBook.bookList.find { it.title.contains(query) }?.let {
+            networkSearchBook
+        } ?: emptyNetworkSearchBook
     }
 
 }

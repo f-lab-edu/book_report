@@ -55,7 +55,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.towitty.bookreport.R
-import com.towitty.bookreport.data.network.model.BookItem
+import com.towitty.bookreport.data.network.model.NetworkBook
 import com.towitty.bookreport.presentation.ui.common.BookReportIcons
 
 
@@ -65,7 +65,7 @@ fun BookSearchScreen(
     onNavigateUp: () -> Unit,
     searchBook: (String) -> Unit,
     onItemClicked: (String) -> Unit,
-    bookList: List<BookItem>,
+    bookList: List<NetworkBook>,
     modifier: Modifier = Modifier,
     title: @Composable () -> Unit = {},
 ) {
@@ -194,7 +194,7 @@ fun SearchFilter(
 
 @Composable
 fun BookList(
-    bookList: List<BookItem>,
+    bookList: List<NetworkBook>,
     onItemClicked: (String) -> Unit,
     selectedFilter: String,
     searchText: String,
@@ -220,10 +220,10 @@ fun BookList(
 }
 
 @Composable
-fun BookListItem(bookItem: BookItem, modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun BookListItem(networkBook: NetworkBook, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val bitmap: MutableState<Bitmap?> = remember { mutableStateOf(null) }
 
-    Glide.with(LocalContext.current).asBitmap().load(bookItem.image).into(object : CustomTarget<Bitmap>() {
+    Glide.with(LocalContext.current).asBitmap().load(networkBook.image).into(object : CustomTarget<Bitmap>() {
         override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
             bitmap.value = resource
         }
@@ -259,10 +259,10 @@ fun BookListItem(bookItem: BookItem, modifier: Modifier = Modifier, onClick: () 
                     .fillMaxHeight()
                     .padding(top = 16.dp, bottom = 16.dp)
             ) {
-                Text(bookItem.title)
-                Text(bookItem.author)
-                Text(bookItem.price)
-                Text(bookItem.publisher)
+                Text(networkBook.title)
+                Text(networkBook.author)
+                Text(networkBook.price)
+                Text(networkBook.publisher)
             }
         }
     }

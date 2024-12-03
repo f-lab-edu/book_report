@@ -1,13 +1,13 @@
 package com.towitty.bookreport.data.network
 
-import com.towitty.bookreport.data.network.model.BookItem
+import com.towitty.bookreport.data.network.model.NetworkBook
 import com.towitty.bookreport.data.repository.BookRemoteRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class BookRemoteRepositoryTest {
+class NetworkSearchBookRemoteRepositoryTest {
 
     private lateinit var bookRemoteDataSource: IBookDataSource
     private lateinit var bookRemoteRepository: BookRemoteRepository
@@ -22,8 +22,8 @@ class BookRemoteRepositoryTest {
     fun getBookSearch_WhenSearchedBooksExist_ShouldReturnMatchingBooks() = runBlocking {
         val androidQuery = "안드로이드"
         val kotlinQuery = "코틀린"
-        ((bookRemoteDataSource as FakeBookRemoteDataSource).book.bookList as MutableList<BookItem>).add(
-            BookItem(
+        ((bookRemoteDataSource as FakeBookRemoteDataSource).networkSearchBook.bookList as MutableList<NetworkBook>).add(
+            NetworkBook(
                 title = androidQuery,
                 link = "",
                 image = "",
@@ -35,8 +35,8 @@ class BookRemoteRepositoryTest {
                 description = ""
             )
         )
-        ((bookRemoteDataSource as FakeBookRemoteDataSource).book.bookList as MutableList<BookItem>).add(
-            BookItem(
+        ((bookRemoteDataSource as FakeBookRemoteDataSource).networkSearchBook.bookList as MutableList<NetworkBook>).add(
+            NetworkBook(
                 title = kotlinQuery,
                 link = "",
                 image = "",
@@ -62,8 +62,8 @@ class BookRemoteRepositoryTest {
         val query = "Kotlin"
         val androidQuery = "안드로이드"
         val kotlinQuery = "코틀린"
-        ((bookRemoteDataSource as FakeBookRemoteDataSource).book.bookList as MutableList<BookItem>).add(
-            BookItem(
+        ((bookRemoteDataSource as FakeBookRemoteDataSource).networkSearchBook.bookList as MutableList<NetworkBook>).add(
+            NetworkBook(
                 title = androidQuery,
                 link = "",
                 image = "",
@@ -75,8 +75,8 @@ class BookRemoteRepositoryTest {
                 description = ""
             )
         )
-        ((bookRemoteDataSource as FakeBookRemoteDataSource).book.bookList as MutableList<BookItem>).add(
-            BookItem(
+        ((bookRemoteDataSource as FakeBookRemoteDataSource).networkSearchBook.bookList as MutableList<NetworkBook>).add(
+            NetworkBook(
                 title = kotlinQuery,
                 link = "",
                 image = "",

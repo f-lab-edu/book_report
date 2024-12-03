@@ -3,9 +3,14 @@ package com.towitty.bookreport.presentation.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.towitty.bookreport.data.database.model.TagEntity
-import com.towitty.bookreport.data.network.model.BookItem
+import com.towitty.bookreport.data.database.model.asTag
+import com.towitty.bookreport.data.network.model.NetworkBook
+import com.towitty.bookreport.data.repository.BookReportRepository
 import com.towitty.bookreport.data.repository.IBookRepository
 import com.towitty.bookreport.data.repository.ITagRepository
+import com.towitty.bookreport.data.repository.model.BookReport
+import com.towitty.bookreport.data.repository.model.Tag
+import com.towitty.bookreport.data.repository.model.emptyBookReport
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,53 +19,70 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BookReportViewModel @Inject constructor(
+    private val bookReportRepository: BookReportRepository,
     private val bookRemoteRepository: IBookRepository,
-    private val tagLocalRepository: ITagRepository
+    private val tagLocalRepository: ITagRepository,
 ) : ViewModel() {
-    private val _bookList = MutableStateFlow<List<BookItem>>(emptyList())
-    val bookList: StateFlow<List<BookItem>> = _bookList
+    private val _bookList = MutableStateFlow<List<NetworkBook>>(emptyList())
+    val bookList: StateFlow<List<NetworkBook>> = _bookList
 
-    private val _tagList = MutableStateFlow<List<TagEntity>>(emptyList())
-    val tagList: StateFlow<List<TagEntity>> = _tagList
+    private val _tagList = MutableStateFlow<List<Tag>>(emptyList())
+    val tagList: StateFlow<List<Tag>> = _tagList
 
-    private val _addedTagList = MutableStateFlow<List<TagEntity>>(emptyList())
-    val addedTagList: StateFlow<List<TagEntity>> = _addedTagList
+    private val _bookReport = MutableStateFlow(emptyBookReport)
+    val bookReport: StateFlow<BookReport> = _bookReport
 
     init {
         getAllTags()
     }
 
+    /**
+     * Book
+     */
     fun searchBooks(query: String) {
         viewModelScope.launch {
             _bookList.value = bookRemoteRepository.searchBooks(query)
         }
     }
 
-    fun findBookByIsbn(isbn: String): BookItem {
+    fun findBookByIsbn(isbn: String): NetworkBook {
         return bookRemoteRepository.findBookByIsbn(isbn)
     }
 
+    /**
+     * Tag
+     */
     private fun getAllTags() {
         viewModelScope.launch {
-            tagLocalRepository.getAllTags().collect { tags ->
-                _tagList.value = tags
+            bookReportRepository.getAllTags().collect { tags ->
+                _tagList.value = tags.map(TagEntity::asTag)
             }
         }
     }
 
-    fun addSelectedTag(id: Int) {
+    /**
+     * BookReport
+     */
+    fun fetchBookReport(bookReportId: Int) {
         viewModelScope.launch {
-            tagLocalRepository.getTag(id).collect { tag ->
-                if (_addedTagList.value.none { it.id == tag.id }) {
-                    _addedTagList.value += tag
-                }
-            }
+            _bookReport.value = bookReportRepository.fetchBookReport(bookReportId)
         }
     }
 
-    fun removeAddedTag(id: Int) {
-        viewModelScope.launch {
-            _addedTagList.value = _addedTagList.value.filter { it.id != id }
+    fun addBookReportTag(tagId: Int) {
+        tagList.value.find { it.id == tagId }?.let { tag ->
+            _bookReport.value = bookReportRepository.addTag(bookReport.value, tag)
         }
     }
+
+    fun removeBookReportTag(tagId: Int) {
+        _bookReport.value = bookReportRepository.removeTag(bookReport.value, tagId)
+    }
+
+    fun saveBookReport(bookReport: BookReport) {
+        viewModelScope.launch {
+            bookReportRepository.saveBookReport(bookReport)
+        }
+    }
+
 }

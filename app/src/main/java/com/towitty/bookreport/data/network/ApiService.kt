@@ -1,7 +1,7 @@
 package com.towitty.bookreport.data.network
 
 import com.towitty.bookreport.BuildConfig
-import com.towitty.bookreport.data.network.model.Book
+import com.towitty.bookreport.data.network.model.NetworkSearchBook
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -24,7 +24,7 @@ interface ApiService {
         @Query("display") display: Int = 10,
         @Query("start") start: Int = 1,
         @Query("sort") sort: String = "sim",
-    ): Response<Book>
+    ): Response<NetworkSearchBook>
 
     @GET("book.json")
     suspend fun getSearchBookDetail(
@@ -36,5 +36,5 @@ interface ApiService {
         @Query("sort") sort: String = "sim",
         @Query("d_titl") title: String = "",
         @Query("d_isbn") isbn: String,
-    ): Response<Book>
+    ): Response<NetworkSearchBook>
 }

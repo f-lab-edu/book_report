@@ -1,6 +1,7 @@
 package com.towitty.bookreport.data.database
 
 import com.towitty.bookreport.data.database.model.TagEntity
+import com.towitty.bookreport.data.database.model.emptyTagEntity
 import com.towitty.bookreport.data.repository.ITagRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -24,8 +25,8 @@ class FakeTagLocalRepository(
         tagDatabase.remove(tagEntity)
     }
 
-    override fun getTag(id: Int): Flow<TagEntity> = flow {
-        tagDatabase.first { it.id == id }
+    override suspend fun getTag(id: Int): TagEntity {
+        return tagDatabase.find { it.id == id } ?: emptyTagEntity
     }
 
     override fun getAllTags(): Flow<List<TagEntity>> = flow {

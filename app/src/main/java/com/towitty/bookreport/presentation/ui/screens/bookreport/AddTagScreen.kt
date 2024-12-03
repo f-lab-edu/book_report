@@ -27,7 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import com.towitty.bookreport.R
-import com.towitty.bookreport.data.database.model.TagEntity
+import com.towitty.bookreport.data.repository.model.Tag
 import com.towitty.bookreport.presentation.ui.common.BookReportIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -36,7 +36,7 @@ fun AddTagScreen(
     onNavigateUp: () -> Unit,
     onAddSelectedTag: (Int) -> Unit,
     onRemoveTag: (Int) -> Unit,
-    tagListState: State<List<TagEntity>>
+    tagListState: State<List<Tag>>
 ) {
     Scaffold(
         topBar = {
@@ -72,7 +72,7 @@ fun AddTagScreen(
 
 @Composable
 fun TagItem(
-    tag: TagEntity,
+    tag: Tag,
     icon: Int = -1,
     onClicked: (Int) -> Unit,
     onRemoveTag: (Int) -> Unit

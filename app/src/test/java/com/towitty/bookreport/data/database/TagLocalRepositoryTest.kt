@@ -32,7 +32,7 @@ class TagLocalRepositoryTest {
     }
 
     @Test
-    fun getAllTags_WhenMultipleTagsExist_ShouldReturnAllTags() = runTest {
+    fun fetchTags() = runTest {
         fakeTagDao.tagDatabase.clear()
         fakeTagDao.tagDatabase.add(TagEntity(1, "", 0))
         fakeTagDao.tagDatabase.add(TagEntity(2, "", 0))

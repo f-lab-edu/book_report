@@ -22,6 +22,8 @@ object DatabaseModule {
         context,
         BookReportDatabase::class.java,
         "book_report_db"
-    ).build()
+    )
+        .fallbackToDestructiveMigrationFrom()
+        .build()
 
 }

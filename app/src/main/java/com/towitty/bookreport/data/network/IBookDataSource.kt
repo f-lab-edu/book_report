@@ -1,7 +1,7 @@
 package com.towitty.bookreport.data.network
 
-import com.towitty.bookreport.data.network.model.Book
+import com.towitty.bookreport.data.network.model.NetworkSearchBook
 
 interface IBookDataSource {
-    suspend fun getBook(query: String): Book
+    suspend fun getNetworkSearchBook(query: String): NetworkSearchBook
 }

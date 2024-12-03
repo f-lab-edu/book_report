@@ -50,35 +50,61 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.towitty.bookreport.R
-import com.towitty.bookreport.data.database.model.TagEntity
-import com.towitty.bookreport.data.network.model.BookItem
+import com.towitty.bookreport.data.network.model.NetworkBook
+import com.towitty.bookreport.data.repository.model.BookReport
+import com.towitty.bookreport.data.repository.model.emptyBook
+import com.towitty.bookreport.data.repository.model.emptyBookReport
 
 @Composable
 fun BookReportScreen(
-    addedTagListState: State<List<TagEntity>>,
     onCancel: () -> Unit,
-    onSaveBookReport: () -> Unit,
+    onSaveBookReport: (BookReport) -> Unit,
     onAddSelectedTag: (Int) -> Unit,
     onRemoveTag: (Int) -> Unit,
     onNavigateAddTag: () -> Unit,
     modifier: Modifier = Modifier,
-    bookItem: BookItem
+    book: NetworkBook,
+    bookReportState: State<BookReport>
 ) {
+    val bookReport by bookReportState
+    var bookReportTitleState by rememberSaveable { mutableStateOf(bookReport.title) }
+    var bookReportContentState by rememberSaveable { mutableStateOf(bookReport.content) }
+
+    val onChangeBookReportTitle: (String) -> Unit = { bookReportTitleState = it }
+    val onChangeBookReportContent: (String) -> Unit = { bookReportContentState = it }
+
     Scaffold(
-        topBar = { BookReportTopAppbar(onCancel, onSaveBookReport) },
+        topBar = {
+            BookReportTopAppbar(
+                bookReport = bookReport,
+                bookReportTitle = bookReportTitleState,
+                bookReportContent = bookReportContentState,
+                onCancel,
+                onSaveBookReport
+            )
+        },
         modifier = modifier
     ) { innerPadding ->
+
         Column(modifier = Modifier.padding(innerPadding)) {
 
-            if (bookItem.isbn.isNotBlank()) {
+            if (book.isbn.isNotBlank()) {
                 BookReportBookInfo(
-                    bookCover = bookItem.image,
-                    bookTitle = bookItem.title,
-                    author = bookItem.author,
-                    content = bookItem.description,
+                    bookCover = book.image,
+                    bookTitle = book.title,
+                    author = book.author,
+                    content = book.description,
                     modifier = Modifier.fillMaxWidth()
                 )
 
+            } else if (bookReport != emptyBookReport) {
+                BookReportBookInfo(
+                    bookCover = if (bookReport.book != emptyBook) bookReport.book.image else "",
+                    bookTitle = bookReport.title,
+                    author = if (bookReport.book != emptyBook) bookReport.book.author else "",
+                    content = bookReport.content,
+                    modifier = Modifier.fillMaxWidth()
+                )
             } else {
                 BookReportBookInfo(
                     bookCover = "",
@@ -91,7 +117,11 @@ fun BookReportScreen(
 
             Spacer(modifier = Modifier.size(4.dp))
             BookReportContent(
-                addedTagListState = addedTagListState,
+                bookReport = bookReport,
+                bookReportTitleState = bookReportTitleState,
+                bookReportContentState = bookReportContentState,
+                onBookReportTitleChange = onChangeBookReportTitle,
+                onBookReportContentChange = onChangeBookReportContent,
                 onAddSelectedTag = onAddSelectedTag,
                 onRemoveTag = onRemoveTag,
                 onNavigateAddTag = onNavigateAddTag,
@@ -105,8 +135,11 @@ fun BookReportScreen(
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 private fun BookReportTopAppbar(
+    bookReport: BookReport,
+    bookReportTitle: String,
+    bookReportContent: String,
     onCancel: () -> Unit,
-    onSaveBookReport: () -> Unit,
+    onSaveBookReport: (BookReport) -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
@@ -122,7 +155,14 @@ private fun BookReportTopAppbar(
         },
         actions = {
             TextButton(
-                onClick = onSaveBookReport,
+                onClick = {
+                    onSaveBookReport(
+                        bookReport.copy(
+                            title = bookReportTitle,
+                            content = bookReportContent
+                        )
+                    )
+                },
                 modifier = Modifier
                     .border(1.dp, color = Color.Gray, shape = RoundedCornerShape(4.dp))
             ) {
@@ -225,20 +265,22 @@ fun BookReportBookInfo(
 
 @Composable
 fun BookReportContent(
-    addedTagListState: State<List<TagEntity>>,
+    bookReport: BookReport,
+    bookReportTitleState: String,
+    bookReportContentState: String,
+    onBookReportTitleChange: (String) -> Unit,
+    onBookReportContentChange: (String) -> Unit,
     onAddSelectedTag: (Int) -> Unit,
     onRemoveTag: (Int) -> Unit,
     onNavigateAddTag: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    var bookReportTitle by rememberSaveable { mutableStateOf("") }
-    var bookReportContent by rememberSaveable { mutableStateOf("") }
 
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.size(8.dp))
         OutlinedTextField(
-            value = bookReportTitle,
-            onValueChange = { bookReportTitle = it },
+            value = bookReportTitleState,
+            onValueChange = { onBookReportTitleChange(it) },
             placeholder = { Text(text = stringResource(R.string.placeholer_bookreport_title)) },
             singleLine = true,
             textStyle = TextStyle(fontWeight = FontWeight.Bold),
@@ -246,15 +288,15 @@ fun BookReportContent(
         )
         Spacer(modifier = Modifier.size(8.dp))
         TagListWithAddButton(
-            addedTagListState,
             onNavigateAddTag,
             onAddSelectedTag,
             onRemoveTag,
+            bookReport = bookReport,
         )
         Spacer(modifier = Modifier.size(8.dp))
         OutlinedTextField(
-            value = bookReportContent,
-            onValueChange = { bookReportContent = it },
+            value = bookReportContentState,
+            onValueChange = { onBookReportContentChange(it)},
             placeholder = { Text(text = stringResource(R.string.placeholer_bookreport_content)) },
             modifier = Modifier
                 .fillMaxSize()
@@ -267,12 +309,11 @@ fun BookReportContent(
 
 @Composable
 fun TagListWithAddButton(
-    addedTagListState: State<List<TagEntity>>,
     onNavigateAddTag: () -> Unit,
     onAddSelectedTag: (Int) -> Unit,
     onRemoveTag: (Int) -> Unit,
+    bookReport: BookReport = emptyBookReport,
 ) {
-    val addedTagList by addedTagListState
     Row(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -281,8 +322,13 @@ fun TagListWithAddButton(
                 .fillMaxWidth()
                 .weight(0.8f)
         ) {
-            items(addedTagList) { tag ->
-                TagItem(tag = tag, icon = R.drawable.ic_outline_cancel, onClicked = onAddSelectedTag, onRemoveTag = onRemoveTag)
+            items(bookReport.tags) { tag ->
+                TagItem(
+                    tag = tag,
+                    icon = R.drawable.ic_outline_cancel,
+                    onClicked = onAddSelectedTag,
+                    onRemoveTag = onRemoveTag
+                )
             }
         }
         Image(

@@ -3,16 +3,16 @@ package com.towitty.bookreport.data.network.model
 import com.google.gson.annotations.SerializedName
 
 
-data class Book(
+data class NetworkSearchBook(
     val lastBuildDate: String,
     val total: Int,
     val start: Int,
     val display: Int,
     @SerializedName("items")
-    val bookList:List<BookItem>
+    val bookList:List<NetworkBook>
 )
 
-data class BookItem(
+data class NetworkBook(
     @SerializedName("title")
     val title: String,
     @SerializedName("link")
@@ -33,7 +33,7 @@ data class BookItem(
     val description: String,
 )
 
-val emptyBook = Book(
+val emptyNetworkSearchBook = NetworkSearchBook(
     lastBuildDate = "",
     total = 0,
     start = 0,
@@ -41,7 +41,7 @@ val emptyBook = Book(
     bookList = emptyList()
 )
 
-val emptyBookItem = BookItem(
+val emptyNetworkBook = NetworkBook(
     title = "",
     link = "",
     image = "",

@@ -49,19 +49,19 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.towitty.bookreport.R
-import com.towitty.bookreport.data.network.model.BookItem
+import com.towitty.bookreport.data.network.model.NetworkBook
 import com.towitty.bookreport.presentation.ui.common.BookReportIcons
 
 @Composable
 fun BookInfoDetailScreen(
     onNavigateUp: () -> Unit,
     onSelection: () -> Unit,
-    bookItem: BookItem,
+    networkBook: NetworkBook,
     modifier: Modifier = Modifier
 ) {
     val bitmap: MutableState<Bitmap?> = remember { mutableStateOf(null) }
 
-    Glide.with(LocalContext.current).asBitmap().load(bookItem.image).into(object : CustomTarget<Bitmap>() {
+    Glide.with(LocalContext.current).asBitmap().load(networkBook.image).into(object : CustomTarget<Bitmap>() {
         override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
             bitmap.value = resource
         }
@@ -96,7 +96,7 @@ fun BookInfoDetailScreen(
             )
 
             BookInfoDetail(
-                book = bookItem,
+                book = networkBook,
                 Modifier
                     .fillMaxSize()
                     .padding(top = 16.dp, bottom = 16.dp)
@@ -183,7 +183,7 @@ fun BookInfoImage(
 }
 
 @Composable
-fun BookInfoDetail(book: BookItem, modifier: Modifier = Modifier) {
+fun BookInfoDetail(book: NetworkBook, modifier: Modifier = Modifier) {
     Card(modifier = modifier) {
         Column(
             verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier
@@ -240,7 +240,7 @@ fun BookInfoDetail(book: BookItem, modifier: Modifier = Modifier) {
 @Composable
 fun BookInfoDetailPreview(modifier: Modifier = Modifier) {
     BookInfoDetail(
-        book = BookItem(
+        book = NetworkBook(
             title = "title",
             link = "link",
             image = "image",

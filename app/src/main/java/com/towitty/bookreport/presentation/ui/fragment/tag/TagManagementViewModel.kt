@@ -3,7 +3,6 @@ package com.towitty.bookreport.presentation.ui.fragment.tag
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.towitty.bookreport.data.database.model.TagEntity
-import com.towitty.bookreport.data.database.model.emptyTagEntity
 import com.towitty.bookreport.data.repository.ITagRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,16 +19,6 @@ class TagManagementViewModel @Inject constructor(
 
     private val _tagList = MutableStateFlow<List<TagEntity>>(emptyList())
     val tagList: StateFlow<List<TagEntity>> = _tagList.asStateFlow()
-
-    fun getTagById(id: Int): TagEntity {
-        var tagEntity: TagEntity? = null
-        viewModelScope.launch {
-            tagLocalRepository.getTag(id).collect { tag ->
-                tagEntity = tag
-            }
-        }
-        return tagEntity ?: emptyTagEntity
-    }
 
     fun getAllTags() {
         viewModelScope.launch {
