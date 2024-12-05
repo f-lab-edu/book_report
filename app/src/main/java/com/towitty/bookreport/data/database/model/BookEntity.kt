@@ -9,13 +9,13 @@ import com.towitty.bookreport.data.repository.model.Book
 data class BookEntity(
     @PrimaryKey(autoGenerate = true)
     val id: Int = 0,
-    val isbn: Int,
+    val isbn: String,
     val title: String,
     val author: String,
     val link: String,
     val image: String,
     val description: String,
-    val price: Int,
+    val price: String,
     val publisher: String,
     val pubDate: String,
     val isFavorite: Boolean = false,
@@ -43,10 +43,10 @@ fun BookEntity.asNetworkBook(): NetworkBook {
         link = link,
         image = image,
         author = author,
-        price = price.toString(),
+        price = price,
         publisher = publisher,
         pubDate = pubDate,
-        isbn = isbn.toString(),
+        isbn = isbn,
         description = description
     )
 }

@@ -49,19 +49,22 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.towitty.bookreport.R
-import com.towitty.bookreport.data.network.model.NetworkBook
+import com.towitty.bookreport.data.repository.model.Book
+import com.towitty.bookreport.data.repository.model.emptyBook
 import com.towitty.bookreport.presentation.ui.common.BookReportIcons
 
 @Composable
-fun BookInfoDetailScreen(
+fun BookDetailScreen(
+    book: Book,
+    onFavoriteClick: (Book) -> Unit,
+    onCameraClick: () -> Unit,
     onNavigateUp: () -> Unit,
     onSelection: () -> Unit,
-    networkBook: NetworkBook,
     modifier: Modifier = Modifier
 ) {
     val bitmap: MutableState<Bitmap?> = remember { mutableStateOf(null) }
 
-    Glide.with(LocalContext.current).asBitmap().load(networkBook.image).into(object : CustomTarget<Bitmap>() {
+    Glide.with(LocalContext.current).asBitmap().load(book.image).into(object : CustomTarget<Bitmap>() {
         override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
             bitmap.value = resource
         }
@@ -72,7 +75,7 @@ fun BookInfoDetailScreen(
     })
 
     Scaffold(
-        topBar = { BookInfoDetailTopAppbar(onNavigateUp, onSelection, Modifier.fillMaxWidth()) },
+        topBar = { BookDetailTopAppbar(onNavigateUp, onSelection, Modifier.fillMaxWidth()) },
         modifier = modifier
     ) { innerPadding ->
         Column(
@@ -83,20 +86,20 @@ fun BookInfoDetailScreen(
         ) {
             bitmap.value?.asImageBitmap()?.let { bookItemImage ->
                 BookInfoImage(
+                    book = book,
                     bookItemImage = bookItemImage,
-                    onCameraClick = {},
-                    onHeartClick = {},
-                    isFavorite = false
+                    onCameraClick = onCameraClick,
+                    onFavoriteClick = onFavoriteClick,
                 )
             } ?: BookInfoImage(
+                book = book,
                 bookItemImage = ImageBitmap.imageResource(id = android.R.drawable.ic_menu_gallery),
-                onCameraClick = {},
-                onHeartClick = {},
-                isFavorite = false
+                onCameraClick = onCameraClick,
+                onFavoriteClick = onFavoriteClick,
             )
 
             BookInfoDetail(
-                book = networkBook,
+                book = book,
                 Modifier
                     .fillMaxSize()
                     .padding(top = 16.dp, bottom = 16.dp)
@@ -107,7 +110,7 @@ fun BookInfoDetailScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BookInfoDetailTopAppbar(onBack: () -> Unit, onSelection: () -> Unit, modifier: Modifier = Modifier) {
+fun BookDetailTopAppbar(onBack: () -> Unit, onSelection: () -> Unit, modifier: Modifier = Modifier) {
     TopAppBar(
         title = {},
         navigationIcon = {
@@ -130,10 +133,11 @@ fun BookInfoDetailTopAppbar(onBack: () -> Unit, onSelection: () -> Unit, modifie
 
 @Composable
 fun BookInfoImage(
+    book: Book,
     bookItemImage: ImageBitmap,
     onCameraClick: () -> Unit,
-    onHeartClick: () -> Unit,
-    isFavorite: Boolean
+    onFavoriteClick: (Book) -> Unit,
+    isFavorite: Boolean = false,
 ) {
     Box(
         modifier = Modifier
@@ -149,8 +153,8 @@ fun BookInfoImage(
                 .align(Alignment.Center)
         )
 
-        IconButton( //HeartButton
-            onClick = onHeartClick,
+        IconButton( //FavoriteButton
+            onClick = { onFavoriteClick(book) },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .clip(CircleShape)
@@ -183,7 +187,7 @@ fun BookInfoImage(
 }
 
 @Composable
-fun BookInfoDetail(book: NetworkBook, modifier: Modifier = Modifier) {
+fun BookInfoDetail(book: Book, modifier: Modifier = Modifier) {
     Card(modifier = modifier) {
         Column(
             verticalArrangement = Arrangement.spacedBy(4.dp), modifier = Modifier
@@ -240,7 +244,8 @@ fun BookInfoDetail(book: NetworkBook, modifier: Modifier = Modifier) {
 @Composable
 fun BookInfoDetailPreview(modifier: Modifier = Modifier) {
     BookInfoDetail(
-        book = NetworkBook(
+        book = Book(
+            id = 0,
             title = "title",
             link = "link",
             image = "image",
@@ -260,8 +265,9 @@ fun PreviewBookInfoImage() {
     BookInfoImage(
         bookItemImage = ImageBitmap.imageResource(id = android.R.drawable.ic_menu_gallery),
         onCameraClick = {},
-        onHeartClick = {},
-        isFavorite = true
+        onFavoriteClick = {},
+        isFavorite = false,
+        book = emptyBook
     )
 }
 

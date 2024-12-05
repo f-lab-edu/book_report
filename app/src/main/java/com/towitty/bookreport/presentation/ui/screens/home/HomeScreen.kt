@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -31,6 +32,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -46,22 +48,32 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.lerp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.towitty.bookreport.R
 import com.towitty.bookreport.data.database.model.BookReportEntity
-import com.towitty.bookreport.data.network.model.emptyNetworkBook
+import com.towitty.bookreport.data.repository.model.Book
+import com.towitty.bookreport.data.repository.model.BookReport
+import com.towitty.bookreport.data.repository.model.emptyBook
+import com.towitty.bookreport.presentation.ui.HomeViewModel
 import com.towitty.bookreport.presentation.ui.common.BookReportIcons
 import com.towitty.bookreport.presentation.ui.common.FavoriteIconState
 import com.towitty.bookreport.presentation.ui.common.IconState
 import com.towitty.bookreport.presentation.ui.components.BookCard
+import com.towitty.bookreport.presentation.ui.components.BookReportCard
 import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     bookReportListState: State<List<BookReportEntity>>,
+    onNavigateBookDetail: (bookIsbn: String) -> Unit,
     onNavigateBookReport: (bookReportId: Int) -> Unit,
-    onMoveSettings: (context: Context) -> Unit
+    onMoveSettings: (context: Context) -> Unit,
+    homeViewModel: HomeViewModel = hiltViewModel()
 ) {
+    val favoriteBooksState by homeViewModel.favoriteBooks.collectAsState()
+    val favoriteBookReportsState by homeViewModel.favoriteBookReports.collectAsState()
+
     Surface(Modifier.padding(16.dp)) {
         val context = LocalContext.current
         Column {
@@ -86,7 +98,12 @@ fun HomeScreen(
                 onChangeCard = {},
                 onChangeList = {}
             ) {
-                //            FavoriteList()
+                FavoriteList(
+                    favoriteBooks = favoriteBooksState,
+                    favoriteBookReports = favoriteBookReportsState,
+                    onNavigateBookDetail = onNavigateBookDetail,
+                    onNavigateBookReport = onNavigateBookReport
+                )
             }
             HomeTitleSlot(
                 text = stringResource(R.string.title_bookreport_list),
@@ -117,7 +134,7 @@ fun MonthRecommendedBook() {
             modifier = Modifier.wrapContentSize()
         ) { page ->
             BookCard(
-                networkBook = emptyNetworkBook,
+                book = emptyBook,
                 modifier = Modifier
                     .graphicsLayer {
                         // 페이지 전환 애니메이션 계산
@@ -171,6 +188,33 @@ fun MonthRecommendedBook() {
                         .background(color)
                         .size(16.dp)
                 )
+            }
+        }
+    }
+}
+
+@Composable
+fun FavoriteList(
+    favoriteBooks: List<Book>,
+    favoriteBookReports: List<BookReport>,
+    onNavigateBookDetail: (bookId: String) -> Unit = {},
+    onNavigateBookReport: (bookReportId: Int) -> Unit,
+) {
+    LazyRow(modifier = Modifier.wrapContentSize()) {
+        items(
+            items = favoriteBooks,
+            key = { it.id }
+        ) { favoriteBook ->
+            BookCard(book = favoriteBook) {
+                onNavigateBookDetail(favoriteBook.isbn)
+            }
+        }
+        items(
+            items = favoriteBookReports,
+            key = { it.id }
+        ) { favoriteBookReport ->
+            BookReportCard(bookReport = favoriteBookReport) {
+                onNavigateBookReport(favoriteBookReport.id)
             }
         }
     }

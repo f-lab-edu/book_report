@@ -40,7 +40,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.towitty.bookreport.R
-import com.towitty.bookreport.data.network.model.NetworkBook
+import com.towitty.bookreport.data.repository.model.Book
 import com.towitty.bookreport.presentation.ui.common.BookReportIcons
 import com.towitty.bookreport.presentation.ui.components.BookCard
 
@@ -51,7 +51,7 @@ fun BookSearchScreen(
     onNavigateUp: () -> Unit,
     searchBook: (String) -> Unit,
     onItemClicked: (String) -> Unit,
-    bookList: List<NetworkBook>,
+    bookList: List<Book>,
     modifier: Modifier = Modifier,
     title: @Composable () -> Unit = {},
 ) {
@@ -180,7 +180,7 @@ fun SearchFilter(
 
 @Composable
 fun BookList(
-    bookList: List<NetworkBook>,
+    bookList: List<Book>,
     onItemClicked: (String) -> Unit,
     selectedFilter: String,
     searchText: String,
@@ -188,18 +188,18 @@ fun BookList(
 ) {
 
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        items(items = bookList, key = { it.isbn }) { bookItem ->
+        items(items = bookList, key = { it.isbn }) { book ->
             when (selectedFilter) {
-                "title" -> if (bookItem.title.contains(searchText))
-                    BookCard(bookItem) { onItemClicked(bookItem.isbn) }
+                "title" -> if (book.title.contains(searchText))
+                    BookCard(book) { onItemClicked(book.isbn) }
 
-                "author" -> if (bookItem.author.contains(searchText))
-                    BookCard(bookItem) { onItemClicked(bookItem.isbn) }
+                "author" -> if (book.author.contains(searchText))
+                    BookCard(book) { onItemClicked(book.isbn) }
 
-                "publisher" -> if (bookItem.publisher.contains(searchText))
-                    BookCard(bookItem) { onItemClicked(bookItem.isbn) }
+                "publisher" -> if (book.publisher.contains(searchText))
+                    BookCard(book) { onItemClicked(book.isbn) }
 
-                "" -> BookCard(bookItem) { onItemClicked(bookItem.isbn) }
+                "" -> BookCard(book) { onItemClicked(book.isbn) }
             }
         }
     }

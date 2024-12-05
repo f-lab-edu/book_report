@@ -1,6 +1,7 @@
 package com.towitty.bookreport.data.network.model
 
 import com.google.gson.annotations.SerializedName
+import com.towitty.bookreport.data.database.model.BookEntity
 import com.towitty.bookreport.data.repository.model.Book
 
 val emptyNetworkSearchBook = NetworkSearchBook(
@@ -53,16 +54,29 @@ data class NetworkBook(
     val description: String,
 )
 
-fun NetworkBook.asBook() = Book(
+fun NetworkBook.asBook(isFavorite: Boolean = false) = Book(
     id = -1,
     title = title,
     author = author,
     publisher = publisher,
     pubDate = pubDate,
-    isbn = isbn.toInt(),
+    isbn = isbn,
     description = description,
     image = image,
-    price = price.toInt(),
+    price = price,
     link = link,
-    isFavorite = false,
+    isFavorite = isFavorite,
+)
+
+fun NetworkBook.asBookEntity(isFavorite: Boolean) = BookEntity(
+    isbn = isbn,
+    title = title,
+    author = author,
+    link = link,
+    image = image,
+    description = description,
+    price = price,
+    publisher = publisher,
+    pubDate = pubDate,
+    isFavorite = isFavorite,
 )

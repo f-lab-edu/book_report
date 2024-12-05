@@ -15,6 +15,8 @@ import com.towitty.bookreport.data.repository.model.emptyBook
 import com.towitty.bookreport.di.BookReportDispatchers
 import com.towitty.bookreport.di.Dispatcher
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
@@ -29,8 +31,8 @@ class BookReportRepository @Inject constructor(
 
     suspend fun fetchBookReport(id: Int): BookReport = withContext(dispatcherIO) {
         Timber.d("fetchBookReport: $id")
-        bookReportDao.getBookReport(id).let { bookReportEntity ->
-            val book = bookDao.getBook(bookReportEntity.bookId)?.asBook() ?: emptyBook
+        bookReportDao.fetchBookReport(id).let { bookReportEntity ->
+            val book = bookDao.fetchBookById(bookReportEntity.bookId)?.asBook() ?: emptyBook
             val tagList = mutableListOf<Tag>()
 
             bookReportEntity.tagIds.forEach { tagId ->
@@ -68,7 +70,9 @@ class BookReportRepository @Inject constructor(
         bookReportDao.insertBookReport(entity) // this
     }
 
-    private fun saveBook(book: Book) = bookDao.insertBook(book.asEntity())
+    suspend fun saveBook(book: Book) = withContext(dispatcherIO) {
+        bookDao.insertBook(book.asEntity())
+    }
 
     fun addTag(bookReport: BookReport, tag: Tag) = bookReport.copy(tags = bookReport.tags + tag)
 
@@ -76,7 +80,14 @@ class BookReportRepository @Inject constructor(
         bookReport.tags.find { it.id == tagId }?.let { tag -> bookReport.copy(tags = bookReport.tags - tag) }
             ?: bookReport
 
-    fun fetchBookReports() = bookReportDao.getAllBookReports()
+    fun fetchBookReports() = bookReportDao.fetchBookReports()
 
     fun getAllTags() = tagDao.getAllTags()
+
+    fun fetchFavoriteBookReports(): Flow<List<BookReport>> =
+        bookReportDao.fetchFavoriteBookReports().map { bookReports ->
+            bookReports.map { bookReport ->
+                fetchBookReport(bookReport.id)
+            }
+        }
 }

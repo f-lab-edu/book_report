@@ -5,26 +5,26 @@ import com.towitty.bookreport.data.network.model.NetworkBook
 
 val emptyBook = Book(
     id = 0,
-    isbn = 0,
+    isbn = "0",
     title = "제목",
     author = "작가",
-    image = " ",
-    description = " ",
-    price = 0,
-    link = " ",
-    pubDate = " ",
+    image = "-",
+    description = "-",
+    price = "-",
+    link = "-",
+    pubDate = "-",
     publisher = "출판사",
     isFavorite = false
 )
 
 data class Book(
     val id: Int,
-    val isbn: Int,
+    val isbn: String,
     val title: String,
     val author: String,
     val image: String,
     val description: String,
-    val price: Int,
+    val price: String,
     val link: String,
     val pubDate: String,
     val publisher: String,
@@ -53,10 +53,10 @@ fun Book.asNetworkBook(): NetworkBook {
         link = link,
         image = image,
         author = author,
-        price = price.toString(),
+        price = price,
         publisher = publisher,
         pubDate = pubDate,
-        isbn = isbn.toString(),
+        isbn = isbn,
         description = description
     )
 }

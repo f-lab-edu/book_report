@@ -50,7 +50,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.towitty.bookreport.R
-import com.towitty.bookreport.data.network.model.NetworkBook
+import com.towitty.bookreport.data.repository.model.Book
 import com.towitty.bookreport.data.repository.model.BookReport
 import com.towitty.bookreport.data.repository.model.emptyBook
 import com.towitty.bookreport.data.repository.model.emptyBookReport
@@ -64,7 +64,7 @@ fun BookReportScreen(
     onRemoveTag: (Int) -> Unit,
     onNavigateAddTag: () -> Unit,
     modifier: Modifier = Modifier,
-    book: NetworkBook,
+    book: Book,
     bookReportState: State<BookReport>
 ) {
     val bookReport by bookReportState
@@ -308,7 +308,7 @@ fun BookReportContent(
                 .fillMaxSize()
                 .weight(0.8f)
         )
-        Text(text = "마지막 수정 0000-00-00", modifier = Modifier.align(Alignment.End))
+        Text(text = "마지막 수정 ${bookReport.date}", modifier = Modifier.align(Alignment.End))
     }
 
 }

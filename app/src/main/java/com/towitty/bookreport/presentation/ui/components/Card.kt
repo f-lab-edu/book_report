@@ -29,15 +29,16 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.towitty.bookreport.R
-import com.towitty.bookreport.data.network.model.NetworkBook
-import com.towitty.bookreport.data.network.model.emptyNetworkBook
+import com.towitty.bookreport.data.repository.model.Book
+import com.towitty.bookreport.data.repository.model.BookReport
+import com.towitty.bookreport.data.repository.model.emptyBook
 
 
 @Composable
-fun BookCard(networkBook: NetworkBook, modifier: Modifier = Modifier, onClick: () -> Unit) {
+fun BookCard(book: Book, modifier: Modifier = Modifier, onClick: () -> Unit) {
     val bitmap: MutableState<Bitmap?> = remember { mutableStateOf(null) }
 
-    Glide.with(LocalContext.current).asBitmap().load(networkBook.image).into(object : CustomTarget<Bitmap>() {
+    Glide.with(LocalContext.current).asBitmap().load(book.image).into(object : CustomTarget<Bitmap>() {
         override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
             bitmap.value = resource
         }
@@ -73,10 +74,61 @@ fun BookCard(networkBook: NetworkBook, modifier: Modifier = Modifier, onClick: (
                     .fillMaxHeight()
                     .padding(top = 16.dp, bottom = 16.dp)
             ) {
-                Text(networkBook.title)
-                Text(networkBook.author)
-                Text(networkBook.price)
-                Text(networkBook.publisher)
+                Text(book.title)
+                Text(book.author)
+                Text(book.price)
+                Text(book.publisher)
+            }
+        }
+    }
+}
+
+@Composable
+fun BookReportCard(
+    bookReport: BookReport,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit
+) {
+    val bitmap: MutableState<Bitmap?> = remember { mutableStateOf(null) }
+
+    Glide.with(LocalContext.current).asBitmap().load(bookReport.book.image).into(object : CustomTarget<Bitmap>() {
+        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+            bitmap.value = resource
+        }
+
+        override fun onLoadCleared(placeholder: Drawable?) {
+            bitmap.value = null
+        }
+    })
+
+    Card(
+        onClick = onClick,
+        shape = RoundedCornerShape(CornerSize(8.dp)),
+        modifier = modifier
+            .fillMaxWidth()
+            .height(166.dp)
+    ) {
+        Row {
+            bitmap.value?.asImageBitmap()?.let { fetchedBitmap ->
+                Image(
+                    bitmap = fetchedBitmap,
+                    contentDescription = null,
+                    modifier = Modifier.size(166.dp)
+                )
+            } ?: Image(
+                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                contentDescription = null,
+                modifier = Modifier.size(166.dp)
+            )
+
+            Column(
+                verticalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .padding(top = 16.dp, bottom = 16.dp)
+            ) {
+                Text(bookReport.title)
+                Text(bookReport.content)
             }
         }
     }
@@ -86,7 +138,7 @@ fun BookCard(networkBook: NetworkBook, modifier: Modifier = Modifier, onClick: (
 @Composable
 fun BookCardPreview(modifier: Modifier = Modifier) {
     BookCard(
-        networkBook = emptyNetworkBook,
+        book = emptyBook,
         modifier = modifier,
         onClick = {}
     )

@@ -11,14 +11,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.toRoute
 import com.towitty.bookreport.data.database.model.BookReportEntity
-import com.towitty.bookreport.data.network.model.NetworkBook
-import com.towitty.bookreport.data.network.model.emptyNetworkBook
+import com.towitty.bookreport.data.repository.model.Book
 import com.towitty.bookreport.data.repository.model.BookReport
 import com.towitty.bookreport.data.repository.model.Tag
-import com.towitty.bookreport.data.repository.model.asNetworkBook
+import com.towitty.bookreport.data.repository.model.emptyBook
 import com.towitty.bookreport.presentation.ui.SettingsActivity
 import com.towitty.bookreport.presentation.ui.screens.bookreport.AddTagScreen
-import com.towitty.bookreport.presentation.ui.screens.bookreport.BookInfoDetailScreen
+import com.towitty.bookreport.presentation.ui.screens.bookreport.BookDetailScreen
 import com.towitty.bookreport.presentation.ui.screens.bookreport.BookReportScreen
 import com.towitty.bookreport.presentation.ui.screens.bookreport.BookSearchScreen
 import com.towitty.bookreport.presentation.ui.screens.calendar.CalendarScreen
@@ -28,13 +27,15 @@ import timber.log.Timber
 
 @Composable
 fun Navigation(
-    bookListState: State<List<NetworkBook>>,
+    findBookState: State<Book>,
+    bookListState: State<List<Book>>,
     tagListState: State<List<Tag>>,
     bookReportListState: State<List<BookReportEntity>>,
     bookReportState: State<BookReport>,
     fetchBookReport: (Int) -> Unit,
-    findBookByIsbn: (String) -> NetworkBook,
+    onFindBookByIsbn: (String) -> Unit,
     searchBooks: (String) -> Unit,
+    onSaveBook: (Book) -> Unit,
     onSaveBookReport: (BookReport) -> Unit,
     onRemoveTag: (Int) -> Unit,
     onAddSelectedTag: (Int) -> Unit,
@@ -42,7 +43,7 @@ fun Navigation(
     startDestination: String,
     modifier: Modifier = Modifier,
 ) {
-    val bookList: List<NetworkBook> by bookListState
+    val bookList: List<Book> by bookListState
 
     NavHost(
         navController = navController,
@@ -52,6 +53,7 @@ fun Navigation(
         composable(route = BottomNavItem.HOME.name) {
             HomeScreen(
                 bookReportListState = bookReportListState,
+                onNavigateBookDetail = { navController.navigate(Routes.BookDetail(it)) },
                 onNavigateBookReport = { navController.navigate(Routes.BookReport.fromBookReportId(it)) },
                 onMoveSettings = { context ->
                     context.startActivity(Intent(context, SettingsActivity::class.java))
@@ -74,12 +76,15 @@ fun Navigation(
                 onSaveBookReport = onSaveBookReport,
                 onNavigateAddTag = { navController.navigate(Routes.AddTag) },
                 book = when {
-                    route.isbn != null -> findBookByIsbn(route.isbn)
+                    route.isbn != null -> {
+                        onFindBookByIsbn(route.isbn)
+                        findBookState.value
+                    }
                     route.bookReportId != null -> {
                         fetchBookReport(route.bookReportId)
-                        bookReportState.value.book.asNetworkBook()
+                        bookReportState.value.book
                     }
-                    else -> emptyNetworkBook
+                    else -> emptyBook
                 }
             )
         }
@@ -101,10 +106,15 @@ fun Navigation(
                 Timber.d("isbn is null")
                 return@composable
             }
-            BookInfoDetailScreen(
+            BookDetailScreen(
+                onFavoriteClick = onSaveBook,
+                onCameraClick = { TODO() },
                 onNavigateUp = { navController.navigateUp() },
                 onSelection = { navController.navigate(Routes.BookReport(isbn = isbn)) },
-                networkBook = findBookByIsbn(isbn)
+                book = run {
+                    onFindBookByIsbn(isbn)
+                    findBookState.value
+                }
             )
         }
 

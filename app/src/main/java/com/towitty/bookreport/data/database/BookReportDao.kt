@@ -20,9 +20,12 @@ interface BookReportDao {
     @Update
     fun updateBookReport(bookReportEntity: BookReportEntity)
 
-    @Query("SELECT * FROM book_reports WHERE id = :id")
-    suspend fun getBookReport(id: Int): BookReportEntity
+    @Query("SELECT * FROM book_reports WHERE id = :id LIMIT 1")
+    suspend fun fetchBookReport(id: Int): BookReportEntity
 
     @Query("SELECT * FROM book_reports")
-    fun getAllBookReports(): Flow<List<BookReportEntity>>
+    fun fetchBookReports(): Flow<List<BookReportEntity>>
+
+    @Query("SELECT * FROM book_reports WHERE isFavorite = 1")
+    fun fetchFavoriteBookReports(): Flow<List<BookReportEntity>>
 }

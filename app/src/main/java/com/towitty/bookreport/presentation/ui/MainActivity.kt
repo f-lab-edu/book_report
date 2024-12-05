@@ -24,7 +24,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.towitty.bookreport.R
 import com.towitty.bookreport.data.database.model.BookReportEntity
-import com.towitty.bookreport.data.network.model.NetworkBook
+import com.towitty.bookreport.data.repository.model.Book
 import com.towitty.bookreport.data.repository.model.BookReport
 import com.towitty.bookreport.data.repository.model.Tag
 import com.towitty.bookreport.presentation.navigation.AppBottomNavigation
@@ -48,14 +48,16 @@ class MainActivity : ComponentActivity() {
                 BookReportApp(
                     bookListState = viewModel.bookList.collectAsState(),
                     tagListState = viewModel.tagList.collectAsState(),
+                    findBookState = viewModel.foundBook.collectAsState(),
                     bookReportState = viewModel.bookReport.collectAsState(),
                     bookReportListState = viewModel.bookReportList.collectAsState(),
                     fetchBookReport = viewModel::fetchBookReport,
                     searchBooks = viewModel::searchBooks,
+                    onSaveBook = viewModel::saveBook,
                     onSaveBookReport = viewModel::saveBookReport,
                     onRemoveTag = viewModel::removeBookReportTag,
                     onAddSelectedTag = viewModel::addBookReportTag,
-                    findBookByIsbn = viewModel::findBookByIsbn,
+                    onFindBookByIsbn = viewModel::findBookByIsbn,
                 )
             }
         }
@@ -64,16 +66,18 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun BookReportApp(
-    bookListState: State<List<NetworkBook>>,
+    bookListState: State<List<Book>>,
+    findBookState: State<Book>,
     tagListState: State<List<Tag>>,
     bookReportState: State<BookReport>,
     bookReportListState: State<List<BookReportEntity>>,
     fetchBookReport: (Int) -> Unit,
     searchBooks: (String) -> Unit,
+    onSaveBook: (Book) -> Unit,
     onSaveBookReport: (BookReport) -> Unit,
     onAddSelectedTag: (Int) -> Unit,
     onRemoveTag: (Int) -> Unit,
-    findBookByIsbn: (String) -> NetworkBook,
+    onFindBookByIsbn: (String) -> Unit,
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -103,13 +107,15 @@ fun BookReportApp(
         }
     ) { innerPadding ->
         Navigation(
+            findBookState = findBookState,
             bookListState = bookListState,
             tagListState = tagListState,
             bookReportListState = bookReportListState,
             bookReportState = bookReportState,
-            findBookByIsbn = findBookByIsbn,
             fetchBookReport = fetchBookReport,
             searchBooks = searchBooks,
+            onFindBookByIsbn = onFindBookByIsbn,
+            onSaveBook = onSaveBook,
             onSaveBookReport = onSaveBookReport,
             onRemoveTag = onRemoveTag,
             onAddSelectedTag = onAddSelectedTag,

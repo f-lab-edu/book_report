@@ -1,21 +1,21 @@
 package com.towitty.bookreport.data.network
 
 import com.towitty.bookreport.data.network.model.NetworkBook
-import com.towitty.bookreport.data.repository.BookRemoteRepository
+import com.towitty.bookreport.data.repository.BookRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class NetworkSearchBookRemoteRepositoryTest {
+class NetworkSearchBookRepositoryTest {
 
     private lateinit var bookRemoteDataSource: IBookDataSource
-    private lateinit var bookRemoteRepository: BookRemoteRepository
+    private lateinit var bookRepository: BookRepository
 
     @Before
     fun setUp() {
         bookRemoteDataSource = FakeBookRemoteDataSource()
-        bookRemoteRepository = BookRemoteRepository(bookRemoteDataSource)
+        bookRepository = BookRepository(bookRemoteDataSource)
     }
 
     @Test
@@ -49,8 +49,8 @@ class NetworkSearchBookRemoteRepositoryTest {
             )
         )
 
-        val androidBook = bookRemoteRepository.searchBooks(androidQuery)
-        val kotlinBook = bookRemoteRepository.searchBooks(kotlinQuery)
+        val androidBook = bookRepository.searchBooks(androidQuery)
+        val kotlinBook = bookRepository.searchBooks(kotlinQuery)
 
         assert(androidBook.isEmpty().not())
         assert(kotlinBook.isEmpty().not())
@@ -89,7 +89,7 @@ class NetworkSearchBookRemoteRepositoryTest {
             )
         )
 
-        val book = bookRemoteRepository.searchBooks(query)
+        val book = bookRepository.searchBooks(query)
 
         assert(book.isEmpty())
     }
