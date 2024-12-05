@@ -8,7 +8,6 @@ import com.towitty.bookreport.data.database.model.asTag
 import com.towitty.bookreport.data.network.model.NetworkBook
 import com.towitty.bookreport.data.repository.BookReportRepository
 import com.towitty.bookreport.data.repository.IBookRepository
-import com.towitty.bookreport.data.repository.ITagRepository
 import com.towitty.bookreport.data.repository.model.BookReport
 import com.towitty.bookreport.data.repository.model.Tag
 import com.towitty.bookreport.data.repository.model.emptyBookReport
@@ -22,7 +21,6 @@ import javax.inject.Inject
 class BookReportViewModel @Inject constructor(
     private val bookReportRepository: BookReportRepository,
     private val bookRemoteRepository: IBookRepository,
-    private val tagLocalRepository: ITagRepository,
 ) : ViewModel() {
     private val _bookList = MutableStateFlow<List<NetworkBook>>(emptyList())
     val bookList: StateFlow<List<NetworkBook>> = _bookList
@@ -68,7 +66,6 @@ class BookReportViewModel @Inject constructor(
     /**
      * BookReport
      */
-
     private fun fetchBookReportList() {
         viewModelScope.launch {
             bookReportRepository.fetchBookReports().collect { bookReport ->
@@ -98,5 +95,4 @@ class BookReportViewModel @Inject constructor(
             bookReportRepository.saveBookReport(bookReport)
         }
     }
-
 }

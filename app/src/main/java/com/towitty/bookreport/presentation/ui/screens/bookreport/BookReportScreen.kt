@@ -54,6 +54,7 @@ import com.towitty.bookreport.data.network.model.NetworkBook
 import com.towitty.bookreport.data.repository.model.BookReport
 import com.towitty.bookreport.data.repository.model.emptyBook
 import com.towitty.bookreport.data.repository.model.emptyBookReport
+import com.towitty.bookreport.util.getCurrentDateTime
 
 @Composable
 fun BookReportScreen(
@@ -158,8 +159,13 @@ private fun BookReportTopAppbar(
                 onClick = {
                     onSaveBookReport(
                         bookReport.copy(
+                            id = bookReport.id,
                             title = bookReportTitle,
-                            content = bookReportContent
+                            content = bookReportContent,
+                            tags = bookReport.tags,
+                            isFavorite = bookReport.isFavorite,
+                            book = bookReport.book,
+                            date = getCurrentDateTime()
                         )
                     )
                 },
@@ -296,7 +302,7 @@ fun BookReportContent(
         Spacer(modifier = Modifier.size(8.dp))
         OutlinedTextField(
             value = bookReportContentState,
-            onValueChange = { onBookReportContentChange(it)},
+            onValueChange = { onBookReportContentChange(it) },
             placeholder = { Text(text = stringResource(R.string.placeholer_bookreport_content)) },
             modifier = Modifier
                 .fillMaxSize()
@@ -323,12 +329,14 @@ fun TagListWithAddButton(
                 .weight(0.8f)
         ) {
             items(bookReport.tags) { tag ->
-                TagItem(
-                    tag = tag,
-                    icon = R.drawable.ic_outline_cancel,
-                    onClicked = onAddSelectedTag,
-                    onRemoveTag = onRemoveTag
-                )
+                if (tag.id != 0) {
+                    TagItem(
+                        tag = tag,
+                        icon = R.drawable.ic_outline_cancel,
+                        onClicked = onAddSelectedTag,
+                        onRemoveTag = onRemoveTag
+                    )
+                }
             }
         }
         Image(

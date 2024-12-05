@@ -19,8 +19,8 @@ interface TagDao {
     @Delete
     suspend fun deleteTag(tagEntity: TagEntity)
 
-    @Query("SELECT * FROM tags WHERE id = :id")
-    fun getTag(id: Int): Flow<TagEntity>
+    @Query("SELECT * FROM tags WHERE id = :id LIMIT 1")
+    fun getTag(id: Int): TagEntity?
 
     @Query("SELECT * FROM tags ORDER BY name ASC")
     fun getAllTags(): Flow<List<TagEntity>>

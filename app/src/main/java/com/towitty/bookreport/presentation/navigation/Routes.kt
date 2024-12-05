@@ -1,29 +1,36 @@
 package com.towitty.bookreport.presentation.navigation
 
-import com.towitty.bookreport.presentation.navigation.Routes.BOOK_REPORT
 import kotlinx.serialization.Serializable
 
-object Routes {
-    const val ADD_TAG: String = "book_report_add_tag"
-    const val BOOK_INFO_DETAIL: String = "book_info_detail"
-    const val BOOK_SEARCH_FOR_BOOK_REPORT: String = "book_report_book_search"
-    const val BOOK_REPORT = "directly_book_report"
-}
-
-sealed interface AppRoute {
-    val route:String
+sealed interface Routes {
 
     @Serializable
-    data class BookReportRoute(
-        override val route: String = BOOK_REPORT,
+    data class BookReport(
         val bookReportId: Int? = null,
         val isbn: String? = null,
-    ): AppRoute {
+    ) : Routes {
         companion object {
-            fun fromBookReportId(bookReportId: Int): BookReportRoute {
-                return BookReportRoute(bookReportId = bookReportId)
-            }
+            fun fromBookReportId(bookReportId: Int) = BookReport(bookReportId = bookReportId)
         }
     }
+
+    @Serializable
+    data object AddTag : Routes
+
+    @Serializable
+    data class BookSearch(
+        val isbn: String? = null
+    ) : Routes
+    @Serializable
+    data class BookDetail(
+        val isbn: String? = null
+    ) : Routes
+}
+
+fun Routes.fromIsbn(isbn: String): Routes = when (this) {
+    is Routes.BookReport -> copy(isbn = isbn)
+    is Routes.BookSearch -> copy(isbn = isbn)
+    is Routes.BookDetail -> copy(isbn = isbn)
+    else -> this
 }
 

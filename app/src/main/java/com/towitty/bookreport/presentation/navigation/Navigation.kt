@@ -24,6 +24,7 @@ import com.towitty.bookreport.presentation.ui.screens.bookreport.BookSearchScree
 import com.towitty.bookreport.presentation.ui.screens.calendar.CalendarScreen
 import com.towitty.bookreport.presentation.ui.screens.home.HomeScreen
 import com.towitty.bookreport.presentation.ui.screens.search.SearchScreen
+import timber.log.Timber
 
 @Composable
 fun Navigation(
@@ -51,7 +52,7 @@ fun Navigation(
         composable(route = BottomNavItem.HOME.name) {
             HomeScreen(
                 bookReportListState = bookReportListState,
-                onMoveBookReport = { navController.navigate(AppRoute.BookReportRoute(bookReportId = it)) },
+                onNavigateBookReport = { navController.navigate(Routes.BookReport.fromBookReportId(it)) },
                 onMoveSettings = { context ->
                     context.startActivity(Intent(context, SettingsActivity::class.java))
                 }
@@ -63,28 +64,15 @@ fun Navigation(
         composable(route = BottomNavItem.SEARCH.name) {
             SearchScreen()
         }
-        /*composable(route = "${Routes.DIRECTLY_BOOK_REPORT}/{isbn}") {
-            val previousRoute = navController.previousBackStackEntry?.destination?.route
-            val isbn = it.arguments?.getString("isbn") ?: ""
+        composable<Routes.BookReport> { backStackEntry ->
+            val route = backStackEntry.toRoute<Routes.BookReport>()
             BookReportScreen(
                 bookReportState = bookReportState,
                 onCancel = { navController.navigateUp() },
                 onAddSelectedTag = onAddSelectedTag,
                 onRemoveTag = onRemoveTag,
                 onSaveBookReport = onSaveBookReport,
-                onNavigateAddTag = { navController.navigate(Routes.ADD_TAG) },
-                book = if (previousRoute == "${Routes.BOOK_INFO_DETAIL}/{isbn}") findBookByIsbn(isbn) else emptyNetworkBook
-            )
-        }*/
-        composable<AppRoute.BookReportRoute> { backStackEntry ->
-            val route = backStackEntry.toRoute<AppRoute.BookReportRoute>()
-            BookReportScreen(
-                bookReportState = bookReportState,
-                onCancel = { navController.navigateUp() },
-                onAddSelectedTag = onAddSelectedTag,
-                onRemoveTag = onRemoveTag,
-                onSaveBookReport = onSaveBookReport,
-                onNavigateAddTag = { navController.navigate(Routes.ADD_TAG) },
+                onNavigateAddTag = { navController.navigate(Routes.AddTag) },
                 book = when {
                     route.isbn != null -> findBookByIsbn(route.isbn)
                     route.bookReportId != null -> {
@@ -96,28 +84,31 @@ fun Navigation(
             )
         }
 
-        composable(route = Routes.BOOK_SEARCH_FOR_BOOK_REPORT) {
+        composable<Routes.BookSearch> { backStackEntry ->
             BookSearchScreen(
                 onNavigateUp = { navController.navigateUp() },
                 searchBook = searchBooks,
                 bookList = bookList,
                 onItemClicked = { isbn ->
-                    navController.navigate("${Routes.BOOK_INFO_DETAIL}/$isbn")
+                    navController.navigate(Routes.BookDetail(isbn = isbn))
                 },
                 title = {/*미사용*/ }
             )
         }
 
-        composable(route = Routes.BOOK_INFO_DETAIL + "/{isbn}") {
-            val isbn = it.arguments?.getString("isbn") ?: ""
+        composable<Routes.BookDetail> { backStackEntry ->
+            val isbn = backStackEntry.toRoute<Routes.BookDetail>().isbn ?: run {
+                Timber.d("isbn is null")
+                return@composable
+            }
             BookInfoDetailScreen(
                 onNavigateUp = { navController.navigateUp() },
-                onSelection = { navController.navigate(AppRoute.BookReportRoute(isbn = isbn)) },
+                onSelection = { navController.navigate(Routes.BookReport(isbn = isbn)) },
                 networkBook = findBookByIsbn(isbn)
             )
         }
 
-        composable(route = Routes.ADD_TAG) {
+        composable<Routes.AddTag> {
              AddTagScreen(
                  onNavigateUp = { navController.navigateUp() },
                  onAddSelectedTag = onAddSelectedTag,

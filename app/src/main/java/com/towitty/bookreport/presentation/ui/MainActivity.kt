@@ -119,7 +119,7 @@ fun BookReportApp(
         )
         if (isShowFabModal) {
             FabModal(
-                onClicked = { navController.navigate(it) },
+                onNavigateRoute = { navController.navigate(it) },
                 onDismissRequest = { isShowFabModal = false },
                 modifier = Modifier.wrapContentHeight()
             )

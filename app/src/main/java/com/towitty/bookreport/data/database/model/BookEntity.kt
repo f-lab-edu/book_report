@@ -18,7 +18,7 @@ data class BookEntity(
     val price: Int,
     val publisher: String,
     val pubDate: String,
-    val isFavorite: Boolean,
+    val isFavorite: Boolean = false,
 )
 
 fun BookEntity.asBook(): Book {

@@ -23,14 +23,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.towitty.bookreport.R
-import com.towitty.bookreport.presentation.navigation.AppRoute
+import com.towitty.bookreport.data.repository.model.emptyBookReport
 import com.towitty.bookreport.presentation.navigation.Routes
 import com.towitty.bookreport.presentation.ui.common.BookReportIcons
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FabModal(
-    onClicked: (String) -> Unit,
+    onNavigateRoute: (Routes) -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -50,7 +50,7 @@ fun FabModal(
                 label = stringResource(R.string.fab_modal_keyboard),
                 onClicked = {
                     onDismissRequest()
-                    onClicked(AppRoute.BookReportRoute().route)
+                    onNavigateRoute(Routes.BookReport.fromBookReportId(emptyBookReport.id))
                 },
             )
             FabModalSheetItem(
@@ -58,7 +58,7 @@ fun FabModal(
                 label = stringResource(R.string.fab_modal_book_search),
                 onClicked = {
                     onDismissRequest()
-                    onClicked(Routes.BOOK_SEARCH_FOR_BOOK_REPORT)
+                    onNavigateRoute(Routes.BookSearch())
                 }
             )
             FabModalSheetItem(

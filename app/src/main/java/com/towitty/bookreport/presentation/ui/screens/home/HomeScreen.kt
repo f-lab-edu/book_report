@@ -59,7 +59,7 @@ import kotlin.math.absoluteValue
 @Composable
 fun HomeScreen(
     bookReportListState: State<List<BookReportEntity>>,
-    onMoveBookReport: (bookReportId: Int) -> Unit,
+    onNavigateBookReport: (bookReportId: Int) -> Unit,
     onMoveSettings: (context: Context) -> Unit
 ) {
     Surface(Modifier.padding(16.dp)) {
@@ -96,7 +96,7 @@ fun HomeScreen(
             ) {
                 BookReportList(
                     bookReportListState,
-                    onMoveBookReport = onMoveBookReport
+                    onMoveBookReport = onNavigateBookReport
                 )
             }
         }

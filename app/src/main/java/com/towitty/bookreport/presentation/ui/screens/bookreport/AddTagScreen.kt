@@ -21,11 +21,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import com.towitty.bookreport.R
 import com.towitty.bookreport.data.repository.model.Tag
 import com.towitty.bookreport.presentation.ui.common.BookReportIcons
@@ -77,11 +75,13 @@ fun TagItem(
     onClicked: (Int) -> Unit,
     onRemoveTag: (Int) -> Unit
 ) {
+    val tagColor = Color(tag.color)
+
     Box(
         modifier = Modifier
             .padding(4.dp)
             .clip(RoundedCornerShape(24.dp))
-            .background(Color(ContextCompat.getColor(LocalContext.current, tag.color)))
+            .background(tagColor)
             .also {
                 if (icon == -1) {
                     it.clickable {
@@ -94,7 +94,7 @@ fun TagItem(
             TextButton(
                 onClick = { onClicked(tag.id) },
             ) {
-                Text(tag.name,color = Color.White)
+                Text(tag.name, color = Color.White)
             }
             if (icon != -1) {
                 IconButton(

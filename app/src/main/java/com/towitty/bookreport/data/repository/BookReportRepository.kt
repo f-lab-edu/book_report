@@ -6,31 +6,41 @@ import com.towitty.bookreport.data.database.TagDao
 import com.towitty.bookreport.data.database.model.BookReportEntity
 import com.towitty.bookreport.data.database.model.asBook
 import com.towitty.bookreport.data.database.model.asTag
+import com.towitty.bookreport.data.database.model.emptyTagEntity
+import com.towitty.bookreport.data.repository.model.Book
 import com.towitty.bookreport.data.repository.model.BookReport
 import com.towitty.bookreport.data.repository.model.Tag
-import kotlinx.coroutines.flow.first
+import com.towitty.bookreport.data.repository.model.asEntity
+import com.towitty.bookreport.data.repository.model.emptyBook
+import com.towitty.bookreport.di.BookReportDispatchers
+import com.towitty.bookreport.di.Dispatcher
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.withContext
 import timber.log.Timber
 import javax.inject.Inject
 
 class BookReportRepository @Inject constructor(
     private val tagDao: TagDao,
     private val bookDao: BookDao,
-    private val bookReportDao: BookReportDao
+    private val bookReportDao: BookReportDao,
+    @Dispatcher(BookReportDispatchers.IO)
+    private val dispatcherIO: CoroutineDispatcher
 ) {
 
-    suspend fun fetchBookReport(id: Int): BookReport {
+    suspend fun fetchBookReport(id: Int): BookReport = withContext(dispatcherIO) {
         Timber.d("fetchBookReport: $id")
-        bookReportDao.getBookReport(id).first().let { bookReportEntity ->
-            val book = bookDao.getBook(bookReportEntity.bookId).first().asBook()
+        bookReportDao.getBookReport(id).let { bookReportEntity ->
+            val book = bookDao.getBook(bookReportEntity.bookId)?.asBook() ?: emptyBook
             val tagList = mutableListOf<Tag>()
 
             bookReportEntity.tagIds.forEach { tagId ->
-                tagDao.getTag(tagId).collect {
-                    tagList.add(it.asTag())
-                }
+                tagDao.getTag(tagId)?.let { tagList.add(it.asTag()) }
             }
 
-            return BookReport(
+            if (tagList.isEmpty()) {
+                tagList.add(emptyTagEntity.asTag())
+            }
+            return@withContext BookReport(
                 id = bookReportEntity.id,
                 title = bookReportEntity.title,
                 content = bookReportEntity.content,
@@ -42,7 +52,7 @@ class BookReportRepository @Inject constructor(
         }
     }
 
-    suspend fun saveBookReport(bookReport: BookReport) {
+    suspend fun saveBookReport(bookReport: BookReport) = withContext(dispatcherIO) {
         val entity = BookReportEntity(
             id = bookReport.id,
             title = bookReport.title,
@@ -50,11 +60,15 @@ class BookReportRepository @Inject constructor(
             date = bookReport.date,
             isFavorite = bookReport.isFavorite,
             bookId = bookReport.book.id,
-            tagIds = bookReport.tags.map { it.id }
+            tagIds = if (bookReport.tags.isNotEmpty()) {
+                bookReport.tags.map { it.id }
+            } else listOf(0)
         )
-
-        bookReportDao.insertBookReport(entity)
+        saveBook(bookReport.book) // this
+        bookReportDao.insertBookReport(entity) // this
     }
+
+    private fun saveBook(book: Book) = bookDao.insertBook(book.asEntity())
 
     fun addTag(bookReport: BookReport, tag: Tag) = bookReport.copy(tags = bookReport.tags + tag)
 

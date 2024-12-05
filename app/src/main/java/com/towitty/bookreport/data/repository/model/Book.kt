@@ -6,14 +6,14 @@ import com.towitty.bookreport.data.network.model.NetworkBook
 val emptyBook = Book(
     id = 0,
     isbn = 0,
-    title = "",
-    author = "",
-    image = "",
-    description = "",
+    title = "제목",
+    author = "작가",
+    image = " ",
+    description = " ",
     price = 0,
-    link = "",
-    pubDate = "",
-    publisher = "",
+    link = " ",
+    pubDate = " ",
+    publisher = "출판사",
     isFavorite = false
 )
 
