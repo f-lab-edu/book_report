@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import com.towitty.bookreport.R
+import com.towitty.bookreport.presentation.navigation.AppRoute
 import com.towitty.bookreport.presentation.navigation.Routes
 import com.towitty.bookreport.presentation.ui.common.BookReportIcons
 
@@ -49,7 +50,7 @@ fun FabModal(
                 label = stringResource(R.string.fab_modal_keyboard),
                 onClicked = {
                     onDismissRequest()
-                    onClicked("${Routes.DIRECTLY_BOOK_REPORT}/")
+                    onClicked(AppRoute.BookReportRoute().route)
                 },
             )
             FabModalSheetItem(

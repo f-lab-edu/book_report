@@ -22,4 +22,7 @@ interface BookReportDao {
 
     @Query("SELECT * FROM book_reports WHERE id = :id")
     fun getBookReport(id: Int): Flow<BookReportEntity>
+
+    @Query("SELECT * FROM book_reports")
+    fun getAllBookReports(): Flow<List<BookReportEntity>>
 }

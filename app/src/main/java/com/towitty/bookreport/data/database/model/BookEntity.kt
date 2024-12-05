@@ -17,7 +17,7 @@ data class BookEntity(
     val description: String,
     val price: Int,
     val publisher: String,
-    val publishedDate: String,
+    val pubDate: String,
     val isFavorite: Boolean,
 )
 
@@ -28,7 +28,7 @@ fun BookEntity.asBook(): Book {
         title = title,
         author = author,
         publisher = publisher,
-        publishedDate = publishedDate,
+        pubDate = pubDate,
         description = description,
         image = image,
         link = link,
@@ -45,7 +45,7 @@ fun BookEntity.asNetworkBook(): NetworkBook {
         author = author,
         price = price.toString(),
         publisher = publisher,
-        pubDate = publishedDate,
+        pubDate = pubDate,
         isbn = isbn.toString(),
         description = description
     )

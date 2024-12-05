@@ -2,6 +2,7 @@ package com.towitty.bookreport.presentation.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.towitty.bookreport.data.database.model.BookReportEntity
 import com.towitty.bookreport.data.database.model.TagEntity
 import com.towitty.bookreport.data.database.model.asTag
 import com.towitty.bookreport.data.network.model.NetworkBook
@@ -32,8 +33,12 @@ class BookReportViewModel @Inject constructor(
     private val _bookReport = MutableStateFlow(emptyBookReport)
     val bookReport: StateFlow<BookReport> = _bookReport
 
+    private val _bookReportList = MutableStateFlow<List<BookReportEntity>>(emptyList())
+    val bookReportList: StateFlow<List<BookReportEntity>> = _bookReportList
+
     init {
         getAllTags()
+        fetchBookReportList()
     }
 
     /**
@@ -63,6 +68,15 @@ class BookReportViewModel @Inject constructor(
     /**
      * BookReport
      */
+
+    private fun fetchBookReportList() {
+        viewModelScope.launch {
+            bookReportRepository.fetchBookReports().collect { bookReport ->
+                _bookReportList.value = bookReport
+            }
+        }
+    }
+
     fun fetchBookReport(bookReportId: Int) {
         viewModelScope.launch {
             _bookReport.value = bookReportRepository.fetchBookReport(bookReportId)

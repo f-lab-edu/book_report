@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.towitty.bookreport.R
+import com.towitty.bookreport.data.database.model.BookReportEntity
 import com.towitty.bookreport.data.network.model.NetworkBook
 import com.towitty.bookreport.data.repository.model.BookReport
 import com.towitty.bookreport.data.repository.model.Tag
@@ -48,6 +49,8 @@ class MainActivity : ComponentActivity() {
                     bookListState = viewModel.bookList.collectAsState(),
                     tagListState = viewModel.tagList.collectAsState(),
                     bookReportState = viewModel.bookReport.collectAsState(),
+                    bookReportListState = viewModel.bookReportList.collectAsState(),
+                    fetchBookReport = viewModel::fetchBookReport,
                     searchBooks = viewModel::searchBooks,
                     onSaveBookReport = viewModel::saveBookReport,
                     onRemoveTag = viewModel::removeBookReportTag,
@@ -64,6 +67,8 @@ fun BookReportApp(
     bookListState: State<List<NetworkBook>>,
     tagListState: State<List<Tag>>,
     bookReportState: State<BookReport>,
+    bookReportListState: State<List<BookReportEntity>>,
+    fetchBookReport: (Int) -> Unit,
     searchBooks: (String) -> Unit,
     onSaveBookReport: (BookReport) -> Unit,
     onAddSelectedTag: (Int) -> Unit,
@@ -100,8 +105,10 @@ fun BookReportApp(
         Navigation(
             bookListState = bookListState,
             tagListState = tagListState,
+            bookReportListState = bookReportListState,
             bookReportState = bookReportState,
             findBookByIsbn = findBookByIsbn,
+            fetchBookReport = fetchBookReport,
             searchBooks = searchBooks,
             onSaveBookReport = onSaveBookReport,
             onRemoveTag = onRemoveTag,

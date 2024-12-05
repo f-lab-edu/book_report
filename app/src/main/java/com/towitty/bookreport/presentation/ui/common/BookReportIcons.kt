@@ -4,7 +4,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.DensityMedium
 import androidx.compose.material.icons.filled.FilterAlt
+import androidx.compose.material.icons.filled.GridView
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Keyboard
 import androidx.compose.material.icons.filled.PhotoCamera
@@ -21,4 +23,6 @@ object BookReportIcons {
     val ArrowBackIosNew = Icons.Default.ArrowBackIosNew
     val FilterAlt = Icons.Default.FilterAlt
     val Settings = Icons.Default.Settings
+    val GridView = Icons.Filled.GridView
+    val DensityMedium = Icons.Filled.DensityMedium
 }

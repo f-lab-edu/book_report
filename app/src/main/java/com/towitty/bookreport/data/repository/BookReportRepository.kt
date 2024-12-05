@@ -9,6 +9,7 @@ import com.towitty.bookreport.data.database.model.asTag
 import com.towitty.bookreport.data.repository.model.BookReport
 import com.towitty.bookreport.data.repository.model.Tag
 import kotlinx.coroutines.flow.first
+import timber.log.Timber
 import javax.inject.Inject
 
 class BookReportRepository @Inject constructor(
@@ -18,6 +19,7 @@ class BookReportRepository @Inject constructor(
 ) {
 
     suspend fun fetchBookReport(id: Int): BookReport {
+        Timber.d("fetchBookReport: $id")
         bookReportDao.getBookReport(id).first().let { bookReportEntity ->
             val book = bookDao.getBook(bookReportEntity.bookId).first().asBook()
             val tagList = mutableListOf<Tag>()
@@ -59,6 +61,8 @@ class BookReportRepository @Inject constructor(
     fun removeTag(bookReport: BookReport, tagId: Int): BookReport =
         bookReport.tags.find { it.id == tagId }?.let { tag -> bookReport.copy(tags = bookReport.tags - tag) }
             ?: bookReport
+
+    fun fetchBookReports() = bookReportDao.getAllBookReports()
 
     fun getAllTags() = tagDao.getAllTags()
 }
