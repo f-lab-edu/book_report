@@ -2,6 +2,7 @@ package com.towitty.bookreport.data.repository.model
 
 import com.towitty.bookreport.data.database.model.BookEntity
 import com.towitty.bookreport.data.network.model.NetworkBook
+import kotlinx.serialization.Serializable
 
 val emptyBook = Book(
     id = 0,
@@ -17,6 +18,7 @@ val emptyBook = Book(
     isFavorite = false
 )
 
+@Serializable
 data class Book(
     val id: Int,
     val isbn: String,

@@ -55,7 +55,7 @@ data class NetworkBook(
 )
 
 fun NetworkBook.asBook(isFavorite: Boolean = false) = Book(
-    id = -1,
+    id = 0,
     title = title,
     author = author,
     publisher = publisher,

@@ -1,12 +1,12 @@
 package com.towitty.bookreport.data.repository
 
-import com.towitty.bookreport.data.database.BookDao
-import com.towitty.bookreport.data.database.BookReportDao
-import com.towitty.bookreport.data.database.TagDao
+import com.towitty.bookreport.data.database.FakeBookReportDao
+import com.towitty.bookreport.data.database.FakeTagDao
 import com.towitty.bookreport.data.database.model.BookReportEntity
 import com.towitty.bookreport.data.database.model.asBook
 import com.towitty.bookreport.data.database.model.asBookReport
 import com.towitty.bookreport.data.database.model.asTag
+import com.towitty.bookreport.data.network.FakeBookDao
 import com.towitty.bookreport.data.repository.model.Book
 import com.towitty.bookreport.data.repository.model.BookReport
 import com.towitty.bookreport.data.repository.model.Tag
@@ -15,15 +15,15 @@ import com.towitty.bookreport.data.repository.model.emptyBook
 import com.towitty.bookreport.data.repository.model.emptyBookReport
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
-import javax.inject.Inject
 
-class BookReportRepository @Inject constructor(
-    private val tagDao: TagDao,
-    private val bookDao: BookDao,
-    private val bookReportDao: BookReportDao,
-) : IBookReportRepository {
+class FakeBooKReportRepository(
+    val tagDao: FakeTagDao,
+    val bookDao: FakeBookDao,
+    val bookReportDao: FakeBookReportDao,
 
+    ) : IBookReportRepository {
     override suspend fun fetchBookReport(id: Int): BookReport {
         val bookReportEntity = bookReportDao.fetchBookReport(id)
             .firstOrNull()
@@ -52,7 +52,7 @@ class BookReportRepository @Inject constructor(
 
     override fun getAllTags() = tagDao.getAllTags()
 
-    override fun fetchFavoriteBookReports(): Flow<List<BookReport>> =
+    override fun fetchFavoriteBookReports(): Flow<List<BookReport>> = flow {
         bookReportDao.fetchFavoriteBookReports()
             .map { entities ->
                 entities.map { entity ->
@@ -60,6 +60,7 @@ class BookReportRepository @Inject constructor(
                 }
             }
             .distinctUntilChanged()
+    }
 
     private suspend fun convertEntitiesToBookAndTags(
         bookReportEntity: BookReportEntity
@@ -84,4 +85,5 @@ class BookReportRepository @Inject constructor(
             bookDao.updateBook(bookEntity)
         } ?: bookDao.insertBook(bookEntity)
     }
+
 }

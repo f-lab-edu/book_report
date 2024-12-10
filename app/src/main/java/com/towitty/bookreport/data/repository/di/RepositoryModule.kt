@@ -1,6 +1,8 @@
 package com.towitty.bookreport.data.repository.di
 
+import com.towitty.bookreport.data.repository.BookReportRepository
 import com.towitty.bookreport.data.repository.BookRepository
+import com.towitty.bookreport.data.repository.IBookReportRepository
 import com.towitty.bookreport.data.repository.IBookRepository
 import com.towitty.bookreport.data.repository.ITagRepository
 import com.towitty.bookreport.data.repository.TagLocalRepository
@@ -18,4 +20,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindsBookRepository(bookRepository: BookRepository): IBookRepository
+
+    @Binds
+    abstract fun bindsBookReportRepository(bookReportRepository: BookReportRepository): IBookReportRepository
 }

@@ -1,21 +1,29 @@
-package com.towitty.bookreport.data.network
+package com.towitty.bookreport.data.repository
 
+import com.towitty.bookreport.data.database.BookDao
+import com.towitty.bookreport.data.network.FakeBookDao
+import com.towitty.bookreport.data.network.FakeBookRemoteDataSource
+import com.towitty.bookreport.data.network.IBookDataSource
 import com.towitty.bookreport.data.network.model.NetworkBook
-import com.towitty.bookreport.data.repository.BookRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class NetworkSearchBookRepositoryTest {
+class BookRepositoryTest {
 
     private lateinit var bookRemoteDataSource: IBookDataSource
+    private lateinit var bookDao: BookDao
     private lateinit var bookRepository: BookRepository
 
     @Before
     fun setUp() {
         bookRemoteDataSource = FakeBookRemoteDataSource()
-        bookRepository = BookRepository(bookRemoteDataSource)
+        bookDao = FakeBookDao()
+        bookRepository = BookRepository(
+            bookRemoteDataSource = bookRemoteDataSource,
+            bookDao = bookDao
+        )
     }
 
     @Test

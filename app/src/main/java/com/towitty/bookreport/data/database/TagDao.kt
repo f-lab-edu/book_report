@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TagDao {
+
     @Insert
     suspend fun insertTag(tagEntity: TagEntity)
 
@@ -20,7 +21,7 @@ interface TagDao {
     suspend fun deleteTag(tagEntity: TagEntity)
 
     @Query("SELECT * FROM tags WHERE id = :id LIMIT 1")
-    fun getTag(id: Int): TagEntity?
+    suspend fun getTag(id: Int): List<TagEntity>
 
     @Query("SELECT * FROM tags ORDER BY name ASC")
     fun getAllTags(): Flow<List<TagEntity>>

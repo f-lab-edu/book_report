@@ -1,3 +1,5 @@
+package com.towitty.bookreport.data.repository
+
 import com.towitty.bookreport.data.database.FakeTagDao
 import com.towitty.bookreport.data.database.model.TagEntity
 import com.towitty.bookreport.data.database.model.emptyTagEntity

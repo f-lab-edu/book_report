@@ -12,19 +12,19 @@ import kotlinx.coroutines.flow.Flow
 interface BookDao {
 
     @Insert
-    fun insertBook(bookEntity: BookEntity)
+    suspend fun insertBook(bookEntity: BookEntity)
 
     @Delete
-    fun deleteBook(bookEntity: BookEntity)
+    suspend fun deleteBook(bookEntity: BookEntity)
 
     @Update
-    fun updateBook(bookEntity: BookEntity)
+    suspend fun updateBook(bookEntity: BookEntity)
 
     @Query("SELECT * FROM books WHERE id = :id LIMIT 1")
-    suspend fun fetchBookById(id: Int): BookEntity?
+    suspend fun fetchBookById(id: Int): List<BookEntity>
 
     @Query("SELECT * FROM books WHERE isbn = :isbn LIMIT 1")
-    suspend fun fetchBookByIsbn(isbn: String): BookEntity?
+    suspend fun fetchBookByIsbn(isbn: String): List<BookEntity>
 
     @Query("SELECT * FROM books")
     fun fetchBooks(): Flow<List<BookEntity>>

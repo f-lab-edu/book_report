@@ -6,7 +6,9 @@ import com.towitty.bookreport.data.database.model.emptyTagEntity
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class TagLocalRepository @Inject constructor(private val tagDao: TagDao) : ITagRepository {
+class TagLocalRepository @Inject constructor(
+    private val tagDao: TagDao
+) : ITagRepository {
 
     override suspend fun insertTag(tagEntity: TagEntity) = tagDao.insertTag(tagEntity)
 
@@ -14,7 +16,7 @@ class TagLocalRepository @Inject constructor(private val tagDao: TagDao) : ITagR
 
     override suspend fun deleteTag(tagEntity: TagEntity) = tagDao.deleteTag(tagEntity)
 
-    override suspend fun getTag(id: Int): TagEntity = tagDao.getTag(id) ?: emptyTagEntity
+    override suspend fun getTag(id: Int): TagEntity = tagDao.getTag(id).firstOrNull() ?: emptyTagEntity
 
     override fun getAllTags(): Flow<List<TagEntity>> = tagDao.getAllTags()
 }

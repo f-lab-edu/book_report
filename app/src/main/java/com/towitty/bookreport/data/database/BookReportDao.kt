@@ -15,13 +15,13 @@ interface BookReportDao {
     suspend fun insertBookReport(bookReport: BookReportEntity)
 
     @Delete
-    fun deleteBookReport(bookReportEntity: BookReportEntity)
+    suspend fun deleteBookReport(bookReportEntity: BookReportEntity)
 
     @Update
-    fun updateBookReport(bookReportEntity: BookReportEntity)
+    suspend fun updateBookReport(bookReportEntity: BookReportEntity)
 
     @Query("SELECT * FROM book_reports WHERE id = :id LIMIT 1")
-    suspend fun fetchBookReport(id: Int): BookReportEntity
+    suspend fun fetchBookReport(id: Int): List<BookReportEntity>
 
     @Query("SELECT * FROM book_reports")
     fun fetchBookReports(): Flow<List<BookReportEntity>>

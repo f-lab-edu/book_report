@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.towitty.bookreport.data.database.model.BookReportEntity
 import com.towitty.bookreport.data.database.model.TagEntity
 import com.towitty.bookreport.data.database.model.asTag
-import com.towitty.bookreport.data.repository.BookReportRepository
+import com.towitty.bookreport.data.repository.IBookReportRepository
 import com.towitty.bookreport.data.repository.IBookRepository
 import com.towitty.bookreport.data.repository.model.Book
 import com.towitty.bookreport.data.repository.model.BookReport
@@ -20,7 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BookReportViewModel @Inject constructor(
-    private val bookReportRepository: BookReportRepository,
+    private val bookReportRepository: IBookReportRepository,
     private val bookRemoteRepository: IBookRepository,
 ) : ViewModel() {
     private val _bookList = MutableStateFlow<List<Book>>(emptyList())
