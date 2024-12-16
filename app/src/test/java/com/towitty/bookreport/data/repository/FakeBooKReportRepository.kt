@@ -2,17 +2,17 @@ package com.towitty.bookreport.data.repository
 
 import com.towitty.bookreport.data.database.FakeBookReportDao
 import com.towitty.bookreport.data.database.FakeTagDao
-import com.towitty.bookreport.data.database.model.BookReportEntity
-import com.towitty.bookreport.data.database.model.asBook
-import com.towitty.bookreport.data.database.model.asBookReport
-import com.towitty.bookreport.data.database.model.asTag
 import com.towitty.bookreport.data.network.FakeBookDao
-import com.towitty.bookreport.data.repository.model.Book
-import com.towitty.bookreport.data.repository.model.BookReport
-import com.towitty.bookreport.data.repository.model.Tag
-import com.towitty.bookreport.data.repository.model.asEntity
-import com.towitty.bookreport.data.repository.model.emptyBook
-import com.towitty.bookreport.data.repository.model.emptyBookReport
+import com.twitty.core.data.repository.IBookReportRepository
+import com.twitty.database.model.asBook
+import com.twitty.database.model.asBookReport
+import com.twitty.database.model.asTag
+import com.twitty.model.Book
+import com.twitty.model.BookReport
+import com.twitty.model.Tag
+import com.twitty.model.asEntity
+import com.twitty.model.emptyBook
+import com.twitty.model.emptyBookReport
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flow
@@ -63,7 +63,7 @@ class FakeBooKReportRepository(
     }
 
     private suspend fun convertEntitiesToBookAndTags(
-        bookReportEntity: BookReportEntity
+        bookReportEntity: com.twitty.database.model.BookReportEntity
     ): Pair<Book, List<Tag>> {
         val book = bookDao.fetchBookById(bookReportEntity.bookId)
             .firstOrNull()

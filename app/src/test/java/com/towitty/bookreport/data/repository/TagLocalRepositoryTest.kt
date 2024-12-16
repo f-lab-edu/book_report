@@ -1,8 +1,6 @@
 package com.towitty.bookreport.data.repository
 
 import com.towitty.bookreport.data.database.FakeTagDao
-import com.towitty.bookreport.data.database.model.TagEntity
-import com.towitty.bookreport.data.database.model.emptyTagEntity
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
@@ -14,7 +12,7 @@ import org.junit.Test
 class TagLocalRepositoryTest {
 
     private lateinit var fakeTagDao: FakeTagDao
-    private val tagDatabase = mutableListOf<TagEntity>()
+    private val tagDatabase = mutableListOf<com.twitty.database.model.TagEntity>()
 
     @Before
     fun setUp() {
@@ -25,7 +23,7 @@ class TagLocalRepositoryTest {
     fun insertTag_WhenTagAdded_ShouldRetrieveSameTag() = runTest {
         tagDatabase.clear()
 
-        val tag = TagEntity(10, "", 0)
+        val tag = com.twitty.database.model.TagEntity(10, "", 0)
 
         fakeTagDao.insertTag(tag)
 
@@ -36,27 +34,27 @@ class TagLocalRepositoryTest {
     @Test
     fun fetchTags() = runTest {
         fakeTagDao.tagDatabase.clear()
-        fakeTagDao.tagDatabase.add(TagEntity(1, "", 0))
-        fakeTagDao.tagDatabase.add(TagEntity(2, "", 0))
-        fakeTagDao.tagDatabase.add(TagEntity(3, "", 0))
+        fakeTagDao.tagDatabase.add(com.twitty.database.model.TagEntity(1, "", 0))
+        fakeTagDao.tagDatabase.add(com.twitty.database.model.TagEntity(2, "", 0))
+        fakeTagDao.tagDatabase.add(com.twitty.database.model.TagEntity(3, "", 0))
 
         val tags = fakeTagDao.getAllTags().firstOrNull() ?: emptyList()
 
         assertEquals(3, tags.size)
-        assertTrue(tags.contains(TagEntity(1, "", 0)))
-        assertTrue(tags.contains(TagEntity(2, "", 0)))
-        assertTrue(tags.contains(TagEntity(3, "", 0)))
+        assertTrue(tags.contains(com.twitty.database.model.TagEntity(1, "", 0)))
+        assertTrue(tags.contains(com.twitty.database.model.TagEntity(2, "", 0)))
+        assertTrue(tags.contains(com.twitty.database.model.TagEntity(3, "", 0)))
     }
 
     @Test
     fun deleteTagById_WhenTagExists_ShouldRemoveTagFromDatabase() = runTest {
         fakeTagDao.tagDatabase.clear()
-        fakeTagDao.tagDatabase.add(TagEntity(1, "", 0))
-        fakeTagDao.deleteTag(TagEntity(1, "", 0))
+        fakeTagDao.tagDatabase.add(com.twitty.database.model.TagEntity(1, "", 0))
+        fakeTagDao.deleteTag(com.twitty.database.model.TagEntity(1, "", 0))
 
-        val deletedTag = fakeTagDao.getTag(1).firstOrNull() ?: emptyTagEntity
+        val deletedTag = fakeTagDao.getTag(1).firstOrNull() ?: com.twitty.database.model.emptyTagEntity
 
-        assertEquals(deletedTag, emptyTagEntity)
-        assertFalse(fakeTagDao.tagDatabase.contains(TagEntity(1, "", 0)))
+        assertEquals(deletedTag, com.twitty.database.model.emptyTagEntity)
+        assertFalse(fakeTagDao.tagDatabase.contains(com.twitty.database.model.TagEntity(1, "", 0)))
     }
 }

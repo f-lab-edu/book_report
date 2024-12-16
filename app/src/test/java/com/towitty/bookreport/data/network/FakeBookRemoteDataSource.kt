@@ -1,11 +1,12 @@
 package com.towitty.bookreport.data.network
 
-import com.towitty.bookreport.data.network.model.NetworkSearchBook
-import com.towitty.bookreport.data.network.model.emptyNetworkSearchBook
+import com.twitty.network.model.NetworkBookContainer
+import com.twitty.network.model.emptyNetworkBookContainer
+import com.twitty.network.retrofit.IBookDataSource
 
 class FakeBookRemoteDataSource : IBookDataSource {
 
-    var networkSearchBook = NetworkSearchBook(
+    var networkBookContainer = NetworkBookContainer(
         lastBuildDate = "",
         total = 0,
         start = 0,
@@ -13,10 +14,16 @@ class FakeBookRemoteDataSource : IBookDataSource {
         bookList = mutableListOf()
     )
 
-    override suspend fun getNetworkSearchBook(query: String): NetworkSearchBook {
-        return networkSearchBook.bookList.find { it.title.contains(query) }?.let {
-            networkSearchBook
-        } ?: emptyNetworkSearchBook
+    override suspend fun fetchNetworkSearchBook(query: String): NetworkBookContainer {
+        return networkBookContainer.bookList.find { it.title.contains(query) }?.let {
+            networkBookContainer
+        } ?: emptyNetworkBookContainer
+    }
+
+    override suspend fun fetchNetworkSearchBookByIsbn(isbn: String): NetworkBookContainer {
+        return networkBookContainer.bookList.find { it.isbn == isbn }?.let {
+            networkBookContainer
+        } ?: emptyNetworkBookContainer
     }
 
 }

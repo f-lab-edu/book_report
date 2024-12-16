@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.towitty.bookreport.presentation.ui.fragment.SettingsFragment"
+        android:name="com.twitty.feature.tag.SettingsFragment"
         android:label="SettingsFragment"
         tools:layout="@layout/fragment_settings">
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/tagManagementFragment"
-        android:name="com.towitty.bookreport.presentation.ui.fragment.tag.TagManagementFragment"
+        android:name="com.twitty.feature.tag.TagManagementFragment"
         android:label="TagManagementFragment"
         tools:layout="@layout/fragment_tag_management" />
 

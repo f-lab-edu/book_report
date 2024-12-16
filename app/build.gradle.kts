@@ -31,14 +31,6 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-
-            buildConfigField("String", "NAVER_API_CLIENT", properties["naver_api_client"].toString())
-            buildConfigField("String", "NAVER_API_SECRET", properties["naver_api_secret"].toString())
-        }
-
-        debug {
-            buildConfigField("String", "NAVER_API_CLIENT", properties["naver_api_client"].toString())
-            buildConfigField("String", "NAVER_API_SECRET", properties["naver_api_secret"].toString())
         }
     }
     compileOptions {
@@ -51,11 +43,25 @@ android {
     buildFeatures {
         viewBinding = true
         compose = true
-        buildConfig = true
     }
 }
 
 dependencies {
+    implementation(project(":feature:home"))
+    implementation(project(":feature:calendar"))
+    implementation(project(":feature:bookreport"))
+    implementation(project(":feature:book"))
+    implementation(project(":feature:tag"))
+    implementation(project(":feature:favorites"))
+    implementation(project(":feature:settings"))
+    implementation(project(":feature:search"))
+    implementation(project(":core:designsystem"))
+    implementation(project(":core:ui"))
+    implementation(project(":core:model"))
+    implementation(project(":core:data"))
+    implementation(project(":core:network"))
+    implementation(project(":core:database"))
+
     // Hilt
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
@@ -64,6 +70,7 @@ dependencies {
     // Glide
     implementation(libs.glide)
     annotationProcessor(libs.glide.compiler)
+    implementation(libs.glide.compose)
 
     // Room
     implementation(libs.androidx.room.runtime)
@@ -88,7 +95,6 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
-    implementation(libs.androidx.constraintlayout.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.material)
     implementation(libs.androidx.ui.viewbinding)
@@ -97,6 +103,7 @@ dependencies {
     implementation(libs.androidx.navigation.fragment)
     implementation(libs.androidx.fragment)
     implementation(libs.androidx.constraintlayout)
+    implementation(libs.androidx.constraintlayout.compose)
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)

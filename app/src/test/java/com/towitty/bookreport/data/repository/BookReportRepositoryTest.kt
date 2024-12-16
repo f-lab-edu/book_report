@@ -3,11 +3,12 @@ package com.towitty.bookreport.data.repository
 import com.towitty.bookreport.data.database.FakeBookReportDao
 import com.towitty.bookreport.data.database.FakeTagDao
 import com.towitty.bookreport.data.network.FakeBookDao
-import com.towitty.bookreport.data.repository.model.Book
-import com.towitty.bookreport.data.repository.model.BookReport
-import com.towitty.bookreport.data.repository.model.Tag
-import com.towitty.bookreport.data.repository.model.emptyBook
-import com.towitty.bookreport.util.getCurrentDateTime
+import com.twitty.core.data.repository.BookReportRepository
+import com.twitty.core.data.util.getCurrentDateTime
+import com.twitty.model.Book
+import com.twitty.model.BookReport
+import com.twitty.model.Tag
+import com.twitty.model.emptyBook
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue

@@ -1,23 +1,22 @@
 package com.towitty.bookreport.data.network
 
-import com.towitty.bookreport.data.database.BookDao
-import com.towitty.bookreport.data.database.model.BookEntity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 
 class FakeBookDao(
-    val bookDatabase: MutableList<BookEntity> = mutableListOf()
-) : BookDao {
+    val bookDatabase: MutableList<com.twitty.database.model.BookEntity> = mutableListOf()
+) : com.twitty.database.dao.BookDao {
 
-    override suspend fun insertBook(bookEntity: BookEntity) {
+    override suspend fun insertBook(bookEntity: com.twitty.database.model.BookEntity) {
         bookDatabase.add(bookEntity)
     }
 
-    override suspend fun deleteBook(bookEntity: BookEntity) {
+    override suspend fun deleteBook(bookEntity: com.twitty.database.model.BookEntity) {
         bookDatabase.remove(bookEntity)
     }
 
-    override suspend fun updateBook(bookEntity: BookEntity) {
+    override suspend fun updateBook(bookEntity: com.twitty.database.model.BookEntity) {
         bookDatabase.indexOfFirst { it.id == bookEntity.id }.let { index ->
             if (index >= 0) {
                 bookDatabase[index] = bookEntity
@@ -25,15 +24,19 @@ class FakeBookDao(
         }
     }
 
-    override suspend fun fetchBookById(id: Int): List<BookEntity> = bookDatabase.filter { it.id == id }
+    override suspend fun fetchBookById(id: Int): List<com.twitty.database.model.BookEntity> = bookDatabase.filter { it.id == id }
 
-    override suspend fun fetchBookByIsbn(isbn: String): List<BookEntity> = bookDatabase.filter { it.isbn == isbn }
+    override suspend fun fetchBookByIsbn(isbn: String): List<com.twitty.database.model.BookEntity> = bookDatabase.filter { it.isbn == isbn }
 
-    override fun fetchBooks(): Flow<List<BookEntity>> = flow {
+    override fun fetchBooksByTitle(title: String): Flow<List<com.twitty.database.model.BookEntity>> = flowOf(
+        bookDatabase.find { it.title.contains(title) }?.let { listOf(it) } ?: emptyList()
+    )
+
+    override fun fetchBooks(): Flow<List<com.twitty.database.model.BookEntity>> = flow {
         emit(bookDatabase.toList())
     }
 
-    override fun fetchFavoriteBooks(): Flow<List<BookEntity>> = flow {
+    override fun fetchFavoriteBooks(): Flow<List<com.twitty.database.model.BookEntity>> = flow {
         emit(bookDatabase.filter { it.isFavorite })
     }
 

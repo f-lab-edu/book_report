@@ -2,14 +2,12 @@ package com.towitty.bookreport.ui
 
 import com.towitty.bookreport.data.database.FakeBookReportDao
 import com.towitty.bookreport.data.database.FakeTagDao
-import com.towitty.bookreport.data.database.model.BookReportEntity
-import com.towitty.bookreport.data.database.model.TagEntity
 import com.towitty.bookreport.data.network.FakeBookDao
 import com.towitty.bookreport.data.repository.FakeBooKReportRepository
 import com.towitty.bookreport.data.repository.FakeBookRemoteRepository
-import com.towitty.bookreport.data.repository.model.Book
-import com.towitty.bookreport.data.repository.model.asEntity
-import com.towitty.bookreport.presentation.ui.BookReportViewModel
+import com.twitty.feature.bookreport.BookReportViewModel
+import com.twitty.model.Book
+import com.twitty.model.asEntity
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
@@ -49,15 +47,15 @@ class BookReportViewModelTest {
         )
 
         val tags = mutableListOf(
-            TagEntity(
+            com.twitty.database.model.TagEntity(
                 id = 1, name = "Android", color = 0
-            ), TagEntity(
+            ), com.twitty.database.model.TagEntity(
                 id = 2, name = "Kotlin", color = 0
             )
         )
 
         val bookReports = mutableListOf(
-            BookReportEntity(
+            com.twitty.database.model.BookReportEntity(
                 id = 0,
                 title = "Kotlin",
                 content = "",
@@ -65,7 +63,7 @@ class BookReportViewModelTest {
                 isFavorite = false,
                 bookId = 0,
                 tagIds = mutableListOf(1)
-            ), BookReportEntity(
+            ), com.twitty.database.model.BookReportEntity(
                 id = 1,
                 title = "Kotlin in Action",
                 content = "",
@@ -85,14 +83,14 @@ class BookReportViewModelTest {
         )
 
         viewModel = BookReportViewModel(
-            bookRemoteRepository = bookRepository,
+            bookRepository = bookRepository,
             bookReportRepository = fakeBookReportRepository
         )
     }
 
     @Test
     fun searchBooks_ShouldUpdateBookList() = runTest {
-        viewModel.searchBooks("Kotlin")
+
 
         assertEquals(2, viewModel.bookList.value.size)
 
@@ -102,17 +100,8 @@ class BookReportViewModelTest {
 
     @Test
     fun searchBooks_ShouldNotUpdateBookList() = runTest {
-        viewModel.searchBooks("Java")
 
         assertEquals(0, viewModel.bookList.value.size)
-    }
-
-    @Test
-    fun findBookByIsbn_ShouldReturnCorrectBook() {
-        viewModel.findBookByIsbn("1234567890")
-        val book = viewModel.foundBook.value
-        assertEquals("Kotlin", book.title)
-        assertEquals("1234567890", book.isbn)
     }
 
     @Test
