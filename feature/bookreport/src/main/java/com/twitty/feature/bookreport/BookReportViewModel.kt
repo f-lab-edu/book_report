@@ -1,12 +1,15 @@
 package com.twitty.feature.bookreport
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.twitty.core.data.repository.IBookReportRepository
 import com.twitty.core.data.repository.IBookRepository
+import com.twitty.feature.bookreport.navigation.BookReportRoute
 import com.twitty.model.Book
 import com.twitty.model.BookReport
-import com.twitty.model.SearchBook
+import com.twitty.model.BookSearchCriteria
 import com.twitty.model.Tag
 import com.twitty.model.emptyBook
 import com.twitty.model.emptyBookReport
@@ -14,13 +17,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class BookReportViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val bookReportRepository: IBookReportRepository,
     private val bookRepository: IBookRepository,
 ) : ViewModel() {
+    val bookReportId: Int = savedStateHandle.toRoute<BookReportRoute>().id
 
     private val _detailBook = MutableStateFlow<Book>(emptyBook)
     val detailBook: StateFlow<Book> = _detailBook
@@ -38,18 +44,19 @@ class BookReportViewModel @Inject constructor(
     val bookReportList: StateFlow<List<BookReport>> = _bookReportList
 
     init {
+        Timber.d("BookReportViewModel init: $bookReportId")
         getAllTags()
         fetchBookReportList()
     }
 
-    fun searchBooks(searchBook: SearchBook) {
+    fun searchBooks(bookSearchCriteria: BookSearchCriteria) {
         viewModelScope.launch {
-            bookRepository.searchBooks(searchBook)
+            bookRepository.searchBooks(bookSearchCriteria)
                 .collect { book ->
                     when {
-                        searchBook.title != null -> _bookList.value = book
+                        bookSearchCriteria.title != null -> _bookList.value = book
                         else -> _detailBook.value =
-                            book.firstOrNull() ?: bookList.value.find { it.isbn == searchBook.isbn } ?: emptyBook
+                            book.firstOrNull() ?: bookList.value.find { it.isbn == bookSearchCriteria.isbn } ?: emptyBook
                     }
                 }
         }

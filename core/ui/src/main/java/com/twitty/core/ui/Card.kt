@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
@@ -16,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.twitty.model.Book
 import com.twitty.model.BookReport
 import com.twitty.model.emptyBook
@@ -33,11 +35,11 @@ fun BookCard(book: Book, modifier: Modifier = Modifier, onClick: () -> Unit) {
             .height(166.dp)
     ) {
         Row {
-            /*GlideImage(
+            GlideImage(
                 model = book.image,
                 contentDescription = null,
                 modifier = Modifier.size(166.dp)
-            )*/
+            )
             Column(
                 verticalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier
@@ -69,12 +71,11 @@ fun BookReportCard(
             .height(166.dp)
     ) {
         Row {
-            /*GlideImage(
+            GlideImage(
                 model = bookReport.book.image,
                 contentDescription = null,
                 modifier = Modifier.size(166.dp)
-            )*/
-
+            )
             Column(
                 verticalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier

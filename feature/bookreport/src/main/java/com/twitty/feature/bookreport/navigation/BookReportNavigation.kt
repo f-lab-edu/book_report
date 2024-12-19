@@ -15,8 +15,12 @@ fun NavController.navigateToBookReport(bookReportId: Int, navOptions: NavOptions
         navOptions()
     }
 
-fun NavGraphBuilder.bookReportScreen() {
+fun NavGraphBuilder.bookReportScreen(
+    onNavigateUp: () -> Unit,
+) {
     composable<BookReportRoute> {
-        BookReportScreen()
+        BookReportScreen(
+            onNavigateUp = onNavigateUp,
+        )
     }
 }

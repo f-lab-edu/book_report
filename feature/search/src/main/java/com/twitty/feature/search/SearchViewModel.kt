@@ -4,9 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.twitty.core.data.repository.IBookRepository
 import com.twitty.model.Book
-import com.twitty.model.SearchBook
+import com.twitty.model.BookSearchCriteria
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -15,13 +19,14 @@ class SearchViewModel @Inject constructor(
     private val bookRepository: IBookRepository
 ) : ViewModel() {
     private val _books = MutableStateFlow<List<Book>>(emptyList())
-    val books = _books
+    val books: StateFlow<List<Book>> = _books.asStateFlow()
 
-    fun searchBooks(searchBook: SearchBook) {
+    @OptIn(FlowPreview::class)
+    fun searchBooks(bookSearchCriteria: BookSearchCriteria) {
         viewModelScope.launch {
-            bookRepository.searchBooks(searchBook).collect {
-                _books.value = it
-            }
+            bookRepository.searchBooks(bookSearchCriteria)
+                .debounce(300)
+                .collect { _books.value = it }
         }
     }
 }

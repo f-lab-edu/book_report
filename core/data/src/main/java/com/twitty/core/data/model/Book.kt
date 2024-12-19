@@ -65,7 +65,7 @@ fun BookEntity.asNetworkBook(): NetworkBook {
 }
 
 fun NetworkBook.asBook(isFavorite: Boolean = false) = Book(
-    id = 0,
+    id = isbn.hashCode(),
     title = title,
     author = author,
     publisher = publisher,
@@ -78,7 +78,7 @@ fun NetworkBook.asBook(isFavorite: Boolean = false) = Book(
     isFavorite = isFavorite,
 )
 
-fun NetworkBook.asBookEntity(isFavorite: Boolean) = com.twitty.database.model.BookEntity(
+fun NetworkBook.asBookEntity(isFavorite: Boolean) = BookEntity(
     isbn = isbn,
     title = title,
     author = author,

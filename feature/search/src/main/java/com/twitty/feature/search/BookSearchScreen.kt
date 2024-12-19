@@ -44,27 +44,25 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.twitty.core.ui.BookCard
 import com.twitty.designsystem.icon.BookReportIcons
 import com.twitty.model.Book
-import com.twitty.model.SearchBook
+import com.twitty.model.BookSearchCriteria
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookSearchScreen(
-    onNavigateUp: () -> Unit = {},
-    onItemClicked: (String) -> Unit = {},
+    onNavigateUp: () -> Unit,
     modifier: Modifier = Modifier,
-    title: @Composable () -> Unit = {},
     viewModel: SearchViewModel = hiltViewModel()
 ) {
     var searchText by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableStateOf("") }
     val books by viewModel.books.collectAsStateWithLifecycle()
-    val onSearchBooks: (SearchBook) -> Unit = viewModel::searchBooks
+    val onSearchBooks = viewModel::searchBooks
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = title,
+                title = { Text(stringResource(R.string.label_search)) },
                 navigationIcon = {
                     IconButton(onClick = onNavigateUp) {
                         Icon(
@@ -89,18 +87,18 @@ fun BookSearchScreen(
             BookSearchBar(
                 searchText,
                 { searchText = it },
-                onSearch = { onSearchBooks(SearchBook.fromTitle(searchText)) },
+                onSearch = { viewModel.searchBooks(BookSearchCriteria(title = searchText)) },
             )
             SearchFilter(
                 selectedFilter,
                 { selectedFilter = if (selectedFilter == it) "" else it }
             )
-            Button(onClick = {}) {
+            Button(onClick = { TODO() }) {
                 Text(stringResource(R.string.btn_direct_book_registration))
             }
             BookList(
                 books = books,
-                onItemClicked = onItemClicked,
+                onItemClicked = onSearchBooks,
                 selectedFilter = selectedFilter,
                 searchText = searchText,
                 Modifier.fillMaxHeight()
@@ -185,7 +183,7 @@ fun SearchFilter(
 @Composable
 fun BookList(
     books: List<Book>,
-    onItemClicked: (String) -> Unit,
+    onItemClicked: (BookSearchCriteria) -> Unit,
     selectedFilter: String,
     searchText: String,
     modifier: Modifier = Modifier
@@ -194,15 +192,15 @@ fun BookList(
         items(items = books, key = { it.isbn }) { book ->
             when (selectedFilter) {
                 "title" -> if (book.title.contains(searchText))
-                    BookCard(book) { onItemClicked(book.isbn) }
+                    BookCard(book) { onItemClicked(BookSearchCriteria(book.isbn)) }
 
                 "author" -> if (book.author.contains(searchText))
-                    BookCard(book) { onItemClicked(book.isbn) }
+                    BookCard(book) { onItemClicked(BookSearchCriteria(book.isbn)) }
 
                 "publisher" -> if (book.publisher.contains(searchText))
-                    BookCard(book) { onItemClicked(book.isbn) }
+                    BookCard(book) { onItemClicked(BookSearchCriteria(book.isbn)) }
 
-                "" -> BookCard(book) { onItemClicked(book.isbn) }
+                "" -> BookCard(book) { onItemClicked(BookSearchCriteria(book.isbn)) }
             }
         }
     }

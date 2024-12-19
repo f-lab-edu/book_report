@@ -23,6 +23,8 @@ import com.towitty.bookreport.navigation.TopLevelDestination
 import com.twitty.core.ui.FabModal
 import com.twitty.designsystem.component.BookReportAppTopAppBar
 import com.twitty.designsystem.icon.BookReportIcons
+import com.twitty.feature.bookreport.navigation.navigateToBookReport
+import com.twitty.feature.search.navigation.navigateToBookSearch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,20 +34,17 @@ fun BookReportApp(
     val currentTopLevelDestination = appState.currentTopLevelDestination
     var isShowFabModal by remember { mutableStateOf(false) }
     val isHomeDestination = currentTopLevelDestination == TopLevelDestination.HOME
-    
+
     Scaffold(
         topBar = {
-            BookReportAppTopAppBar(
-                titleRes = currentTopLevelDestination?.label ?: R.string.app_name,
-                navigationIcon = BookReportIcons.ArrowBackIosNew,
-                navigationIconContentDescription = stringResource(
-                    id = currentTopLevelDestination?.label ?: R.string.label_home
-                ),
-                actionIcon = BookReportIcons.Settings,
-                actionIconContentDescription = stringResource(id = R.string.label_settings),
-                onNavigationClick = { currentTopLevelDestination ?: appState.navController.popBackStack() },
-                onActionClick = appState::moveSettings,
-            )
+            if(currentTopLevelDestination != null) {
+                BookReportAppTopAppBar(
+                    titleRes = currentTopLevelDestination.title,
+                    actionIcon = BookReportIcons.Settings,
+                    actionIconContentDescription = stringResource(id = R.string.label_settings),
+                    onActionClick = appState::moveSettings,
+                )
+            }
         },
         bottomBar = { BookReportAppNavigationBar(appState = appState) },
         floatingActionButton = {
@@ -68,7 +67,9 @@ fun BookReportApp(
         )
         if (isShowFabModal) {
             FabModal(
-                onNavigateRoute = { },
+                onNavigateToBookSearch = appState.navController::navigateToBookSearch,
+                onNavigateToBookReport = { appState.navController.navigateToBookReport(0) },
+                onNavigateToBarcode = { TODO() },
                 onDismissRequest = { isShowFabModal = false },
                 modifier = Modifier.wrapContentHeight()
             )

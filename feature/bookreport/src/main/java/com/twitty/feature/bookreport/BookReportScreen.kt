@@ -57,7 +57,7 @@ import com.twitty.model.emptyBookReport
 
 @Composable
 fun BookReportScreen(
-    onCancel: () -> Unit = {},
+    onNavigateUp: () -> Unit,
     onSaveBookReport: (BookReport) -> Unit = {},
     onAddSelectedTag: (Int) -> Unit = {0},
     onRemoveTag: (Int) -> Unit = {},
@@ -78,7 +78,7 @@ fun BookReportScreen(
                 bookReport = bookReport,
                 bookReportTitle = bookReportTitleState,
                 bookReportContent = bookReportContentState,
-                onCancel,
+                onCancel = onNavigateUp,
                 onSaveBookReport
             )
         },

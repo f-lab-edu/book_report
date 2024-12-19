@@ -46,9 +46,9 @@ import com.twitty.model.emptyBook
 
 @Composable
 fun BookDetailScreen(
+    onNavigateUp: () -> Unit,
     onFavoriteClick: (Book) -> Unit = {},
     onCameraClick: () -> Unit = {},
-    onNavigateUp: () -> Unit = {},
     onSelection: () -> Unit = {},
     modifier: Modifier = Modifier,
     viewModel: BookViewModel = hiltViewModel()

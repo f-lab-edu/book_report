@@ -5,18 +5,23 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.composable
 import com.twitty.feature.book.BookDetailScreen
-import com.twitty.model.SearchBook
 import kotlinx.serialization.Serializable
 
 
 @Serializable
-data class BookRoute(val book: SearchBook)
+data class BookRoute(val isbn: String)
 
-fun NavController.navigateToBook(book: SearchBook, navOptions: NavOptionsBuilder.() -> Unit = {}) =
-    navigate(route = BookRoute(book)) {
+fun NavController.navigateToBook(isbn: String, navOptions: NavOptionsBuilder.() -> Unit = {}) =
+    navigate(route = BookRoute(isbn)) {
         navOptions()
     }
-fun NavGraphBuilder.bookScreen() {
+
+fun NavGraphBuilder.bookScreen(
+    onNavigateUp: () -> Unit,
+) {
     composable<BookRoute> {
-        BookDetailScreen()    }
+        BookDetailScreen(
+            onNavigateUp = onNavigateUp,
+        )
+    }
 }

@@ -50,16 +50,14 @@ import com.twitty.core.ui.BookReportCard
 import com.twitty.designsystem.icon.BookReportIcons
 import com.twitty.model.Book
 import com.twitty.model.BookReport
-import com.twitty.model.SearchBook
 import com.twitty.model.emptyBook
 import kotlin.math.absoluteValue
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onNavigateToBookSearch: () -> Unit,
     onNavigateToBookReport: (bookReportId: Int) -> Unit,
-    onNavigateToBook: (SearchBook) -> Unit,
+    onNavigateToBook: (String) -> Unit,
     onNavigateToBarcode: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
@@ -181,7 +179,7 @@ fun MonthRecommendedBook() {
 fun FavoriteList(
     favoriteBooks: List<Book>,
     favoriteBookReports: List<BookReport>,
-    onNavigateToBook: (SearchBook) -> Unit = {},
+    onNavigateToBook: (String) -> Unit = {},
     onNavigateToBookReport: (bookReportId: Int) -> Unit,
 ) {
     LazyRow(modifier = Modifier.wrapContentSize()) {
@@ -190,7 +188,7 @@ fun FavoriteList(
             key = { it.id }
         ) { favoriteBook ->
             BookCard(book = favoriteBook) {
-                onNavigateToBook(SearchBook(favoriteBook.isbn))
+                onNavigateToBook(favoriteBook.isbn)
             }
         }
         items(

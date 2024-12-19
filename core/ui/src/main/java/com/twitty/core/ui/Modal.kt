@@ -27,7 +27,9 @@ import com.twitty.designsystem.icon.BookReportIcons
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FabModal(
-    onNavigateRoute: () -> Unit,
+    onNavigateToBookSearch: () -> Unit,
+    onNavigateToBookReport: () -> Unit,
+    onNavigateToBarcode: () -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -47,7 +49,7 @@ fun FabModal(
                 label = stringResource(R.string.fab_modal_keyboard),
                 onClicked = {
                     onDismissRequest()
-                    onNavigateRoute()
+                    onNavigateToBookReport()
                 },
             )
             FabModalSheetItem(
@@ -55,13 +57,16 @@ fun FabModal(
                 label = stringResource(R.string.fab_modal_book_search),
                 onClicked = {
                     onDismissRequest()
-                    onNavigateRoute()
+                    onNavigateToBookSearch()
                 }
             )
             FabModalSheetItem(
                 icon = BookReportIcons.Scanner,
                 label = stringResource(R.string.fab_modal_barcode_scanner),
-                onClicked = {/* 바코드 스크린 이동 */ }
+                onClicked = {
+                    onDismissRequest()
+                    onNavigateToBarcode()
+                }
             )
         }
 

@@ -15,8 +15,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.towitty.bookreport.navigation.TopLevelDestination
+import com.twitty.feature.bookreport.navigation.navigateToBookReport
 import com.twitty.feature.calendar.navigation.navigateToCalendar
 import com.twitty.feature.home.navigation.navigateToHome
+import com.twitty.feature.search.navigation.navigateToBookSearch
 import com.twitty.feature.search.navigation.navigateToSearch
 import com.twitty.feature.settings.SettingsActivity
 
@@ -92,6 +94,14 @@ class BookReportAppState(
 
     fun moveSettings() {
         context.startActivity(Intent(context, SettingsActivity::class.java))
+    }
+
+    fun navigateToBookSearch() {
+        navController.navigateToBookSearch()
+    }
+
+    fun navigateToBookReport() {
+        navController.navigateToBookReport(0)
     }
 
 }
