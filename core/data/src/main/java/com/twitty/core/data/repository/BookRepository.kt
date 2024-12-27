@@ -45,15 +45,18 @@ class BookRepository @Inject constructor(
             .map { it.asBook() })
     }
 
-    private suspend fun searchByIsbn(isbn: String): Flow<List<Book>> = flow {
+
+    private fun searchByIsbn(isbn: String): Flow<List<Book>> = flow {
         emit(bookRemoteDataSource.fetchNetworkSearchBookByIsbn(isbn)
             .bookList
             .map { it.asBook() })
     }
 
-    private suspend fun searchById(id: Int): Flow<List<Book>> = flow {
+    private fun searchById(id: Int): Flow<List<Book>> = flow {
         emit(bookLocalDataSource.fetchBookById(id)
             .map { it.asBook() })
     }
 }
+
+
 

@@ -28,5 +28,5 @@ data class Book(
     val link: String,
     val pubDate: String,
     val publisher: String,
-    val isFavorite: Boolean = false
+    val isFavorite: Boolean
 )

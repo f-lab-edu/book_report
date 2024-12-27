@@ -35,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -67,9 +68,7 @@ fun BookSearchScreen(
                     IconButton(onClick = onNavigateUp) {
                         Icon(
                             imageVector = BookReportIcons.ArrowBackIosNew,
-                            contentDescription = stringResource(
-                                R.string.description_go_back
-                            )
+                            contentDescription = stringResource(R.string.description_go_back)
                         )
                     }
                 },
@@ -81,13 +80,13 @@ fun BookSearchScreen(
         Column(
             modifier = Modifier
                 .padding(innerPadding)
-                .padding(start = 16.dp, end = 16.dp),
+                .padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             BookSearchBar(
-                searchText,
-                { searchText = it },
-                onSearch = { viewModel.searchBooks(BookSearchCriteria(title = searchText)) },
+                searchText = searchText,
+                onValueChange = { searchText = it },
+                onSearch = { onSearchBooks(BookSearchCriteria(title = searchText)) },
             )
             SearchFilter(
                 selectedFilter,
@@ -114,6 +113,8 @@ fun BookSearchBar(
     onSearch: KeyboardActionScope.() -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     OutlinedTextField(
         value = searchText,
         onValueChange = onValueChange,
@@ -124,7 +125,13 @@ fun BookSearchBar(
             Text(stringResource(id = R.string.placeholder_search))
         },
         keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Search),
-        keyboardActions = KeyboardActions(onSearch = onSearch),
+        keyboardActions = KeyboardActions(
+            onSearch = {
+                onSearch()
+                keyboardController?.hide()
+            }
+
+        ),
         modifier = modifier
             .fillMaxWidth()
             .heightIn(min = 56.dp)
@@ -190,14 +197,15 @@ fun BookList(
 ) {
     LazyColumn(modifier = modifier, verticalArrangement = Arrangement.spacedBy(16.dp)) {
         items(items = books, key = { it.isbn }) { book ->
+            val filterText = searchText.lowercase()
             when (selectedFilter) {
-                "title" -> if (book.title.contains(searchText))
+                "title" -> if (book.title.lowercase().contains(filterText))
                     BookCard(book) { onItemClicked(BookSearchCriteria(book.isbn)) }
 
-                "author" -> if (book.author.contains(searchText))
+                "author" -> if (book.author.lowercase().contains(filterText))
                     BookCard(book) { onItemClicked(BookSearchCriteria(book.isbn)) }
 
-                "publisher" -> if (book.publisher.contains(searchText))
+                "publisher" -> if (book.publisher.lowercase().contains(filterText))
                     BookCard(book) { onItemClicked(BookSearchCriteria(book.isbn)) }
 
                 "" -> BookCard(book) { onItemClicked(BookSearchCriteria(book.isbn)) }

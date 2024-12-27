@@ -1,6 +1,6 @@
 package com.twitty.network.di
 
-import jakarta.inject.Qualifier
+import javax.inject.Qualifier
 
 @Qualifier
 @Retention(AnnotationRetention.RUNTIME)

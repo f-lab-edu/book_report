@@ -222,20 +222,6 @@ fun BookInfoDetail(book: Book, modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun BookInfoDetailPreview(modifier: Modifier = Modifier) {
-    BookInfoDetail(
-        book = Book(
-            id = 0,
-            title = "title",
-            link = "link",
-            image = "image",
-            author = "author",
-            price = "price",
-            publisher = "publisher",
-            pubDate = "pubDate",
-            isbn = "isbn",
-            description = "description"
-        ), modifier = modifier
-    )
 }
 
 @Preview(showBackground = true)

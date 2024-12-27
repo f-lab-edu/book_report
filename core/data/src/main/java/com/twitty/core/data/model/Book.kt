@@ -65,12 +65,12 @@ fun BookEntity.asNetworkBook(): NetworkBook {
 }
 
 fun NetworkBook.asBook(isFavorite: Boolean = false) = Book(
-    id = isbn.hashCode(),
+    id = 0,
+    isbn = isbn,
     title = title,
     author = author,
     publisher = publisher,
     pubDate = pubDate,
-    isbn = isbn,
     description = description,
     image = image,
     price = price,
