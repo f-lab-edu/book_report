@@ -56,7 +56,7 @@ import kotlin.math.absoluteValue
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    onNavigateToBookReport: (bookReportId: Int) -> Unit,
+    onNavigateToBookReport: (bookReportId: Long) -> Unit,
     onNavigateToBook: (String) -> Unit,
     onNavigateToBarcode: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
@@ -180,7 +180,7 @@ fun FavoriteList(
     favoriteBooks: List<Book>,
     favoriteBookReports: List<BookReport>,
     onNavigateToBook: (String) -> Unit = {},
-    onNavigateToBookReport: (bookReportId: Int) -> Unit,
+    onNavigateToBookReport: (bookReportId: Long) -> Unit,
 ) {
     LazyRow(modifier = Modifier.wrapContentSize()) {
         items(
@@ -205,7 +205,7 @@ fun FavoriteList(
 @Composable
 fun BookReportList(
     bookReports: List<BookReport>,
-    onMoveBookReport: (bookReportId: Int) -> Unit
+    onMoveBookReport: (bookReportId: Long) -> Unit
 ) {
     LazyColumn {
         items(items = bookReports, key = { it.id }) { bookReport ->

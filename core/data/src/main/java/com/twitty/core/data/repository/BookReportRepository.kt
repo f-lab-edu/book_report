@@ -1,25 +1,38 @@
 package com.twitty.core.data.repository
 
-import com.twitty.core.data.model.asBook
 import com.twitty.core.data.model.asBookReport
 import com.twitty.core.data.model.asEntity
 import com.twitty.core.data.model.asTag
+import com.twitty.database.dao.BookReportDao
+import com.twitty.database.dao.TagDao
+import com.twitty.database.model.BookReportEntity
 import com.twitty.model.Book
 import com.twitty.model.BookReport
+import com.twitty.model.BookSearchCriteria
 import com.twitty.model.Tag
 import com.twitty.model.emptyBook
 import com.twitty.model.emptyBookReport
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class BookReportRepository @Inject constructor(
-    private val tagDao: com.twitty.database.dao.TagDao,
-    private val bookDao: com.twitty.database.dao.BookDao,
-    private val bookReportDao: com.twitty.database.dao.BookReportDao,
+    private val bookRepository: IBookRepository,
+    private val tagDao: TagDao,
+    private val bookReportDao: BookReportDao,
 ) : IBookReportRepository {
 
-    override suspend fun fetchBookReport(id: Int): BookReport {
+    override suspend fun saveBookReport(bookReport: BookReport) {
+        val newBookId = bookRepository.saveBook(bookReport.book)
+        val bookReportEntity = bookReport.asEntity()
+
+        bookReportDao.fetchBookReport(bookReport.id).firstOrNull()?.let {
+            bookReportDao.updateBookReport(bookReportEntity)
+        } ?: bookReportDao.insertBookReport(bookReportEntity)
+    }
+
+    override suspend fun fetchBookReport(id: Long): BookReport {
         val bookReportEntity = bookReportDao.fetchBookReport(id)
             .firstOrNull()
             ?: return emptyBookReport
@@ -28,33 +41,12 @@ class BookReportRepository @Inject constructor(
         return bookReportEntity.asBookReport(book, tagList)
     }
 
-    override suspend fun saveBookReport(bookReport: BookReport) {
-        saveBook(bookReport.book)
-        val bookReportEntity = bookReport.asEntity()
-
-        bookReportDao.fetchBookReport(bookReport.id).firstOrNull()?.let {
-            bookReportDao.updateBookReport(bookReportEntity)
-        } ?: bookReportDao.insertBookReport(bookReportEntity)
-    }
-
-    override fun addTag(bookReport: BookReport, tag: Tag) =
-        bookReport.copy(tags = bookReport.tags + tag)
-
-    override fun removeTag(bookReport: BookReport, tagId: Int): BookReport =
-        bookReport.tags.find { it.id == tagId }
-            ?.let { tag -> bookReport.copy(tags = bookReport.tags - tag) }
-            ?: bookReport
-
     override fun fetchBookReports(): Flow<List<BookReport>> =
         bookReportDao.fetchBookReports().map { bookReportEntities ->
             bookReportEntities.map {
                 it.asBookReport()
             }
         }
-
-    override fun getAllTags() = tagDao.getAllTags().map { tagEntities ->
-        tagEntities.map { it.asTag() }
-    }
 
     override fun fetchFavoriteBookReports(): Flow<List<BookReport>> =
         bookReportDao.fetchFavoriteBookReports()
@@ -64,13 +56,18 @@ class BookReportRepository @Inject constructor(
                 }
             }
 
+    override fun fetchAllTags() = tagDao.getAllTags().map { tagEntities ->
+        tagEntities.map { it.asTag() }
+    }
+
+    override suspend fun searchBooks(bookSearchCriteria: BookSearchCriteria): Flow<List<Book>> =
+        bookRepository.searchBooks(bookSearchCriteria)
+
     private suspend fun convertEntitiesToBookAndTags(
-        bookReportEntity: com.twitty.database.model.BookReportEntity
+        bookReportEntity: BookReportEntity
     ): Pair<Book, List<Tag>> {
-        val book = bookDao.fetchBookById(bookReportEntity.bookId)
-            .firstOrNull()
-            ?.asBook()
-            ?: emptyBook
+        val book = bookRepository.searchBooks(BookSearchCriteria(id = bookReportEntity.bookId))
+            .firstOrNull()?.get(0) ?: emptyBook
 
         val tagList = bookReportEntity.tagIds
             .mapNotNull { tagId ->
@@ -79,12 +76,5 @@ class BookReportRepository @Inject constructor(
                     ?.asTag()
             }
         return Pair(book, tagList)
-    }
-
-    override suspend fun saveBook(book: Book) {
-        val bookEntity = book.asEntity()
-        bookDao.fetchBookByIsbn(bookEntity.isbn).firstOrNull()?.let {
-            bookDao.updateBook(bookEntity)
-        } ?: bookDao.insertBook(bookEntity)
     }
 }

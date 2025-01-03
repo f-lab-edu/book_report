@@ -105,7 +105,7 @@ class BookReportViewModelTest {
     }
 
     @Test
-    fun getAllTags_ShouldUpdateTagList() = runTest {
+    fun fetchAllTags_ShouldUpdateTagList() = runTest {
 
         assertEquals(2, viewModel.tagList.value.size)
         assertTrue(viewModel.tagList.value[0].id == 1 && viewModel.tagList.value[0].name == "Android")

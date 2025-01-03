@@ -6,4 +6,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface IBookRepository {
     suspend fun searchBooks(bookSearchCriteria: BookSearchCriteria): Flow<List<Book>>
+    suspend fun saveBook(book: Book): Long
 }

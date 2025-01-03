@@ -1,6 +1,7 @@
 package com.twitty.core.data.repository
 
 import com.twitty.core.data.model.asBook
+import com.twitty.core.data.model.asEntity
 import com.twitty.database.dao.BookDao
 import com.twitty.model.Book
 import com.twitty.model.BookSearchCriteria
@@ -39,6 +40,15 @@ class BookRepository @Inject constructor(
             }
         }
 
+    override suspend fun saveBook(book: Book): Long =
+        if (bookLocalDataSource.fetchBookByIsbn(book.isbn).isEmpty()) {
+            bookLocalDataSource.insertBook(book.asEntity())
+        } else {
+            bookLocalDataSource.updateBook(book.asEntity())
+            book.id
+        }
+
+
     private suspend fun searchByTitle(title: String): Flow<List<Book>> = flow {
         emit(bookRemoteDataSource.fetchNetworkSearchBook(title)
             .bookList
@@ -47,16 +57,25 @@ class BookRepository @Inject constructor(
 
 
     private fun searchByIsbn(isbn: String): Flow<List<Book>> = flow {
+        bookLocalDataSource.fetchBookByIsbn(isbn).firstOrNull()?.let {
+            emit(listOf(it.asBook()))
+            return@flow
+        }
         emit(bookRemoteDataSource.fetchNetworkSearchBookByIsbn(isbn)
             .bookList
             .map { it.asBook() })
     }
 
-    private fun searchById(id: Int): Flow<List<Book>> = flow {
+    private fun searchById(id: Long): Flow<List<Book>> = flow {
+
         emit(bookLocalDataSource.fetchBookById(id)
-            .map { it.asBook() })
+            .map {
+                Timber.d("favorite: ${it.asBook().isFavorite}")
+                it.asBook()
+            })
     }
 }
+
 
 
 

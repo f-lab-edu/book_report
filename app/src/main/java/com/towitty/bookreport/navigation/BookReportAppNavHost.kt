@@ -32,6 +32,7 @@ fun BookReportAppNavHost(
         )
         searchScreen(
             onNavigateUp = navController::navigateUp,
+            onNavigateToBook = navController::navigateToBook,
         )
         calendarScreen()
         bookReportScreen(
@@ -39,6 +40,7 @@ fun BookReportAppNavHost(
         )
         bookScreen(
             onNavigateUp = navController::navigateUp,
+            onNavigateToBookReport = navController::navigateToBookReport,
         )
     }
 }

@@ -14,7 +14,7 @@ fun NavController.navigateToHome(navOptions: NavOptions) =
     navigate(route = HomeRoute, navOptions)
 
 fun NavGraphBuilder.homeScreen(
-    onNavigateToBookReport: (Int) -> Unit,
+    onNavigateToBookReport: (Long) -> Unit,
     onNavigateToBook: (String) -> Unit,
     onNavigateToBarcode: () -> Unit,
 ) {

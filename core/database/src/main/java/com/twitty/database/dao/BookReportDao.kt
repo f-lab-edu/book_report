@@ -21,7 +21,7 @@ interface BookReportDao {
     suspend fun updateBookReport(bookReportEntity: BookReportEntity)
 
     @Query("SELECT * FROM book_reports WHERE id = :id LIMIT 1")
-    suspend fun fetchBookReport(id: Int): List<BookReportEntity>
+    suspend fun fetchBookReport(id: Long): List<BookReportEntity>
 
     @Query("SELECT * FROM book_reports")
     fun fetchBookReports(): Flow<List<BookReportEntity>>

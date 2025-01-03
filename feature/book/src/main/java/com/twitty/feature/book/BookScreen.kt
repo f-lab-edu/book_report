@@ -46,17 +46,25 @@ import com.twitty.model.emptyBook
 
 @Composable
 fun BookDetailScreen(
-    onNavigateUp: () -> Unit,
-    onFavoriteClick: (Book) -> Unit = {},
-    onCameraClick: () -> Unit = {},
-    onSelection: () -> Unit = {},
     modifier: Modifier = Modifier,
+    onNavigateUp: () -> Unit,
+    onNavigateToBookReport: (Long, String) -> Unit,
+    onNavigateToCamera: () -> Unit = { TODO() },
     viewModel: BookViewModel = hiltViewModel()
 ) {
     val detailBook by viewModel.book.collectAsState()
+    val onFavoriteClick = viewModel::favoriteBook
 
     Scaffold(
-        topBar = { BookDetailTopAppbar(onNavigateUp, onSelection, Modifier.fillMaxWidth()) },
+        topBar = {
+            BookDetailTopAppbar(
+                onNavigateUp = onNavigateUp,
+                onSelection = {
+                    onNavigateToBookReport(0, detailBook.firstOrNull()?.isbn ?: "-")
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+        },
         modifier = modifier
     ) { innerPadding ->
         Column(
@@ -67,7 +75,7 @@ fun BookDetailScreen(
         ) {
             BookInfoImage(
                 book = detailBook.firstOrNull() ?: emptyBook,
-                onCameraClick = onCameraClick,
+                onCameraClick = onNavigateToCamera,
                 onFavoriteClick = onFavoriteClick,
             )
             BookInfoDetail(
@@ -83,14 +91,14 @@ fun BookDetailScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookDetailTopAppbar(
-    onBack: () -> Unit,
+    onNavigateUp: () -> Unit,
     onSelection: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
         title = {},
         navigationIcon = {
-            IconButton(onClick = onBack) {
+            IconButton(onClick = onNavigateUp) {
                 Icon(
                     BookReportIcons.ArrowBackIosNew,
                     contentDescription = stringResource(R.string.description_go_back)
@@ -115,8 +123,7 @@ fun BookDetailTopAppbar(
 fun BookInfoImage(
     book: Book,
     onCameraClick: () -> Unit,
-    onFavoriteClick: (Book) -> Unit,
-    isFavorite: Boolean = false,
+    onFavoriteClick: () -> Unit,
 ) {
     Box(
         modifier = Modifier
@@ -133,15 +140,15 @@ fun BookInfoImage(
         )
 
         IconButton( //FavoriteButton
-            onClick = { onFavoriteClick(book) },
+            onClick = { onFavoriteClick() },
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .clip(CircleShape)
         ) {
             Icon(
-                imageVector = if (isFavorite) Icons.TwoTone.Favorite else Icons.Outlined.FavoriteBorder,
+                imageVector = if (book.isFavorite) Icons.TwoTone.Favorite else Icons.Outlined.FavoriteBorder,
                 contentDescription = stringResource(R.string.description_favorite_btn),
-                tint = if (isFavorite) Color.Red else Color.Black,
+                tint = if (book.isFavorite) Color.Red else Color.Black,
                 modifier = Modifier.size(34.dp)
             )
         }
@@ -231,7 +238,6 @@ fun PreviewBookInfoImage() {
         book = emptyBook,
         onCameraClick = {},
         onFavoriteClick = {},
-        isFavorite = false,
     )
 }
 

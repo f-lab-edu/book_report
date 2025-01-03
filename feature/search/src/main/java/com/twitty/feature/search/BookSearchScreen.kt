@@ -52,6 +52,7 @@ import com.twitty.model.BookSearchCriteria
 @Composable
 fun BookSearchScreen(
     onNavigateUp: () -> Unit,
+    onNavigateToBook: (String) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: SearchViewModel = hiltViewModel()
 ) {
@@ -97,7 +98,7 @@ fun BookSearchScreen(
             }
             BookList(
                 books = books,
-                onItemClicked = onSearchBooks,
+                onItemClicked = onNavigateToBook,
                 selectedFilter = selectedFilter,
                 searchText = searchText,
                 Modifier.fillMaxHeight()
@@ -190,7 +191,7 @@ fun SearchFilter(
 @Composable
 fun BookList(
     books: List<Book>,
-    onItemClicked: (BookSearchCriteria) -> Unit,
+    onItemClicked: (String) -> Unit,
     selectedFilter: String,
     searchText: String,
     modifier: Modifier = Modifier
@@ -200,15 +201,15 @@ fun BookList(
             val filterText = searchText.lowercase()
             when (selectedFilter) {
                 "title" -> if (book.title.lowercase().contains(filterText))
-                    BookCard(book) { onItemClicked(BookSearchCriteria(book.isbn)) }
+                    BookCard(book) { onItemClicked(book.isbn) }
 
                 "author" -> if (book.author.lowercase().contains(filterText))
-                    BookCard(book) { onItemClicked(BookSearchCriteria(book.isbn)) }
+                    BookCard(book) { onItemClicked(book.isbn) }
 
                 "publisher" -> if (book.publisher.lowercase().contains(filterText))
-                    BookCard(book) { onItemClicked(BookSearchCriteria(book.isbn)) }
+                    BookCard(book) { onItemClicked(book.isbn) }
 
-                "" -> BookCard(book) { onItemClicked(BookSearchCriteria(book.isbn)) }
+                "" -> BookCard(book) { onItemClicked(book.isbn) }
             }
         }
     }

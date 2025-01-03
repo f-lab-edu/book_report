@@ -7,7 +7,6 @@ import androidx.navigation.compose.composable
 import com.twitty.feature.book.BookDetailScreen
 import kotlinx.serialization.Serializable
 
-
 @Serializable
 data class BookRoute(val isbn: String)
 
@@ -18,10 +17,12 @@ fun NavController.navigateToBook(isbn: String, navOptions: NavOptionsBuilder.() 
 
 fun NavGraphBuilder.bookScreen(
     onNavigateUp: () -> Unit,
+    onNavigateToBookReport: (Long, String) -> Unit,
 ) {
     composable<BookRoute> {
         BookDetailScreen(
             onNavigateUp = onNavigateUp,
+            onNavigateToBookReport = onNavigateToBookReport,
         )
     }
 }

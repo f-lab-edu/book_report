@@ -18,7 +18,7 @@ val emptyBook = Book(
 
 @Serializable
 data class Book(
-    val id: Int,
+    val id: Long,
     val isbn: String,
     val title: String,
     val author: String,

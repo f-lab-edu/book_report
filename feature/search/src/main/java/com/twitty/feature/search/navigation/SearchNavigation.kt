@@ -22,14 +22,16 @@ fun NavController.navigateToBookSearch() {
 }
 
 fun NavGraphBuilder.searchScreen(
-    onNavigateUp: () -> Unit
+    onNavigateUp: () -> Unit,
+    onNavigateToBook: (String) -> Unit
 ) {
     composable<SearchRoute> {
         SearchScreen()
     }
     composable<SearchBookRoute> {
         BookSearchScreen(
-            onNavigateUp = onNavigateUp
+            onNavigateUp = onNavigateUp,
+            onNavigateToBook = onNavigateToBook
         )
     }
 }

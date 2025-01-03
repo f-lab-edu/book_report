@@ -50,7 +50,7 @@ class FakeBooKReportRepository(
 
     override fun fetchBookReports() = bookReportDao.fetchBookReports()
 
-    override fun getAllTags() = tagDao.getAllTags()
+    override fun fetchAllTags() = tagDao.getAllTags()
 
     override fun fetchFavoriteBookReports(): Flow<List<BookReport>> = flow {
         bookReportDao.fetchFavoriteBookReports()

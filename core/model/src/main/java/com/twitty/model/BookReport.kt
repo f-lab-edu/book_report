@@ -3,7 +3,7 @@ package com.twitty.model
 val emptyBookReport = BookReport(0, emptyBook, "", "", "", emptyList(), false)
 
 data class BookReport(
-    val id: Int,
+    val id: Long,
     val book: Book,
     val title: String,
     val content: String,

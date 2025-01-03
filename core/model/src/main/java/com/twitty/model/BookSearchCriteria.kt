@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class BookSearchCriteria(
     val title: String? = null,
     val isbn: String? = null,
-    val id: Int? = null,
+    val id: Long? = null,
 )

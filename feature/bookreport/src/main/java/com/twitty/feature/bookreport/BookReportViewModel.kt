@@ -5,34 +5,24 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.toRoute
 import com.twitty.core.data.repository.IBookReportRepository
-import com.twitty.core.data.repository.IBookRepository
 import com.twitty.feature.bookreport.navigation.BookReportRoute
-import com.twitty.model.Book
 import com.twitty.model.BookReport
 import com.twitty.model.BookSearchCriteria
 import com.twitty.model.Tag
-import com.twitty.model.emptyBook
 import com.twitty.model.emptyBookReport
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class BookReportViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val bookReportRepository: IBookReportRepository,
-    private val bookRepository: IBookRepository,
 ) : ViewModel() {
-    val bookReportId: Int = savedStateHandle.toRoute<BookReportRoute>().id
-
-    private val _detailBook = MutableStateFlow<Book>(emptyBook)
-    val detailBook: StateFlow<Book> = _detailBook
-
-    private val _bookList = MutableStateFlow<List<Book>>(emptyList())
-    val bookList: StateFlow<List<Book>> = _bookList
+    private val bookReportId: Long = savedStateHandle.toRoute<BookReportRoute>().bookReportId
+    private val bookIsbn: String = savedStateHandle.toRoute<BookReportRoute>().bookIsbn
 
     private val _tagList = MutableStateFlow<List<Tag>>(emptyList())
     val tagList: StateFlow<List<Tag>> = _tagList
@@ -40,69 +30,50 @@ class BookReportViewModel @Inject constructor(
     private val _bookReport = MutableStateFlow(emptyBookReport)
     val bookReport: StateFlow<BookReport> = _bookReport
 
-    private val _bookReportList = MutableStateFlow<List<BookReport>>(emptyList())
-    val bookReportList: StateFlow<List<BookReport>> = _bookReportList
-
     init {
-        Timber.d("BookReportViewModel init: $bookReportId")
-        getAllTags()
-        fetchBookReportList()
+        fetchAllTags()
+        fetchBookReport()
     }
 
-    fun searchBooks(bookSearchCriteria: BookSearchCriteria) {
+    private fun fetchAllTags() {
         viewModelScope.launch {
-            bookRepository.searchBooks(bookSearchCriteria)
-                .collect { book ->
-                    when {
-                        bookSearchCriteria.title != null -> _bookList.value = book
-                        else -> _detailBook.value =
-                            book.firstOrNull() ?: bookList.value.find { it.isbn == bookSearchCriteria.isbn } ?: emptyBook
-                    }
-                }
-        }
-    }
-
-    private fun getAllTags() {
-        viewModelScope.launch {
-            bookReportRepository.getAllTags().collect { tags ->
+            bookReportRepository.fetchAllTags().collect { tags ->
                 _tagList.value = tags
             }
         }
     }
 
-    private fun fetchBookReportList() {
+    private fun fetchBookReport() {
         viewModelScope.launch {
-            bookReportRepository.fetchBookReports().collect { bookReport ->
-                _bookReportList.value = bookReport
+            if (bookReportId == 0L && bookIsbn != "-") {
+                bookReportRepository.searchBooks(BookSearchCriteria(isbn = bookIsbn)).collect { books ->
+                    _bookReport.value = books.first().let { book ->
+                        emptyBookReport.copy(book = book)
+                    }
+                }
+            } else if (bookReportId != 0L) {
+                bookReportRepository.fetchBookReport(bookReportId).let { bookReport ->
+                    _bookReport.value = bookReport
+                }
+            } else {
+                _bookReport.value = emptyBookReport
             }
-        }
-    }
-
-    fun fetchBookReport(bookReportId: Int) {
-        viewModelScope.launch {
-            _bookReport.value = bookReportRepository.fetchBookReport(bookReportId)
         }
     }
 
     fun addBookReportTag(tagId: Int) {
         tagList.value.find { it.id == tagId }?.let { tag ->
-            _bookReport.value = bookReportRepository.addTag(bookReport.value, tag)
+            _bookReport.value = _bookReport.value.copy(tags = _bookReport.value.tags + tag)
         }
     }
 
     fun removeBookReportTag(tagId: Int) {
-        _bookReport.value = bookReportRepository.removeTag(bookReport.value, tagId)
+        _bookReport.value = _bookReport.value.copy(tags = _bookReport.value.tags.filter { it.id != tagId })
     }
 
-    fun saveBookReport(bookReport: BookReport) {
+    fun saveBookReport() {
         viewModelScope.launch {
-            bookReportRepository.saveBookReport(bookReport)
-        }
-    }
-
-    fun saveBook(book: Book) {
-        viewModelScope.launch {
-            bookReportRepository.saveBook(book)
+            bookReportRepository.saveBookReport(bookReport.value)
         }
     }
 }
