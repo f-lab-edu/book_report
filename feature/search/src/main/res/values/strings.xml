@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="description_go_back">뒤로 가기</string>
+    <string name="btn_direct_book_registration">책 직접 등록</string>
+    <string name="placeholder_search">검색</string>
+    <string name="str_book_title">책 이름</string>
+    <string name="str_author">저자</string>
+    <string name="str_publisher">출판사</string>
+    <string name="label_search">검색</string>
+
+</resources>

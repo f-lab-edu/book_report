@@ -21,4 +21,17 @@ dependencyResolutionManagement {
 
 rootProject.name = "BookReport"
 include(":app")
- 
+include(":core:data")
+include(":core:database")
+include(":core:network")
+include(":core:designsystem")
+include(":core:model")
+include(":core:ui")
+include(":feature:bookreport")
+include(":feature:tag")
+include(":feature:settings")
+include(":feature:favorites")
+include(":feature:search")
+include(":feature:book")
+include(":feature:home")
+include(":feature:calendar")

@@ -1,34 +1,33 @@
 package com.towitty.bookreport.data.database
 
-import com.towitty.bookreport.data.database.model.TagEntity
-import com.towitty.bookreport.data.repository.ITagRepository
+import com.twitty.core.data.repository.ITagRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class FakeTagLocalRepository(
-    private val tagDatabase: MutableList<TagEntity>
+    private val tagDatabase: MutableList<com.twitty.database.model.TagEntity>
 ) : ITagRepository {
 
-    override suspend fun insertTag(tagEntity: TagEntity) {
+    override suspend fun insertTag(tagEntity: com.twitty.database.model.TagEntity) {
         tagDatabase.add(tagEntity)
     }
 
-    override suspend fun updateTag(tagEntity: TagEntity) {
+    override suspend fun updateTag(tagEntity: com.twitty.database.model.TagEntity) {
         val index = tagDatabase.indexOfFirst { it.id == tagEntity.id }
         if (index >= 0) {
             tagDatabase[index] = tagEntity
         }
     }
 
-    override suspend fun deleteTag(tagEntity: TagEntity) {
+    override suspend fun deleteTag(tagEntity: com.twitty.database.model.TagEntity) {
         tagDatabase.remove(tagEntity)
     }
 
-    override fun getTag(id: Int): Flow<TagEntity> = flow {
-        tagDatabase.first { it.id == id }
+    override suspend fun getTag(id: Int): com.twitty.database.model.TagEntity {
+        return tagDatabase.find { it.id == id } ?: com.twitty.database.model.emptyTagEntity
     }
 
-    override fun getAllTags(): Flow<List<TagEntity>> = flow {
+    override fun getAllTags(): Flow<List<com.twitty.database.model.TagEntity>> = flow {
         tagDatabase
     }
 
