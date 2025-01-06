@@ -8,5 +8,5 @@ class TagIdsConverter {
     fun fromTagIds(tagIds: List<Int>): String = tagIds.joinToString(",")
 
     @TypeConverter
-    fun toTagIds(tagIdsString: String): List<Int> = tagIdsString.split(",").map { it.toInt() }
+    fun toTagIds(tagIdsString: String): List<Int> = tagIdsString.ifEmpty { "0" }.split(",").map { it.toInt() }
 }

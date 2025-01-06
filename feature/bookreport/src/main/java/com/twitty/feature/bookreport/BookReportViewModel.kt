@@ -52,7 +52,7 @@ class BookReportViewModel @Inject constructor(
                     }
                 }
             } else if (bookReportId != 0L) {
-                bookReportRepository.fetchBookReport(bookReportId).let { bookReport ->
+                bookReportRepository.fetchBookReport(bookReportId).collect { bookReport ->
                     _bookReport.value = bookReport
                 }
             } else {
@@ -71,9 +71,13 @@ class BookReportViewModel @Inject constructor(
         _bookReport.value = _bookReport.value.copy(tags = _bookReport.value.tags.filter { it.id != tagId })
     }
 
+    fun updateTitleAndContent(title: String, content: String) {
+        _bookReport.value = _bookReport.value.copy(title = title, content = content)
+    }
+
     fun saveBookReport() {
         viewModelScope.launch {
-            bookReportRepository.saveBookReport(bookReport.value)
+            val newBookReportId = bookReportRepository.saveBookReport(_bookReport.value)
         }
     }
 }

@@ -20,17 +20,14 @@ class BookRepository @Inject constructor(
     override suspend fun searchBooks(bookSearchCriteria: BookSearchCriteria): Flow<List<Book>> =
         when {
             bookSearchCriteria.title != null -> {
-                Timber.tag("BookRepository").d("Title: ${bookSearchCriteria.title}")
                 searchByTitle(bookSearchCriteria.title!!)
             }
 
             bookSearchCriteria.isbn != null -> {
-                Timber.tag("BookRepository").d("isbn: ${bookSearchCriteria.isbn}")
                 searchByIsbn(bookSearchCriteria.isbn!!)
             }
 
             bookSearchCriteria.id != null -> {
-                Timber.tag("BookRepository").d("id: ${bookSearchCriteria.id}")
                 searchById(bookSearchCriteria.id!!)
             }
 
@@ -70,7 +67,6 @@ class BookRepository @Inject constructor(
 
         emit(bookLocalDataSource.fetchBookById(id)
             .map {
-                Timber.d("favorite: ${it.asBook().isFavorite}")
                 it.asBook()
             })
     }

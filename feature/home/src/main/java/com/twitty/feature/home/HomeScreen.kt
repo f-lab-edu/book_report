@@ -23,7 +23,6 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
@@ -53,7 +52,6 @@ import com.twitty.model.BookReport
 import com.twitty.model.emptyBook
 import kotlin.math.absoluteValue
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     onNavigateToBookReport: (bookReportId: Long) -> Unit,
@@ -93,12 +91,11 @@ fun HomeScreen(
             ) {
                 BookReportList(
                     bookReports = bookReports,
-                    onMoveBookReport = onNavigateToBookReport
+                    onNavigateToBookReport = onNavigateToBookReport
                 )
             }
         }
     }
-
 }
 
 @Composable
@@ -182,7 +179,11 @@ fun FavoriteList(
     onNavigateToBook: (String) -> Unit = {},
     onNavigateToBookReport: (bookReportId: Long) -> Unit,
 ) {
-    LazyRow(modifier = Modifier.wrapContentSize()) {
+    LazyRow(
+        modifier = Modifier
+            .fillMaxWidth()
+            .wrapContentHeight()
+    ) {
         items(
             items = favoriteBooks,
             key = { it.id }
@@ -205,7 +206,7 @@ fun FavoriteList(
 @Composable
 fun BookReportList(
     bookReports: List<BookReport>,
-    onMoveBookReport: (bookReportId: Long) -> Unit
+    onNavigateToBookReport: (bookReportId: Long) -> Unit
 ) {
     LazyColumn {
         items(items = bookReports, key = { it.id }) { bookReport ->
@@ -218,7 +219,7 @@ fun BookReportList(
                         shape = RoundedCornerShape(4.dp)
                     )
                     .clickable {
-                        onMoveBookReport(bookReport.id)
+                        onNavigateToBookReport(bookReport.id)
                     }
             ) {
                 val (title, date) = createRefs()

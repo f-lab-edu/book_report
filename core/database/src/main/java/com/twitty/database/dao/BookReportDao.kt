@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.Flow
 interface BookReportDao {
 
     @Insert
-    suspend fun insertBookReport(bookReport: BookReportEntity)
+    suspend fun insertBookReport(bookReport: BookReportEntity): Long
 
     @Delete
     suspend fun deleteBookReport(bookReportEntity: BookReportEntity)
@@ -21,7 +21,7 @@ interface BookReportDao {
     suspend fun updateBookReport(bookReportEntity: BookReportEntity)
 
     @Query("SELECT * FROM book_reports WHERE id = :id LIMIT 1")
-    suspend fun fetchBookReport(id: Long): List<BookReportEntity>
+    fun fetchBookReport(id: Long): Flow<BookReportEntity>
 
     @Query("SELECT * FROM book_reports")
     fun fetchBookReports(): Flow<List<BookReportEntity>>

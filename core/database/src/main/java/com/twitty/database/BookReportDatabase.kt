@@ -3,6 +3,9 @@ package com.twitty.database
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import com.twitty.database.dao.BookDao
+import com.twitty.database.dao.BookReportDao
+import com.twitty.database.dao.TagDao
 import com.twitty.database.util.TagIdsConverter
 
 
@@ -19,9 +22,9 @@ import com.twitty.database.util.TagIdsConverter
 @TypeConverters(TagIdsConverter::class)
 abstract class BookReportDatabase : RoomDatabase() {
 
-    abstract fun bookDao(): com.twitty.database.dao.BookDao
+    abstract fun bookDao(): BookDao
 
-    abstract fun bookReportDao(): com.twitty.database.dao.BookReportDao
+    abstract fun bookReportDao(): BookReportDao
 
-    abstract fun tagDao(): com.twitty.database.dao.TagDao
+    abstract fun tagDao(): TagDao
 }
