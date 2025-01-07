@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
-import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -45,11 +44,9 @@ import androidx.compose.ui.util.lerp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.twitty.core.ui.BookCard
-import com.twitty.core.ui.BookReportCard
 import com.twitty.designsystem.icon.BookReportIcons
 import com.twitty.model.Book
 import com.twitty.model.BookReport
-import com.twitty.model.emptyBook
 import kotlin.math.absoluteValue
 
 @Composable
@@ -59,47 +56,58 @@ fun HomeScreen(
     onNavigateToBarcode: () -> Unit,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
+    val recommendedBooks by viewModel.recommendedBooks.collectAsState()
     val favoriteBooks by viewModel.favoriteBooks.collectAsState()
-    val favoriteBookReports by viewModel.favoriteBookReports.collectAsState()
     val bookReports by viewModel.bookReports.collectAsState()
 
-    Surface(Modifier.padding(16.dp)) {
-        Column {
-            HomeTitleSlot(
-                text = stringResource(R.string.title_recommended_book),
-            ) {
-                MonthRecommendedBook()
+    Surface {
+        LazyColumn {
+            item {
+                HomeTitleSlot(
+                    text = stringResource(R.string.title_recommended_book),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    if (recommendedBooks.isNotEmpty()) {
+                        MonthRecommendedBook(recommendedBooks)
+                    }
+                }
             }
-            HomeTitleSlot(
-                text = stringResource(R.string.title_favorite_list),
-                isVisibleIcon = true,
-                onChangeCard = {},
-                onChangeList = {}
-            ) {
-                FavoriteList(
-                    favoriteBooks = favoriteBooks,
-                    favoriteBookReports = favoriteBookReports,
-                    onNavigateToBook = onNavigateToBook,
-                    onNavigateToBookReport = onNavigateToBookReport
-                )
+            item {
+                HomeTitleSlot(
+                    text = stringResource(R.string.title_favorite_list),
+                    isVisibleIcon = true,
+                    onChangeCard = {},
+                    onChangeList = {},
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    FavoriteList(
+                        favoriteBooks = favoriteBooks,
+                        onNavigateToBook = onNavigateToBook,
+                    )
+                }
             }
-            HomeTitleSlot(
-                text = stringResource(R.string.title_bookreport_list),
-                isVisibleIcon = true,
-                onChangeCard = {},
-                onChangeList = {}
-            ) {
-                BookReportList(
-                    bookReports = bookReports,
-                    onNavigateToBookReport = onNavigateToBookReport
-                )
+            item {
+                HomeTitleSlot(
+                    text = stringResource(R.string.title_bookreport_list),
+                    isVisibleIcon = true,
+                    onChangeCard = {},
+                    onChangeList = {},
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    BookReportList(
+                        bookReports = bookReports,
+                        onNavigateToBookReport = onNavigateToBookReport
+                    )
+                }
             }
         }
     }
 }
 
 @Composable
-fun MonthRecommendedBook() {
+fun MonthRecommendedBook(
+    recommendedBooks: List<Book>
+) {
     val pagerState = rememberPagerState(
         initialPage = 1,
         pageCount = { 3 }
@@ -109,10 +117,10 @@ fun MonthRecommendedBook() {
             state = pagerState,
             contentPadding = PaddingValues(horizontal = 64.dp),
             pageSpacing = 16.dp,
-            modifier = Modifier.wrapContentSize()
+            modifier = Modifier.height(200.dp)
         ) { page ->
             BookCard(
-                book = emptyBook,
+                book = recommendedBooks[page],
                 modifier = Modifier
                     .graphicsLayer {
                         // 페이지 전환 애니메이션 계산
@@ -175,14 +183,11 @@ fun MonthRecommendedBook() {
 @Composable
 fun FavoriteList(
     favoriteBooks: List<Book>,
-    favoriteBookReports: List<BookReport>,
     onNavigateToBook: (String) -> Unit = {},
-    onNavigateToBookReport: (bookReportId: Long) -> Unit,
 ) {
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
-            .wrapContentHeight()
     ) {
         items(
             items = favoriteBooks,
@@ -190,14 +195,6 @@ fun FavoriteList(
         ) { favoriteBook ->
             BookCard(book = favoriteBook) {
                 onNavigateToBook(favoriteBook.isbn)
-            }
-        }
-        items(
-            items = favoriteBookReports,
-            key = { it.id }
-        ) { favoriteBookReport ->
-            BookReportCard(bookReport = favoriteBookReport) {
-                onNavigateToBookReport(favoriteBookReport.id)
             }
         }
     }
@@ -208,8 +205,8 @@ fun BookReportList(
     bookReports: List<BookReport>,
     onNavigateToBookReport: (bookReportId: Long) -> Unit
 ) {
-    LazyColumn {
-        items(items = bookReports, key = { it.id }) { bookReport ->
+    Column {
+        bookReports.forEach { bookReport ->
             ConstraintLayout(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -245,13 +242,14 @@ fun BookReportList(
 @Composable
 fun HomeTitleSlot(
     text: String,
+    modifier: Modifier = Modifier,
     isVisibleIcon: Boolean = false,
     onChangeList: () -> Unit = {},
     onChangeCard: () -> Unit = {},
     content: @Composable () -> Unit
 ) {
     ConstraintLayout(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier
     ) {
         Spacer(modifier = Modifier.padding(8.dp))
 
@@ -302,19 +300,8 @@ fun HomeTitleSlot(
     }
 
     Spacer(modifier = Modifier.height(8.dp))
-
     content()
-
     Spacer(modifier = Modifier.height(8.dp))
-
-    Spacer(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(1.dp)
-            .background(color = Color.Gray)
-    )
-
-
 }
 
 @Preview(showBackground = true)
@@ -326,16 +313,9 @@ fun HomeScreenPreview(modifier: Modifier = Modifier) {
 @Preview(showBackground = true)
 @Composable
 fun MonthRecommendedBookPreview(modifier: Modifier = Modifier) {
-    MonthRecommendedBook()
 }
 
 @Preview(showBackground = true)
 @Composable
 fun TitleSlotPreview(modifier: Modifier = Modifier) {
-    Column {
-        HomeTitleSlot("이달의 추천 Book") { Text("aslfkmaasfasfsafafasfafs\naslfkmlasfm") }
-        HomeTitleSlot("즐겨 찾기", true) { Text("aslfkmaasfasfsafafasfafs\naslfkmlasfm") }
-        HomeTitleSlot("독후감 목록", true) { Text("aslfkmaasfasfsafafasfafs\naslfkmlasfm") }
-    }
-
 }

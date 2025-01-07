@@ -195,7 +195,7 @@ fun BookInfoDetail(book: Book, modifier: Modifier = Modifier) {
                     .padding(8.dp)
             )
             Text(
-                text = book.price,
+                text = book.discount,
                 modifier = Modifier
                     .fillMaxWidth()
                     .border(1.dp, Color.Gray, shape = RoundedCornerShape(8.dp))

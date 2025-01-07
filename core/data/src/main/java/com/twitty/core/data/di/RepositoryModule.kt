@@ -6,7 +6,9 @@ import com.twitty.core.data.repository.FavoritesRepository
 import com.twitty.core.data.repository.IBookReportRepository
 import com.twitty.core.data.repository.IBookRepository
 import com.twitty.core.data.repository.IFavoritesRepository
+import com.twitty.core.data.repository.IRecommendedBooksRepository
 import com.twitty.core.data.repository.ITagRepository
+import com.twitty.core.data.repository.RecommendedBooksRepository
 import com.twitty.core.data.repository.TagLocalRepository
 import dagger.Binds
 import dagger.Module
@@ -28,4 +30,7 @@ abstract class RepositoryModule {
 
     @Binds
     abstract fun bindsFavoritesRepository(favoritesRepository: FavoritesRepository): IFavoritesRepository
+
+    @Binds
+    abstract fun bindsRecommendedBooksRepository(recommendedBooksRepository: RecommendedBooksRepository): IRecommendedBooksRepository
 }

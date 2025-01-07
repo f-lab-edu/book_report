@@ -48,7 +48,7 @@ fun BookCard(book: Book, modifier: Modifier = Modifier, onClick: () -> Unit) {
             ) {
                 Text(book.title)
                 Text(book.author)
-                Text(book.price)
+                Text(book.discount)
                 Text(book.publisher)
             }
         }

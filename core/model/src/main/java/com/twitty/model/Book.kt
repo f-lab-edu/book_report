@@ -9,9 +9,9 @@ val emptyBook = Book(
     author = "작가",
     image = "-",
     description = "-",
-    price = "-",
+    discount = "-",
     link = "-",
-    pubDate = "-",
+    pubdate = "-",
     publisher = "출판사",
     isFavorite = false
 )
@@ -19,14 +19,14 @@ val emptyBook = Book(
 @Serializable
 data class Book(
     val id: Long,
-    val isbn: String,
     val title: String,
-    val author: String,
-    val image: String,
-    val description: String,
-    val price: String,
     val link: String,
-    val pubDate: String,
+    val image: String,
+    val author: String,
+    val discount: String,
     val publisher: String,
-    val isFavorite: Boolean
+    val pubdate: String,
+    val isbn: String,
+    val description: String,
+    val isFavorite: Boolean = false
 )

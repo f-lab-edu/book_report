@@ -64,7 +64,6 @@ class BookRepository @Inject constructor(
     }
 
     private fun searchById(id: Long): Flow<List<Book>> = flow {
-
         emit(bookLocalDataSource.fetchBookById(id)
             .map {
                 it.asBook()

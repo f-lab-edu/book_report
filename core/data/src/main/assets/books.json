@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "title": "Android",
+    "link": "https://search.shopping.naver.com/book/catalog/32451971823",
+    "image": "https://shopping-phinf.pstatic.net/main_3245197/32451971823.20220519081242.jpg",
+    "author": "",
+    "discount": "109690",
+    "publisher": "Edizioni Accademiche Italiane",
+    "pubdate": "20160114",
+    "isbn": "9783639777833",
+    "description": "Un metodo semplice per consentire a tutti gli appassionati di conoscere il mondo Android e sviluppare applicazioni per smartphone e tablet con semplicita. Riassunto in poche pagine tutto quello che c'e da sapere sul funzionamento delle App basate sul sistema operativo di casa Google. Seguendo questa guida, con semplici passaggi, potete creare tutte le applicazioni su misura per voi. All'interno troverete un'applicazione completa e funzionante d'esempio."
+  },
+  {
+    "id": 2,
+    "title": "Android (App Development & Programming Guide: Learn In A Day!)",
+    "link": "https://search.shopping.naver.com/book/catalog/32510410432",
+    "image": "https://shopping-phinf.pstatic.net/main_3251041/32510410432.20220521201217.jpg",
+    "author": "",
+    "discount": "47740",
+    "publisher": "Lulu Press",
+    "pubdate": "20151209",
+    "isbn": "9781329747517",
+    "description": "Learn to Program Android Apps - in Only a Day! \n\nAndroid: Programming Guide: Android App Development - Learn in a Day teaches you everything you need to become an Android App Developer from scratch. It explains how you can get started by installing Android Studio and learning to use the Android SDK Manager.\n\nCan you really create an app in just a day?\n\nYes, you can! With Android: Programming Guide: Android App Development - Learn in a Day, you'll learn to create \"OMG Andriod\"."
+  },
+  {
+    "id": 3,
+    "title": "Naked Android (Synthetic Socialness and the Human Gaze)",
+    "link": "https://search.shopping.naver.com/book/catalog/51299804639",
+    "image": "https://shopping-phinf.pstatic.net/main_5129980/51299804639.20241108153216.jpg",
+    "author": "",
+    "discount": "186270",
+    "publisher": "",
+    "pubdate": "20241202",
+    "isbn": "9780367772543",
+    "description": "The Naked Android: Synthetic Socialness and the Human Gaze illuminates the connection between the stories people tell, their expectations of what a robot is, and how these beliefs and values manifest in how real robots are designed and used."
+  },
+  {
+    "id": 4,
+    "title": "Pro Android",
+    "link": "https://search.shopping.naver.com/book/catalog/32477661264",
+    "image": "https://shopping-phinf.pstatic.net/main_3247766/32477661264.20221228072253.jpg",
+    "author": "Hashimi, Sayed Y./ Komatineni, Satya",
+    "discount": "75410",
+    "publisher": "Springer-Verlag New York Inc",
+    "pubdate": "20090622",
+    "isbn": "9781430215967",
+    "description": "Pro Android is the first book that includes coverage of the new Google Android 1.5 SDK (including the branch formerly called Cupcake). This essential book covers the fundamentals of building applications for embedded devices thru through to advanced concepts, such as, custom 3D components. \n\n\nTakes a pragmatic approach to developing Google Android applications.\n\n\nExamines the Android Virtual Device; the Input-Method Framework, special development considerations for touch screen vs."
+  },
+  {
+    "id": 5,
+    "title": "Android Dawn",
+    "link": "https://search.shopping.naver.com/book/catalog/33783591202",
+    "image": "https://shopping-phinf.pstatic.net/main_3378359/33783591202.20220731094923.jpg",
+    "author": "",
+    "discount": "28930",
+    "publisher": "Westridge Art",
+    "pubdate": "20220615",
+    "isbn": "9780998355832",
+    "description": "Can Humans and androids co-exist in the future? Who survives when androids engage emotional reactions as they interact with humans having similar emotional needs? Cigi Weatherman wants a world in which her children can grow and succeed."
+  },
+  {
+    "id": 6,
+    "title": "Hello, Android (Introducing Google’s Mobile Development Platform)",
+    "link": "https://search.shopping.naver.com/book/catalog/32445466677",
+    "image": "https://shopping-phinf.pstatic.net/main_3244546/32445466677.20220518234353.jpg",
+    "author": "",
+    "discount": "53370",
+    "publisher": "Pragmatic Bookshelf",
+    "pubdate": "20100720",
+    "isbn": "9781934356562",
+    "description": "Android is a software toolkit for mobile phones, created by Google and the Open Handset Alliance. It's inside millions of cell phones and other mobile devices, making Android a major platform for application developers. That could be your own program running on all those devices.\n\nWithin minutes, Hello, Android will get you started creating your first working application: Android's version of \"Hello, World.\" From there, you'll build up a more substantial example: an Android Sudoku game. By gradually adding features to the game, you'll learn the basics of Android programming. You'll also see how to build in audio and video support, add graphics using 2D and 3D OpenGL, network with web pages and web services, and store data with SQLite. You'll also learn how to publish your applications to the Android Market.\n\nThe #1 book for learning Android is now in its third edition. Every page and example was reviewed and updated for compatibility with the latest versions. Freshly added material covers installing applications to the SD card, supporting multi-touch, and creating live wallpaper. You'll also find plenty of real-world advice on how to support all the Android versions in use today-everything from Cupcake (Android 1.5) to FroYo (Android 2.2) and beyond.\n\nIf you'd rather be coding than reading about coding, this book is for you.\n\nEd Burnette is editor of the articles section at eclipse.org, and author of the web site's \"The Rich Client Platform (RCP) Tutorial\" series. Ed also co-authored Eclipse in Action (Manning) and runs the eclipsepowered.org site, where he can often be found hanging out in the Eclipse community forums. He's written everything from multi-user servers to compilers to commercial video games since earning a Bachelor of Science degree in computer science from North Carolina State University. He is a Principal Systems Developer at SAS, and lives near Research Triangle Park, NC."
+  },
+  {
+    "id": 7,
+    "title": "Android Studio를 활용한 안드로이드 프로그래밍 (Android 14.0(U) 지원, 9판)",
+    "link": "https://search.shopping.naver.com/book/catalog/45326523619",
+    "image": "https://shopping-phinf.pstatic.net/main_4532652/45326523619.20241230071341.jpg",
+    "author": "우재남^박길식",
+    "discount": "32300",
+    "publisher": "한빛아카데미",
+    "pubdate": "20240119",
+    "isbn": "9791156640219",
+    "description": "프로그래밍 초보자도 할 수 있는 Java 기반 안드로이드 프로그래밍 교재\n\n이 책은 대학교나 IT 전문학원의 안드로이드 프로그래밍 과목 수강생을 대상으로 합니다. 기본적인 프로그래밍을 접해본 독자라면 Java 기초부터 시작하여 안드로이드 앱 개발까지 한번에 학습할 수 있도록 구성되어 있습니다. 특별히 이번 9판에서는 버전업을 적용하여 JDK 17, Android 14.0(U), Android Studio Hedgehog에서 실습할 수 있습니다. 또한 연습문제 일부를 변경하였으며, 13장에 ‘경기도 맛집 찾기 앱 만들기’ 프로젝트를 추가하였습니다. 마지막으로 안드로이드 프로그래밍을 하면서 접할 수 있는 다양한 오류나 실수까지 친절하게 안내하여 시행착오 없이 안드로이드를 빠르게 정복할 수 있을 것입니다.\n\n※ 본 도서는 대학 강의용 교재로 개발되었으므로 연습문제 해답은 제공하지 않습니다."
+  },
+  {
+    "id": 8,
+    "title": "Android Studio를 활용한 안드로이드 프로그래밍 (Android 12.0(S) 지원)",
+    "link": "https://search.shopping.naver.com/book/catalog/32436264666",
+    "image": "https://shopping-phinf.pstatic.net/main_3243626/32436264666.20221019104929.jpg",
+    "author": "우재남^박길식",
+    "discount": "0",
+    "publisher": "한빛아카데미",
+    "pubdate": "20220122",
+    "isbn": "9791156645849",
+    "description": "실습 단계별 명쾌한 멘토링!\n대학이나 IT 전문 학원의 안드로이드 프로그래밍 과목 수강생을 대상으로 합니다. 기본적인 프로그래밍을 접해본 독자라면 안드로이드에 꼭 필요한 Java 기초부터 안드로이드 앱 개발까지 학습 가능하도록 구성되어 있습니다. 안드로이드 프로그래밍을 하면서 부딪힐 수 있는 다양한 오류나 실수까지 친절하게 안내하여 시행착오 없이 안드로이드를 빠르게 정복할 수 있습니다.\n\n※ 본 도서는 대학 강의용 교재로 개발되었으므로 연습문제 해답은 제공하지 않습니다."
+  },
+  {
+    "id": 9,
+    "title": "안드로이드 프로그래밍 (Android 7.1, 8.0 지원)",
+    "link": "https://search.shopping.naver.com/book/catalog/32445250654",
+    "image": "https://shopping-phinf.pstatic.net/main_3244525/32445250654.20230905101133.jpg",
+    "author": "김선우",
+    "discount": "31500",
+    "publisher": "한빛아카데미",
+    "pubdate": "20171208",
+    "isbn": "9791156643630",
+    "description": "체계적인 실습 예제를 통해 익히는 『안드로이드 프로그래밍』은 한정된 시간과 분량 내에서 안드로이드 프로그래밍의 핵심 주제를 균형있게 담아내는 데 중점을 두고 크게 네 가지 관점에서 구성하였다."
+  },
+  {
+    "id": 10,
+    "title": "Android Studio로 시작하는 모바일 프로그래밍 (Android Apps 개발)",
+    "link": "https://search.shopping.naver.com/book/catalog/32506653833",
+    "image": "https://shopping-phinf.pstatic.net/main_3250665/32506653833.20221228071858.jpg",
+    "author": "박흥복^서정희",
+    "discount": "28000",
+    "publisher": "정익사",
+    "pubdate": "20170830",
+    "isbn": "9788935305360",
+    "description": "▶ 이 책은 Android Studio로 시작하는 모바일 프로그래밍에 대해 다룬 도서입니다."
+  }
+]
