@@ -12,6 +12,12 @@ import com.twitty.feature.calendar.navigation.calendarScreen
 import com.twitty.feature.home.navigation.HomeRoute
 import com.twitty.feature.home.navigation.homeScreen
 import com.twitty.feature.search.navigation.searchScreen
+import com.twitty.feature.settings.navigation.navigateToSettingsAlarm
+import com.twitty.feature.settings.navigation.navigateToSettingsBackup
+import com.twitty.feature.settings.navigation.navigateToSettingsFeedback
+import com.twitty.feature.settings.navigation.navigateToSettingsTag
+import com.twitty.feature.settings.navigation.navigateToSettingsTheme
+import com.twitty.feature.settings.navigation.settingsScreen
 
 @Composable
 fun BookReportAppNavHost(
@@ -41,6 +47,14 @@ fun BookReportAppNavHost(
         bookScreen(
             onNavigateUp = navController::navigateUp,
             onNavigateToBookReport = navController::navigateToBookReport,
+        )
+        settingsScreen(
+            onNavigateUp = navController::navigateUp,
+            onNavigateToAlarm = navController::navigateToSettingsAlarm,
+            onNavigateToTag = navController::navigateToSettingsTag,
+            onNavigateToBackup = navController::navigateToSettingsBackup,
+            onNavigateToTheme = navController::navigateToSettingsTheme,
+            onNavigateToFeedback = navController::navigateToSettingsFeedback,
         )
     }
 }

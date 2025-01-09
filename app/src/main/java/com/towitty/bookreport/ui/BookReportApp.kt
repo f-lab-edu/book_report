@@ -25,6 +25,7 @@ import com.twitty.designsystem.component.BookReportAppTopAppBar
 import com.twitty.designsystem.icon.BookReportIcons
 import com.twitty.feature.bookreport.navigation.navigateToBookReport
 import com.twitty.feature.search.navigation.navigateToBookSearch
+import com.twitty.feature.settings.navigation.navigateToSettingsMain
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -42,7 +43,7 @@ fun BookReportApp(
                     titleRes = currentTopLevelDestination.title,
                     actionIcon = BookReportIcons.Settings,
                     actionIconContentDescription = stringResource(id = R.string.label_settings),
-                    onActionClick = appState::moveSettings,
+                    onActionClick = appState.navController::navigateToSettingsMain,
                 )
             }
         },

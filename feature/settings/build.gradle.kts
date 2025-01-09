@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.compose.compiler)
     alias(libs.plugins.kotlin.serialization)
     id("com.google.devtools.ksp")
     id("com.google.dagger.hilt.android")
@@ -23,15 +24,19 @@ android {
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
     buildFeatures {
         viewBinding = true
+        compose = true
     }
 }
 
@@ -61,11 +66,14 @@ dependencies {
 
     // UI
     implementation(libs.androidx.navigation.runtime.ktx)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.fragment)
-    implementation(libs.androidx.fragment.ktx)
-    implementation(libs.androidx.constraintlayout)
-    implementation(libs.androidx.recyclerview)
+    implementation(libs.androidx.constraintlayout.compose)
+    implementation(libs.androidx.activity.compose)
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.ui.tooling.preview)
+    implementation(libs.androidx.material3)
+
+    // Timber
+    implementation(libs.timber)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

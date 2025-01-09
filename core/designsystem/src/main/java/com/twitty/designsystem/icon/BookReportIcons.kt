@@ -2,6 +2,7 @@ package com.twitty.designsystem.icon
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBackIosNew
+import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.CalendarMonth
 import androidx.compose.material.icons.filled.DensityMedium
@@ -22,6 +23,7 @@ object BookReportIcons {
     val CalendarMonth = Icons.Default.CalendarMonth
     val PhotoCamera = Icons.Default.PhotoCamera
     val ArrowBackIosNew = Icons.Default.ArrowBackIosNew
+    val ArrowForward = Icons.Default.ArrowForwardIos
     val FilterAlt = Icons.Default.FilterAlt
     val Settings = Icons.Default.Settings
     val GridView = Icons.Filled.GridView

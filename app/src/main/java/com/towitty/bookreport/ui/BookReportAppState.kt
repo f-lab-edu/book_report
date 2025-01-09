@@ -1,7 +1,6 @@
 package com.towitty.bookreport.ui
 
 import android.content.Context
-import android.content.Intent
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
@@ -15,12 +14,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import com.towitty.bookreport.navigation.TopLevelDestination
-import com.twitty.feature.bookreport.navigation.navigateToBookReport
 import com.twitty.feature.calendar.navigation.navigateToCalendar
 import com.twitty.feature.home.navigation.navigateToHome
-import com.twitty.feature.search.navigation.navigateToBookSearch
 import com.twitty.feature.search.navigation.navigateToSearch
-import com.twitty.feature.settings.SettingsActivity
 
 @Composable
 fun rememberBookReportAppState(
@@ -32,7 +28,6 @@ fun rememberBookReportAppState(
     ) {
         BookReportAppState(
             navController = navController,
-            context = context,
         )
     }
 }
@@ -40,18 +35,6 @@ fun rememberBookReportAppState(
 @Stable
 class BookReportAppState(
     val navController: NavHostController,
-    val context: Context,
-//    detailBookState: State<Book>,
-//    bookListState: State<List<Book>>,
-//    tagListState: State<List<Tag>>,
-//    bookReportListState: State<List<BookReport>>,
-//    bookReportState: State<BookReport>,
-//    fetchBookReport: (Int) -> Unit,
-//    onSearchBooks: (SearchBook) -> Unit,
-//    onSaveBook: (Book) -> Unit,
-//    onSaveBookReport: (BookReport) -> Unit,
-//    onRemoveTag: (Int) -> Unit,
-//    onAddSelectedTag: (Int) -> Unit,
 ) {
     private val previousDestination = mutableStateOf<NavDestination?>(null)
 
@@ -90,18 +73,6 @@ class BookReportAppState(
             TopLevelDestination.CALENDAR -> navController.navigateToCalendar(topLevelNavOptions)
             TopLevelDestination.SEARCH -> navController.navigateToSearch(topLevelNavOptions)
         }
-    }
-
-    fun moveSettings() {
-        context.startActivity(Intent(context, SettingsActivity::class.java))
-    }
-
-    fun navigateToBookSearch() {
-        navController.navigateToBookSearch()
-    }
-
-    fun navigateToBookReport() {
-        navController.navigateToBookReport(0)
     }
 
 }

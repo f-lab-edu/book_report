@@ -45,7 +45,6 @@ dependencies {
     implementation(project(":feature:calendar"))
     implementation(project(":feature:bookreport"))
     implementation(project(":feature:book"))
-    implementation(project(":feature:tag"))
     implementation(project(":feature:favorites"))
     implementation(project(":feature:settings"))
     implementation(project(":feature:search"))
