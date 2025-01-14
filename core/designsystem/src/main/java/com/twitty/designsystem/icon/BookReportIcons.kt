@@ -1,6 +1,7 @@
 package com.twitty.designsystem.icon
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.Book
@@ -29,4 +30,5 @@ object BookReportIcons {
     val GridView = Icons.Filled.GridView
     val DensityMedium = Icons.Filled.DensityMedium
     val Scanner = Icons.Filled.Scanner
+    val AddCircleOutline = Icons.Filled.AddCircleOutline
 }

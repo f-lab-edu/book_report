@@ -6,7 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class SettingsTagViewModel @Inject constructor(
+class TagViewModel @Inject constructor(
     private val tagRepository: ITagRepository
 ) : ViewModel() {
 

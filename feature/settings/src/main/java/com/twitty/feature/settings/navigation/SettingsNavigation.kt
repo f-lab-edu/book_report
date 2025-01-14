@@ -4,6 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import com.twitty.feature.settings.SettingsMainScreen
+import com.twitty.feature.settings.tag.TagManagementScreen
 
 fun NavController.navigateToSettingsMain() {
     navigate(route = SettingsMainRoute)
@@ -52,7 +53,7 @@ fun NavGraphBuilder.settingsScreen(
     }
 
     composable<SettingsRoute.Tag> {
-        // TagManagementScreen()
+        TagManagementScreen(onNavigateUp = onNavigateUp)
     }
 
     composable<SettingsRoute.Backup> {
