@@ -27,7 +27,7 @@ class FakeTagLocalRepository(
         return tagDatabase.find { it.id == id } ?: com.twitty.database.model.emptyTagEntity
     }
 
-    override fun getAllTags(): Flow<List<com.twitty.database.model.TagEntity>> = flow {
+    override fun fetchAllTags(): Flow<List<com.twitty.database.model.TagEntity>> = flow {
         tagDatabase
     }
 

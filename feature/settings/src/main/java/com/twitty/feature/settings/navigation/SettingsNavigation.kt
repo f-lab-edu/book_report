@@ -53,7 +53,9 @@ fun NavGraphBuilder.settingsScreen(
     }
 
     composable<SettingsRoute.Tag> {
-        TagManagementScreen(onNavigateUp = onNavigateUp)
+        TagManagementScreen(
+            onNavigateUp = onNavigateUp,
+        )
     }
 
     composable<SettingsRoute.Backup> {

@@ -1,5 +1,6 @@
 package com.twitty.feature.settings.tag
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +18,11 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
@@ -24,14 +30,21 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.twitty.core.ui.TagModal
 import com.twitty.designsystem.icon.BookReportIcons
 import com.twitty.feature.settings.R
+import com.twitty.model.Tag
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TagManagementScreen(
     onNavigateUp: () -> Unit,
+    viewModel: TagViewModel = hiltViewModel()
 ) {
+    val tags by viewModel.tags.collectAsState()
+    var isShowTagSheet by remember { mutableStateOf(false) }
+
     Surface {
         Column {
             CenterAlignedTopAppBar(
@@ -51,11 +64,17 @@ fun TagManagementScreen(
 
             TagSlot(
                 text = stringResource(id = R.string.str_custom),
+                onShowTagSheet = { isShowTagSheet = true },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp)
             ) {
-                TagItems()
+                TagItems(tags)
+            }
+            if (isShowTagSheet) {
+                TagModal {
+                    isShowTagSheet = false
+                }
             }
         }
     }
@@ -63,14 +82,16 @@ fun TagManagementScreen(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun TagItems() {
+fun TagItems(tags: List<Tag>) {
     FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        repeat(10) {
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        tags.forEach { tag ->
             Text(
-                text = "Tag$it",
+                text = tag.name,
                 style = TextStyle(fontWeight = FontWeight.Bold),
                 modifier = Modifier
+                    .background(Color(tag.color), shape = RoundedCornerShape(4.dp))
                     .border(1.dp, Color.Gray, shape = RoundedCornerShape(4.dp))
                     .padding(8.dp)
             )
@@ -82,7 +103,7 @@ fun TagItems() {
 fun TagSlot(
     text: String,
     modifier: Modifier = Modifier,
-    onChangeCard: () -> Unit = {},
+    onShowTagSheet: () -> Unit,
     content: @Composable () -> Unit
 ) {
     ConstraintLayout(
@@ -103,7 +124,7 @@ fun TagSlot(
                 }
         )
         IconButton(
-            onClick = onChangeCard,
+            onClick = onShowTagSheet,
             modifier = Modifier
                 .constrainAs(icon) {
                     top.linkTo(parent.top)

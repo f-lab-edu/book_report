@@ -20,10 +20,10 @@ class TagLocalRepository @Inject constructor(
     override suspend fun deleteTag(tag: Tag) = tagDao.deleteTag(tag.asEntity())
 
     override suspend fun getTag(id: Int): Tag =
-        tagDao.getTag(id).firstOrNull()?.asTag() ?: emptyTagEntity.asTag()
+        tagDao.fetchTag(id).firstOrNull()?.asTag() ?: emptyTagEntity.asTag()
 
-    override fun getAllTags(): Flow<List<Tag>> =
+    override fun fetchAllTags(): Flow<List<Tag>> =
         flow {
-            tagDao.getAllTags().collect { tagEntities -> tagEntities.map { it.asTag() } }
+            tagDao.fetchAllTags().collect { tagEntities -> tagEntities.map { it.asTag() } }
         }
 }

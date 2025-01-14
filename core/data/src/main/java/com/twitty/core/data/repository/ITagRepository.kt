@@ -8,5 +8,5 @@ interface ITagRepository {
     suspend fun updateTag(tag: Tag)
     suspend fun deleteTag(tag: Tag)
     suspend fun getTag(id: Int): Tag
-    fun getAllTags(): Flow<List<Tag>>
+    fun fetchAllTags(): Flow<List<Tag>>
 }

@@ -15,6 +15,7 @@ import com.twitty.model.emptyBook
 import com.twitty.model.emptyBookReport
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 
@@ -50,7 +51,7 @@ class FakeBooKReportRepository(
 
     override fun fetchBookReports() = bookReportDao.fetchBookReports()
 
-    override fun fetchAllTags() = tagDao.getAllTags()
+    override fun fetchAllTags() = tagDao.fetchAllTags()
 
     override fun fetchFavoriteBookReports(): Flow<List<BookReport>> = flow {
         bookReportDao.fetchFavoriteBookReports()
@@ -72,7 +73,7 @@ class FakeBooKReportRepository(
 
         val tagList = bookReportEntity.tagIds
             .mapNotNull { tagId ->
-                tagDao.getTag(tagId)
+                tagDao.fetchTag(tagId)
                     .firstOrNull()
                     ?.asTag()
             }
