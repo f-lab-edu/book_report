@@ -23,7 +23,7 @@ class FakeTagLocalRepository(
         tagDatabase.remove(tagEntity)
     }
 
-    override suspend fun getTag(id: Int): com.twitty.database.model.TagEntity {
+    override suspend fun fetchTag(id: Int): com.twitty.database.model.TagEntity {
         return tagDatabase.find { it.id == id } ?: com.twitty.database.model.emptyTagEntity
     }
 

@@ -2,14 +2,17 @@ package com.twitty.feature.settings.tag
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentHeight
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,6 +36,13 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.twitty.core.ui.TagModal
 import com.twitty.designsystem.icon.BookReportIcons
+import com.twitty.designsystem.theme.Blue
+import com.twitty.designsystem.theme.Green
+import com.twitty.designsystem.theme.Indigo
+import com.twitty.designsystem.theme.Orange
+import com.twitty.designsystem.theme.Purple
+import com.twitty.designsystem.theme.Red
+import com.twitty.designsystem.theme.Yellow
 import com.twitty.feature.settings.R
 import com.twitty.model.Tag
 
@@ -40,13 +50,26 @@ import com.twitty.model.Tag
 @Composable
 fun TagManagementScreen(
     onNavigateUp: () -> Unit,
-    viewModel: TagViewModel = hiltViewModel()
+    viewModel: TagViewModel = hiltViewModel(),
 ) {
     val tags by viewModel.tags.collectAsState()
+    val selectedColor by viewModel.selectedColor.collectAsState()
     var isShowTagSheet by remember { mutableStateOf(false) }
 
+    val rainbowColors = listOf(
+        Red,
+        Orange,
+        Yellow,
+        Green,
+        Blue,
+        Indigo,
+        Purple,
+    )
+
     Surface {
-        Column {
+        Column(
+            modifier = Modifier.fillMaxSize()
+        ) {
             CenterAlignedTopAppBar(
                 title = { Text(stringResource(id = R.string.tag_management)) },
                 navigationIcon = {
@@ -67,12 +90,21 @@ fun TagManagementScreen(
                 onShowTagSheet = { isShowTagSheet = true },
                 modifier = Modifier
                     .fillMaxWidth()
+                    .wrapContentHeight()
                     .padding(8.dp)
             ) {
-                TagItems(tags)
+                TagItems(
+                    tags = tags,
+                    onDeleteTag = viewModel::deleteTag,
+                )
             }
             if (isShowTagSheet) {
-                TagModal {
+                TagModal(
+                    colors = rainbowColors,
+                    selectedColor = selectedColor,
+                    onSelectedColor = viewModel::onSelectedColor,
+                    onCreateTag = viewModel::insertTag,
+                ) {
                     isShowTagSheet = false
                 }
             }
@@ -82,19 +114,49 @@ fun TagManagementScreen(
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-fun TagItems(tags: List<Tag>) {
+fun TagItems(
+    tags: List<Tag>,
+    onDeleteTag: (Tag) -> Unit,
+) {
     FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
+        modifier = Modifier.padding(8.dp)
     ) {
         tags.forEach { tag ->
-            Text(
-                text = tag.name,
-                style = TextStyle(fontWeight = FontWeight.Bold),
+            ConstraintLayout(
                 modifier = Modifier
-                    .background(Color(tag.color), shape = RoundedCornerShape(4.dp))
-                    .border(1.dp, Color.Gray, shape = RoundedCornerShape(4.dp))
-                    .padding(8.dp)
-            )
+                    .wrapContentSize()
+                    .background(
+                        color = Color(tag.color),
+                        shape = RoundedCornerShape(16.dp)
+                    )
+                    .padding(4.dp)
+            ) {
+                val (text, deleteBtn) = createRefs()
+                Text(
+                    text = tag.name,
+                    style = TextStyle(fontWeight = FontWeight.Bold),
+                    modifier = Modifier.constrainAs(text) {
+                        top.linkTo(parent.top)
+                        bottom.linkTo(parent.bottom)
+                        start.linkTo(parent.start)
+                        end.linkTo(deleteBtn.start)
+                    }
+                )
+                Icon(
+                    imageVector = BookReportIcons.Cancel,
+                    contentDescription = stringResource(id = R.string.description_delete_tag),
+                    modifier = Modifier
+                        .constrainAs(deleteBtn) {
+                            top.linkTo(text.top)
+                            bottom.linkTo(text.bottom)
+                            start.linkTo(text.end)
+                            end.linkTo(parent.end)
+                        }
+                        .clickable { onDeleteTag(tag) }
+                )
+            }
         }
     }
 }
@@ -104,7 +166,7 @@ fun TagSlot(
     text: String,
     modifier: Modifier = Modifier,
     onShowTagSheet: () -> Unit,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     ConstraintLayout(
         modifier = modifier.padding(vertical = 8.dp)

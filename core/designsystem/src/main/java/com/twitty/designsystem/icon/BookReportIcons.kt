@@ -6,6 +6,7 @@ import androidx.compose.material.icons.filled.ArrowBackIosNew
 import androidx.compose.material.icons.filled.ArrowForwardIos
 import androidx.compose.material.icons.filled.Book
 import androidx.compose.material.icons.filled.CalendarMonth
+import androidx.compose.material.icons.filled.Cancel
 import androidx.compose.material.icons.filled.DensityMedium
 import androidx.compose.material.icons.filled.FilterAlt
 import androidx.compose.material.icons.filled.GridView
@@ -31,4 +32,5 @@ object BookReportIcons {
     val DensityMedium = Icons.Filled.DensityMedium
     val Scanner = Icons.Filled.Scanner
     val AddCircleOutline = Icons.Filled.AddCircleOutline
+    val Cancel = Icons.Filled.Cancel
 }

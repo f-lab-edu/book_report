@@ -1,12 +1,10 @@
 package com.towitty.bookreport.ui
 
-import android.content.Context
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavDestination
 import androidx.navigation.NavDestination.Companion.hasRoute
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -21,7 +19,6 @@ import com.twitty.feature.search.navigation.navigateToSearch
 @Composable
 fun rememberBookReportAppState(
     navController: NavHostController = rememberNavController(),
-    context: Context = LocalContext.current,
 ): BookReportAppState {
     return remember(
         navController,

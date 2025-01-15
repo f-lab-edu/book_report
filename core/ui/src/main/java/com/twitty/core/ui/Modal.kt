@@ -1,11 +1,11 @@
 package com.twitty.core.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -32,14 +32,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import com.twitty.designsystem.icon.BookReportIcons
-import com.twitty.model.ColorPicker
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,7 +50,7 @@ fun FabModal(
     onNavigateToBookReport: () -> Unit,
     onNavigateToBarcode: () -> Unit,
     onDismissRequest: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
@@ -113,20 +114,14 @@ fun FabModalSheetItem(icon: ImageVector, label: String, onClicked: () -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TagModal(
-    onAddTag: () -> Unit = {},
-    onEditTag: () -> Unit = {},
+    colors: List<Color>,
+    selectedColor: Color,
+    onSelectedColor: (Color) -> Unit,
+    onCreateTag: (String, Color) -> Unit,
     onDismissRequest: () -> Unit,
 ) {
     var tagName by remember { mutableStateOf("") }
-    val colorPickers = listOf(
-        ColorPicker(Color.Red.toArgb(), false),
-        ColorPicker(Color.Blue.toArgb(), false),
-        ColorPicker(Color.Cyan.toArgb(), false),
-        ColorPicker(Color.Black.toArgb(), false),
-        ColorPicker(Color.Green.toArgb(), false),
-        ColorPicker(Color.Magenta.toArgb(), false),
-        ColorPicker(Color.Yellow.toArgb(), false),
-    )
+
     ModalBottomSheet(
         onDismissRequest = onDismissRequest,
         shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp),
@@ -137,21 +132,25 @@ fun TagModal(
         LazyRow(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            modifier = Modifier.fillMaxWidth()
         ) {
-            items(colorPickers) { colorPicker ->
+            items(colors) { color ->
                 Box(
                     modifier = Modifier
-                        .clickable { colorPicker.toggle() }
-                        .background(Color(colorPicker.color), shape = CircleShape)
+                        .clickable { onSelectedColor(color) }
+                        .background(color.copy(alpha = 0.8f), shape = CircleShape)
                         .size(48.dp)
-                        .border(
-                            if (colorPicker.selected) 2.dp else 0.dp,
-                            Color.Black,
-                            shape = CircleShape
-                        )
+                        .drawBehind {
+                            if (selectedColor == color) {
+                                drawCircle(
+                                    color = color.copy(alpha = 0.3f),
+                                    radius = size.minDimension / 2,
+                                    center = Offset(size.width / 2, size.height / 2),
+                                    style = Stroke(width = 8.dp.toPx())
+                                )
+                            }
+                        }
                 )
             }
         }
@@ -180,7 +179,7 @@ fun TagModal(
                 Text(text = stringResource(id = R.string.str_cancel))
             }
             Button(
-                onClick = onAddTag,
+                onClick = { onCreateTag(tagName, selectedColor) },
                 modifier = Modifier.constrainAs(addBtn) {
                     end.linkTo(parent.end)
                     top.linkTo(parent.top)
