@@ -27,9 +27,9 @@ class BookReportViewModelTest {
                 link = "",
                 image = "",
                 author = "",
-                price = "",
+                discount = "",
                 publisher = "",
-                pubDate = "",
+                pubdate = "",
                 isbn = "1234567890",
                 description = ""
             ), Book(
@@ -38,9 +38,9 @@ class BookReportViewModelTest {
                 link = "",
                 image = "",
                 author = "",
-                price = "",
+                discount = "",
                 publisher = "",
-                pubDate = "",
+                pubdate = "",
                 isbn = "0987654321",
                 description = ""
             )

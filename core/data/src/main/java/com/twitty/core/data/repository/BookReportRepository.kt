@@ -52,7 +52,7 @@ class BookReportRepository @Inject constructor(
                 }
             }
 
-    override fun fetchAllTags() = tagDao.getAllTags().map { tagEntities ->
+    override fun fetchAllTags() = tagDao.fetchAllTags().map { tagEntities ->
         tagEntities.map { it.asTag() }
     }
 
@@ -79,7 +79,7 @@ class BookReportRepository @Inject constructor(
 
         val tagList = bookReportEntity.tagIds
             .mapNotNull { tagId ->
-                tagDao.getTag(tagId)
+                tagDao.fetchTag(tagId)
                     .firstOrNull()
                     ?.asTag()
             }

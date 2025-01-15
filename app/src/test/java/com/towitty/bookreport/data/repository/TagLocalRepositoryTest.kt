@@ -27,7 +27,7 @@ class TagLocalRepositoryTest {
 
         fakeTagDao.insertTag(tag)
 
-        val getTag = fakeTagDao.getTag(10).firstOrNull()
+        val getTag = fakeTagDao.fetchTag(10).firstOrNull()
         assertEquals(tag, getTag)
     }
 
@@ -38,7 +38,7 @@ class TagLocalRepositoryTest {
         fakeTagDao.tagDatabase.add(com.twitty.database.model.TagEntity(2, "", 0))
         fakeTagDao.tagDatabase.add(com.twitty.database.model.TagEntity(3, "", 0))
 
-        val tags = fakeTagDao.getAllTags().firstOrNull() ?: emptyList()
+        val tags = fakeTagDao.fetchAllTags().firstOrNull() ?: emptyList()
 
         assertEquals(3, tags.size)
         assertTrue(tags.contains(com.twitty.database.model.TagEntity(1, "", 0)))
@@ -52,7 +52,7 @@ class TagLocalRepositoryTest {
         fakeTagDao.tagDatabase.add(com.twitty.database.model.TagEntity(1, "", 0))
         fakeTagDao.deleteTag(com.twitty.database.model.TagEntity(1, "", 0))
 
-        val deletedTag = fakeTagDao.getTag(1).firstOrNull() ?: com.twitty.database.model.emptyTagEntity
+        val deletedTag = fakeTagDao.fetchTag(1).firstOrNull() ?: com.twitty.database.model.emptyTagEntity
 
         assertEquals(deletedTag, com.twitty.database.model.emptyTagEntity)
         assertFalse(fakeTagDao.tagDatabase.contains(com.twitty.database.model.TagEntity(1, "", 0)))

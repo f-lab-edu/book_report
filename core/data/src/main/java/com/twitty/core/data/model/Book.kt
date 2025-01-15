@@ -10,9 +10,9 @@ fun Book.asEntity(): BookEntity {
         isbn = isbn,
         title = title,
         author = author,
-        price = price,
+        price = discount,
         publisher = publisher,
-        pubDate = pubDate,
+        pubDate = pubdate,
         description = description,
         image = image,
         link = link,
@@ -26,9 +26,9 @@ fun Book.asNetworkBook(): NetworkBook {
         link = link,
         image = image,
         author = author,
-        price = price,
+        price = discount,
         publisher = publisher,
-        pubDate = pubDate,
+        pubDate = pubdate,
         isbn = isbn,
         description = description
     )
@@ -41,11 +41,11 @@ fun BookEntity.asBook(): Book {
         title = title,
         author = author,
         publisher = publisher,
-        pubDate = pubDate,
+        pubdate = pubDate,
         description = description,
         image = image,
         link = link,
-        price = price,
+        discount = price,
         isFavorite = isFavorite
     )
 }
@@ -70,10 +70,10 @@ fun NetworkBook.asBook(isFavorite: Boolean = false) = Book(
     title = title,
     author = author,
     publisher = publisher,
-    pubDate = pubDate,
+    pubdate = pubDate,
     description = description,
     image = image,
-    price = price,
+    discount = price,
     link = link,
     isFavorite = isFavorite,
 )

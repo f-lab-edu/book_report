@@ -90,8 +90,8 @@ class BookReportRepositoryTest {
             link = "Test link",
             image = "Test image",
             description = "Test description",
-            price = "Test price",
-            pubDate = "Test pubDate",
+            discount = "Test price",
+            pubdate = "Test pubDate",
             publisher = "Test publisher",
             isFavorite = false
         )
@@ -121,8 +121,8 @@ class BookReportRepositoryTest {
                 link = "Test link",
                 image = "Test image",
                 description = "Test description",
-                price = "Test price",
-                pubDate = "Test pubDate",
+                discount = "Test price",
+                pubdate = "Test pubDate",
                 publisher = "Test publisher",
                 isFavorite = false
             ),
@@ -155,8 +155,8 @@ class BookReportRepositoryTest {
                 link = "Test link",
                 image = "Test image",
                 description = "Test description",
-                price = "Test price",
-                pubDate = "Test pubDate",
+                discount = "Test price",
+                pubdate = "Test pubDate",
                 publisher = "Test publisher",
                 isFavorite = false
             ),

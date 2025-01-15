@@ -26,12 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,43 +46,27 @@ import com.twitty.core.data.util.getCurrentDateTime
 import com.twitty.model.Book
 import com.twitty.model.BookReport
 import com.twitty.model.emptyBookReport
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.flow.debounce
 import kotlinx.serialization.json.JsonNull.content
 
-@OptIn(FlowPreview::class)
 @Composable
 fun BookReportScreen(
     onNavigateUp: () -> Unit,
-    onAddSelectedTag: (Int) -> Unit = { 0 },
+    onAddSelectedTag: (Int) -> Unit = {},
     onRemoveTag: (Int) -> Unit = {},
     onNavigateAddTag: () -> Unit = {},
     modifier: Modifier = Modifier,
     viewModel: BookReportViewModel = hiltViewModel()
 ) {
     val bookReport by viewModel.bookReport.collectAsStateWithLifecycle()
-    var bookReportTitleState by rememberSaveable { mutableStateOf(bookReport.title) }
-    var bookReportContentState by rememberSaveable { mutableStateOf(bookReport.content) }
-
-    val onChangeBookReportTitle: (String) -> Unit = { bookReportTitleState = it }
-    val onChangeBookReportContent: (String) -> Unit = { bookReportContentState = it }
-
-    LaunchedEffect(
-        key1 = bookReportTitleState,
-        key2 = bookReportContentState
-    ) {
-        snapshotFlow { Pair(bookReportTitleState, bookReportContentState) }
-            .debounce(300)
-            .collect { (title, content) ->
-                viewModel.updateTitleAndContent(title = title, content = content)
-            }
-    }
+    val onChangeTitle = viewModel::updateTitle
+    val onChangeContent = viewModel::updateContent
+    val onSave = viewModel::saveBookReport
 
     Scaffold(
         topBar = {
             BookReportTopAppbar(
                 onCancel = onNavigateUp,
-                onSaveBookReport = viewModel::saveBookReport
+                onSaveBookReport = onSave
             )
         },
         modifier = modifier
@@ -101,10 +80,8 @@ fun BookReportScreen(
             Spacer(modifier = Modifier.size(4.dp))
             BookReportContent(
                 bookReport = bookReport,
-                bookReportTitleState = bookReportTitleState,
-                bookReportContentState = bookReportContentState,
-                onBookReportTitleChange = onChangeBookReportTitle,
-                onBookReportContentChange = onChangeBookReportContent,
+                onChangeTitle = onChangeTitle,
+                onChangeContent = onChangeContent,
                 onAddSelectedTag = onAddSelectedTag,
                 onRemoveTag = onRemoveTag,
                 onNavigateAddTag = onNavigateAddTag,
@@ -215,10 +192,8 @@ fun BookReportBookInfo(
 @Composable
 fun BookReportContent(
     bookReport: BookReport,
-    bookReportTitleState: String,
-    bookReportContentState: String,
-    onBookReportTitleChange: (String) -> Unit,
-    onBookReportContentChange: (String) -> Unit,
+    onChangeTitle: (String) -> Unit,
+    onChangeContent: (String) -> Unit,
     onAddSelectedTag: (Int) -> Unit,
     onRemoveTag: (Int) -> Unit,
     onNavigateAddTag: () -> Unit,
@@ -228,8 +203,8 @@ fun BookReportContent(
     Column(modifier = modifier) {
         Spacer(modifier = Modifier.size(8.dp))
         OutlinedTextField(
-            value = if(bookReport.title != bookReportTitleState) bookReportTitleState else bookReport.title,
-            onValueChange = { onBookReportTitleChange(it) },
+            value = bookReport.title,
+            onValueChange = onChangeTitle,
             placeholder = { Text(text = stringResource(R.string.placeholer_bookreport_title)) },
             singleLine = true,
             textStyle = TextStyle(fontWeight = FontWeight.Bold),
@@ -244,8 +219,8 @@ fun BookReportContent(
         )
         Spacer(modifier = Modifier.size(8.dp))
         OutlinedTextField(
-            value = if(bookReport.content != bookReportContentState) bookReportContentState else bookReport.content,
-            onValueChange = { onBookReportContentChange(it) },
+            value = bookReport.content,
+            onValueChange = onChangeContent,
             placeholder = { Text(text = stringResource(R.string.placeholer_bookreport_content)) },
             modifier = Modifier
                 .fillMaxSize()

@@ -13,6 +13,7 @@ import com.twitty.model.emptyBookReport
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -46,11 +47,12 @@ class BookReportViewModel @Inject constructor(
     private fun fetchBookReport() {
         viewModelScope.launch {
             if (bookReportId == 0L && bookIsbn != "-") {
-                bookReportRepository.searchBooks(BookSearchCriteria(isbn = bookIsbn)).collect { books ->
-                    _bookReport.value = books.first().let { book ->
-                        emptyBookReport.copy(book = book)
+                bookReportRepository.searchBooks(BookSearchCriteria(isbn = bookIsbn))
+                    .collect { books ->
+                        _bookReport.value = books.first().let { book ->
+                            emptyBookReport.copy(book = book)
+                        }
                     }
-                }
             } else if (bookReportId != 0L) {
                 bookReportRepository.fetchBookReport(bookReportId).collect { bookReport ->
                     _bookReport.value = bookReport
@@ -63,21 +65,22 @@ class BookReportViewModel @Inject constructor(
 
     fun addBookReportTag(tagId: Int) {
         tagList.value.find { it.id == tagId }?.let { tag ->
-            _bookReport.value = _bookReport.value.copy(tags = _bookReport.value.tags + tag)
+            _bookReport.update { it.copy(tags = it.tags + tag) }
         }
     }
 
     fun removeBookReportTag(tagId: Int) {
-        _bookReport.value = _bookReport.value.copy(tags = _bookReport.value.tags.filter { it.id != tagId })
+        _bookReport.value =
+            _bookReport.value.copy(tags = _bookReport.value.tags.filter { it.id != tagId })
     }
 
-    fun updateTitleAndContent(title: String, content: String) {
-        _bookReport.value = _bookReport.value.copy(title = title, content = content)
-    }
+    fun updateTitle(title: String) = _bookReport.update { it.copy(title = title) }
+
+    fun updateContent(content: String) = _bookReport.update { it.copy(content = content) }
 
     fun saveBookReport() {
         viewModelScope.launch {
-            val newBookReportId = bookReportRepository.saveBookReport(_bookReport.value)
+            bookReportRepository.saveBookReport(_bookReport.value)
         }
     }
 }
