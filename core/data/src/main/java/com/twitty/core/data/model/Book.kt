@@ -50,20 +50,6 @@ fun BookEntity.asBook(): Book {
     )
 }
 
-fun BookEntity.asNetworkBook(): NetworkBook {
-    return NetworkBook(
-        title = title,
-        link = link,
-        image = image,
-        author = author,
-        price = price,
-        publisher = publisher,
-        pubDate = pubDate,
-        isbn = isbn,
-        description = description
-    )
-}
-
 fun NetworkBook.asBook(isFavorite: Boolean = false) = Book(
     id = 0,
     isbn = isbn,
@@ -75,18 +61,5 @@ fun NetworkBook.asBook(isFavorite: Boolean = false) = Book(
     image = image,
     discount = price,
     link = link,
-    isFavorite = isFavorite,
-)
-
-fun NetworkBook.asBookEntity(isFavorite: Boolean) = BookEntity(
-    isbn = isbn,
-    title = title,
-    author = author,
-    link = link,
-    image = image,
-    description = description,
-    price = price,
-    publisher = publisher,
-    pubDate = pubDate,
     isFavorite = isFavorite,
 )
