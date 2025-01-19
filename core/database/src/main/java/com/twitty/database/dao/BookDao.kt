@@ -34,11 +34,4 @@ interface BookDao {
 
     @Query("SELECT * FROM books WHERE isFavorite = 1")
     fun fetchFavoriteBooks(): Flow<List<BookEntity>>
-
-    @Query("SELECT * FROM books " +
-            "WHERE (:title IS NULL OR title LIKE '%' || :title || '%') " +
-            "AND (:id IS NULL OR id = :id) " +
-            "AND (:isbn ISNULL OR isbn = :isbn)")
-    fun searchBooks(title: String?, id: Long?, isbn: String?): Flow<List<BookEntity>>
-
 }

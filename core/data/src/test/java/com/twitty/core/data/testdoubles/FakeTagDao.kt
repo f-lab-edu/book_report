@@ -1,4 +1,4 @@
-package com.towitty.bookreport.data.database
+package com.twitty.core.data.testdoubles
 
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
