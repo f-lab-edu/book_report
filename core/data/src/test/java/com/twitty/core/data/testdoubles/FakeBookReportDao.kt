@@ -1,33 +1,52 @@
 package com.twitty.core.data.testdoubles
 
-//class FakeBookReportDao(
-//    val bookReportDatabase: MutableList<com.twitty.database.model.BookReportEntity>
-//) : com.twitty.database.dao.BookReportDao {
-//
-//    override suspend fun insertBookReport(bookReportEntity: com.twitty.database.model.BookReportEntity) {
-//        bookReportDatabase.add(bookReportEntity)
-//    }
-//
-//    override suspend fun deleteBookReport(bookReportEntity: com.twitty.database.model.BookReportEntity) {
-//        bookReportDatabase.remove(bookReportEntity)
-//    }
-//
-//    override suspend fun updateBookReport(bookReportEntity: com.twitty.database.model.BookReportEntity) {
-//        val index = bookReportDatabase.indexOfFirst { it.id == bookReportEntity.id }
-//        if (index >= 0) {
-//            bookReportDatabase[index] = bookReportEntity
-//        }
-//    }
-//
-//    override fun fetchBookReport(id: Int): List<com.twitty.database.model.BookReportEntity> =
-//        bookReportDatabase.apply {
-//            if(isEmpty()) emptyBookReport else filter { it.id == id }
-//        }
-//
-//    override fun fetchBookReports(): Flow<List<com.twitty.database.model.BookReportEntity>> = flow { emit(bookReportDatabase.toList()) }
-//
-//    override fun fetchFavoriteBookReports(): Flow<List<com.twitty.database.model.BookReportEntity>> {
-//        val favoriteBookReports = bookReportDatabase.filter { it.isFavorite }
-//        return flow { emit(favoriteBookReports) }
-//    }
-//}
+import com.twitty.core.data.model.asEntity
+import com.twitty.database.dao.BookReportDao
+import com.twitty.database.model.BookReportEntity
+import com.twitty.model.emptyBookReport
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.update
+
+class FakeBookReportDao : BookReportDao {
+
+    private val bookReportEntities = MutableStateFlow<List<BookReportEntity>>(emptyList())
+
+    override suspend fun insertBookReport(bookReport: BookReportEntity): Long {
+        bookReportEntities.update { oldValues ->
+            oldValues.map {
+                if (it.id == bookReport.id) {
+                    return -1L
+                }
+            }
+            oldValues + bookReport
+        }
+        return bookReport.id
+    }
+
+    override suspend fun deleteBookReport(bookReportEntity: BookReportEntity) {
+        bookReportEntities.update { oldValues ->
+            oldValues.filterNot { it.id == bookReportEntity.id }
+        }
+    }
+
+    override suspend fun updateBookReport(bookReportEntity: BookReportEntity) {
+        bookReportEntities.update { oldValues ->
+            oldValues.filterNot { it.id == bookReportEntity.id } + bookReportEntity
+        }
+    }
+
+    override fun fetchBookReport(id: Long): Flow<BookReportEntity> =
+        flowOf(bookReportEntities.value.find { it.id == id }
+            ?: emptyBookReport.asEntity())
+
+    override fun fetchBookReports(): Flow<List<BookReportEntity>> = bookReportEntities
+
+
+    override fun fetchFavoriteBookReports(): Flow<List<BookReportEntity>> =
+        bookReportEntities.map { bookReportEntities ->
+            bookReportEntities.filter { it.isFavorite }
+        }
+}
