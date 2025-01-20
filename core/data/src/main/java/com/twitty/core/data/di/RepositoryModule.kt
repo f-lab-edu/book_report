@@ -9,7 +9,7 @@ import com.twitty.core.data.repository.IFavoritesRepository
 import com.twitty.core.data.repository.IRecommendedBooksRepository
 import com.twitty.core.data.repository.ITagRepository
 import com.twitty.core.data.repository.RecommendedBooksRepository
-import com.twitty.core.data.repository.TagLocalRepository
+import com.twitty.core.data.repository.TagRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -20,7 +20,7 @@ import dagger.hilt.components.SingletonComponent
 abstract class RepositoryModule {
 
     @Binds
-    abstract fun bindsTagRepository(tagLocalRepository: TagLocalRepository): ITagRepository
+    abstract fun bindsTagRepository(tagRepository: TagRepository): ITagRepository
 
     @Binds
     abstract fun bindsBookRepository(bookRepository: BookRepository): IBookRepository

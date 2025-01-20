@@ -6,10 +6,11 @@ import com.twitty.database.dao.TagDao
 import com.twitty.database.model.emptyTagEntity
 import com.twitty.model.Tag
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
-class TagLocalRepository @Inject constructor(
+class TagRepository @Inject constructor(
     private val tagDao: TagDao,
 ) : ITagRepository {
 
@@ -19,6 +20,11 @@ class TagLocalRepository @Inject constructor(
             name = name,
             color = color
         )
+
+        if (tagDao.fetchAllTags().first()
+            .any { it.name == tag.name && it.color == tag.color }
+        ) return
+
         tagDao.insertTag(tag.asEntity())
     }
 
