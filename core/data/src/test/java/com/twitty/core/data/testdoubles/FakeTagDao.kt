@@ -8,12 +8,13 @@ import kotlinx.coroutines.flow.update
 
 class FakeTagDao : TagDao {
 
-    val tagEntities = MutableStateFlow<List<TagEntity>>(emptyList())
+    private val tagEntities = MutableStateFlow<List<TagEntity>>(emptyList())
 
     override suspend fun insertTag(tagEntity: TagEntity) {
         tagEntities.update { oldValues ->
             oldValues.map {
-                if (it.id == tagEntity.id) {
+                if (tagEntity.id == 0 || it.id == tagEntity.id) {
+                    oldValues + (tagEntity.copy(id = oldValues.size + 1))
                     return
                 }
             }
