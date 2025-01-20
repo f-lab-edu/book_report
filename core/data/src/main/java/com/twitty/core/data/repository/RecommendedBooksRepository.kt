@@ -1,6 +1,6 @@
 package com.twitty.core.data.repository
 
-import com.twitty.core.data.AssetLoader
+import com.twitty.core.data.AssetLoaderImpl
 import com.twitty.model.Book
 import com.twitty.network.di.BookReportDispatchers
 import com.twitty.network.di.Dispatcher
@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class RecommendedBooksRepository @Inject constructor(
-    private val assetLoader: AssetLoader,
+    private val assetLoader: AssetLoaderImpl,
     @Dispatcher(BookReportDispatchers.IO)
     private val ioDispatcher: CoroutineDispatcher
 ) : IRecommendedBooksRepository {
