@@ -1,17 +1,16 @@
 package com.twitty.core.data.testdoubles
 
 import com.twitty.core.data.model.asNetworkBook
-import com.twitty.model.Book
 import com.twitty.network.model.NetworkBookContainer
 import com.twitty.network.model.emptyNetworkBookContainer
 import com.twitty.network.retrofit.IBookDataSource
-import kotlinx.serialization.json.Json
-import java.io.File
 
 class FakeBookRemoteDataSource : IBookDataSource {
 
     // "src/main/assets/books.json"
-    private val books = getJsonBookList().map { it.asNetworkBook()}
+    private val books = FakeAssetLoader()
+        .getBooks("books.json")
+        .map { it.asNetworkBook() }
 
     private val networkBookContainer = NetworkBookContainer(
         lastBuildDate = "",
@@ -30,11 +29,4 @@ class FakeBookRemoteDataSource : IBookDataSource {
         networkBookContainer.bookList.find { it.isbn == isbn }?.let {
             networkBookContainer
         } ?: emptyNetworkBookContainer
-
-    private fun getJsonBookList(): List<Book> {
-        val jsonFile = File("src/main/assets/books.json")
-        val jsonString = jsonFile.readText()
-
-        return Json.decodeFromString(jsonString)
-    }
 }
