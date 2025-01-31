@@ -9,7 +9,7 @@
 - 독후감에 사용할 태그 생성
 
 ## 모듈 아키텍처
-![모듈 아키텍처](doc/module_architecture.png)
+![모듈 아키텍처](![image](https://github.com/user-attachments/assets/f7e317a1-079d-4560-b1fa-1d9b92e4570c))
 | **이름** | **책임** |
 | --- | --- |
 | feature: … | 특정 기능을 담당하며 기능과 관련된 UI 요소와 ViewModel 을 포함 되어 있습니다. |
